@@ -9,7 +9,7 @@ namespace SQLAid
     {
         public const string Id = "f6bb9eff-8832-4cfc-e6fb-08daf943be5c";
         public const string Name = "SQL Aid";
-        public const string Description = @"SQL Aid is a SQL Server Management Studio Add-in";
+        public const string Description = @"SQL Aid is a SQL Server Management Studio Add-in.";
         public const string Language = "en-US";
         public const string Version = "2.0.1";
         public const string Author = "duong.nguyen";
