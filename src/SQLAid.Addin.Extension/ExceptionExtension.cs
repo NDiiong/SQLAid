@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace SQLAid.Addin.Logging
+namespace SQLAid.Addin.Extension
 {
     public static class ExceptionExtension
     {

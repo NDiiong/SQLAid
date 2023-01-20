@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLAid.Addin.Extension;
+using System;
 using System.IO;
 
 namespace SQLAid.Addin.Logging
