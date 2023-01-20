@@ -1,8 +1,6 @@
 ﻿using Microsoft.VisualStudio.Shell;
 using SQLAid.Commands;
-using SQLAid.Commands.Excute;
-using SQLAid.Commands.Grid;
-using SQLAid.Services.SqlPackage;
+using SQLAid.Integration.DTE;
 using System;
 using System.Runtime.InteropServices;
 using Task = System.Threading.Tasks.Task;
