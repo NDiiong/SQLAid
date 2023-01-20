@@ -30,10 +30,16 @@ namespace SQLAid
 
     /*
      * BUILDING
-     * SSMS VERSION    VS VESION     VS BUILD
-     *  19.0
-     *                   2019       15.0
-     *                   2017       14.0
-     *  17.0             2015
+     * SSMS VERSION     VS DLL
+     *  19.0            16.0
+     *  18.0            15.0
+     *  17.0            14.0
+     *
+     * VS VESION        VS BUILD
+     *
+     *  2022            17.0
+     *  2019            15.0
+     *  2017            14.0
+     *
      */
 }
