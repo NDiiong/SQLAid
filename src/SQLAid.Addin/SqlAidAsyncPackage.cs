@@ -27,4 +27,13 @@ namespace SQLAid
             //await SqlInsertScriptGridResultCommand.InitializeAsync(this).ConfigureAwait(false);
         }
     }
+
+    /*
+     * BUILDING
+     * SSMS VERSION    VS VESION     VS BUILD
+     *  19.0
+     *                   2019       15.0
+     *                   2017       14.0
+     *  17.0             2015
+     */
 }
