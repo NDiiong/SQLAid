@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Text;
 
-namespace SQLAid.Extensions
+namespace SQLAid.Addin.Logging
 {
-    public static class ExceptionExtensions
+    public static class ExceptionExtension
     {
         public static string GetFullMessage(this Exception exception)
         {
             var builder = new StringBuilder();
-            Exception realerror = exception;
+            var realerror = exception;
             builder.AppendLine(exception.Message);
             while (realerror.InnerException != null)
             {

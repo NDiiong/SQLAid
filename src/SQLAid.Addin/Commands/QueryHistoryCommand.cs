@@ -1,9 +1,8 @@
 ﻿using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
-using SQLAid.Cores;
-using SQLAid.Extensions;
-using SQLAid.Helpers;
+using SQLAid.Addin.Extension;
+using SQLAid.Addin.Logging;
 using SQLAid.Integration.DTE;
 using System;
 using System.Collections.Concurrent;
@@ -20,7 +19,7 @@ namespace SQLAid.Commands
 
         static QueryHistoryCommand()
         {
-            var localPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Addin.NAME);
+            var localPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Cores.Addin.NAME);
             _location = Path.Combine(localPath, "histories");
             Directory.CreateDirectory(_location);
         }

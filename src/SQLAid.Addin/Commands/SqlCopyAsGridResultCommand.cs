@@ -4,8 +4,8 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.CommandBars;
 using Microsoft.VisualStudio.Shell;
-using SQLAid.Extensions;
-using SQLAid.Helpers;
+using SQLAid.Addin.Extension;
+using SQLAid.Addin.Logging;
 using SQLAid.Integration;
 using SQLAid.Integration.Clipboard;
 using SQLAid.Integration.DTE.SqlControl;
@@ -51,9 +51,7 @@ namespace SQLAid.Commands
         {
             Function.Run(() =>
             {
-                var gridControl = SqlManagementService.GetCurrentGridControl();
-
-                var currentGridControl = SqlManagementService.GetCurrentGridControl(serviceProvider);
+                var currentGridControl = GridControl.GetCurrentGridControl();
                 if (currentGridControl != null)
                 {
                     using (var gridResultControl = new GridResultControl(currentGridControl))

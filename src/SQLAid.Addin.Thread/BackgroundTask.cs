@@ -1,23 +1,22 @@
-﻿using SQLAid.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 
-namespace SQLAid.Theards
+namespace SQLAid.Addin.Thread
 {
     public class BackgroundTask : IDisposable
     {
         private bool _keepRunning = true;
         private static object _internalSyncObject;
-        private readonly Thread _primaryThread;
+        private readonly System.Threading.Thread _primaryThread;
 
         private BackgroundWorker _worker;
         private EventWaitHandle _runTaskRequestPending;
         private ManualResetEvent _runTaskThreadTerminated;
         private readonly List<IThreadTask> _threadTasks = new List<IThreadTask>();
 
-        public BackgroundTask(Thread primaryThread)
+        public BackgroundTask(System.Threading.Thread primaryThread)
         {
             _primaryThread = primaryThread;
             StartThread();
@@ -26,9 +25,7 @@ namespace SQLAid.Theards
         internal void StartThread()
         {
             if (null != _worker)
-            {
                 return;
-            }
 
             _runTaskRequestPending = new EventWaitHandle(false, EventResetMode.AutoReset);
             _runTaskThreadTerminated = new ManualResetEvent(false);
@@ -37,64 +34,53 @@ namespace SQLAid.Theards
                 WorkerReportsProgress = true,
                 WorkerSupportsCancellation = true
             };
-            _worker.DoWork += worker_DoWork;
-            _worker.ProgressChanged += worker_ProgressChanged;
+            _worker.DoWork += Worker_DoWork;
+            _worker.ProgressChanged += Worker_ProgressChanged;
             _worker.RunWorkerAsync();
         }
 
         internal void StopThread()
         {
-            try
+            if (_worker != null)
             {
-                if (_worker != null)
+                var ptt = _runTaskThreadTerminated;
+                _keepRunning = false;
+                lock (InternalSyncObject)
                 {
-                    var ptt = _runTaskThreadTerminated;
-                    _keepRunning = false;
-                    lock (InternalSyncObject)
-                    {
-                        _threadTasks.Clear();
-                    }
-                    _runTaskRequestPending.Set();
-                    if (!ptt.WaitOne(50, false))
-                    {
-                        try
-                        {
-                            _worker.CancelAsync();
-                        }
-                        catch
-                        {
-                        }
-                    }
+                    _threadTasks.Clear();
                 }
-                CleanupThread();
+
+                _runTaskRequestPending.Set();
+                if (!ptt.WaitOne(50, false))
+                    _worker.CancelAsync();
             }
-            catch (Exception e)
-            {
-                Logger.Error(nameof(BackgroundTask), nameof(BackgroundTask.StopThread), e);
-            }
+
+            CleanupThread();
         }
 
         internal void CleanupThread()
         {
-            if (null != _worker)
+            if (_worker != null)
             {
-                _worker.DoWork -= worker_DoWork;
-                _worker.ProgressChanged -= worker_ProgressChanged;
+                _worker.DoWork -= Worker_DoWork;
+                _worker.ProgressChanged -= Worker_ProgressChanged;
                 _worker = null;
             }
+
             _runTaskRequestPending = null;
             _runTaskThreadTerminated = null;
         }
 
-        private static Object InternalSyncObject
+        private static object InternalSyncObject
         {
             get
             {
-                if (null == _internalSyncObject)
+                if (_internalSyncObject == null)
                 {
-                    var o = new Object();
+                    var o = new object();
                     Interlocked.CompareExchange(ref _internalSyncObject, o, null);
                 }
+
                 return _internalSyncObject;
             }
         }
@@ -104,19 +90,14 @@ namespace SQLAid.Theards
             StopThread();
         }
 
-        private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            if (_primaryThread != Thread.CurrentThread)
-            {
-                Logger.Error(nameof(BackgroundTask), nameof(BackgroundTask.worker_ProgressChanged), $"NOT EXECUTED IN GUI THREAD. {_primaryThread} != {Thread.CurrentThread}.");
+            if (_primaryThread != System.Threading.Thread.CurrentThread)
                 return;
-            }
 
             var taskToRun = e.UserState as IThreadTask;
             if (null == taskToRun)
-            {
                 return;
-            }
 
             switch (e.ProgressPercentage)
             {
@@ -134,7 +115,7 @@ namespace SQLAid.Theards
             }
         }
 
-        private void worker_DoWork(object sender, DoWorkEventArgs e)
+        private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
             RunBackgroundTaskThread();
         }
@@ -157,11 +138,6 @@ namespace SQLAid.Theards
                         var taskToRun = DeQueue();
                         while (null != taskToRun)
                         {
-                            if (taskToRun.LogQueueStatus)
-                            {
-                                Logger.Error(nameof(BackgroundTask), nameof(BackgroundTask.RunBackgroundTaskThread), "Running " + taskToRun);
-                            }
-
                             try
                             {
                                 _worker.ReportProgress(0, taskToRun);
@@ -175,9 +151,8 @@ namespace SQLAid.Theards
                                 }
                                 _worker.ReportProgress(100, taskToRun);
                             }
-                            catch (Exception e)
+                            catch (Exception)
                             {
-                                Logger.Error(nameof(BackgroundTask), nameof(BackgroundTask.RunBackgroundTaskThread), e, "Running " + taskToRun + "error");
                             }
 
                             taskToRun = DeQueue();
@@ -200,44 +175,22 @@ namespace SQLAid.Theards
 
         public void QueueTask(IThreadTask taskToRun)
         {
-            try
-            {
-                if (taskToRun.LogQueueStatus)
-                {
-                    Logger.Error(nameof(BackgroundTask), nameof(BackgroundTask.QueueTask), "Queueing task " + taskToRun);
-                }
-                _threadTasks.Add(taskToRun);
-                _runTaskRequestPending.Set();
-            }
-            catch (Exception e)
-            {
-                Logger.Error(nameof(BackgroundTask), nameof(BackgroundTask.QueueTask), e);
-            }
+            _threadTasks.Add(taskToRun);
+            _runTaskRequestPending.Set();
         }
 
         private IThreadTask DeQueue()
         {
-            try
+            lock (InternalSyncObject)
             {
-                lock (InternalSyncObject)
+                IThreadTask taskToRun = null;
+                if (_threadTasks.Count > 0)
                 {
-                    IThreadTask taskToRun = null;
-                    if (_threadTasks.Count > 0)
-                    {
-                        taskToRun = _threadTasks[0];
-                        if (taskToRun.LogQueueStatus)
-                        {
-                            Logger.Error(nameof(BackgroundTask), nameof(BackgroundTask.DeQueue), "Dequeuing task " + taskToRun);
-                        }
-                        _threadTasks.RemoveAt(0);
-                    }
-                    return taskToRun;
+                    taskToRun = _threadTasks[0];
+                    _threadTasks.RemoveAt(0);
                 }
-            }
-            catch (Exception e)
-            {
-                Logger.Error(nameof(BackgroundTask), nameof(BackgroundTask.DeQueue), e);
-                return null;
+
+                return taskToRun;
             }
         }
     }

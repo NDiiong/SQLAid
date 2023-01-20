@@ -1,4 +1,4 @@
-﻿namespace SQLAid.Theards
+﻿namespace SQLAid.Addin.Thread
 {
     public interface IThreadTask
     {

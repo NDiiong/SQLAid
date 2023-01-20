@@ -1,7 +1,7 @@
 ﻿#pragma warning disable IDE1006
 
 using Microsoft.VisualStudio.CommandBars;
-using SQLAid.Extensions;
+using SQLAid.Addin.Extension;
 using stdole;
 using System.Drawing;
 using IconConverter = SQLAid.Helpers.IconConverter;

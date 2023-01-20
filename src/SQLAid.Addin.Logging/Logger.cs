@@ -1,9 +1,7 @@
-﻿using SQLAid.Cores;
-using SQLAid.Extensions;
-using System;
+﻿using System;
 using System.IO;
 
-namespace SQLAid.Helpers
+namespace SQLAid.Addin.Logging
 {
     public static class Logger
     {
@@ -62,9 +60,6 @@ namespace SQLAid.Helpers
 
         private static void Log(LogVerbosity verbosity, string message)
         {
-            if (_writer == null)
-                Initialize();
-
             var data = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss:ff} | {verbosity.ToString().ToUpper()} | {message}";
             lock (_writer)
             {
@@ -73,10 +68,8 @@ namespace SQLAid.Helpers
             }
         }
 
-        private static void Initialize()
+        public static void Initialize(string localPath)
         {
-            var localPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Addin.NAME);
-
             var location = Path.Combine(localPath, "logs");
             Directory.CreateDirectory(location);
 

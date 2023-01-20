@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SQLAid.Extensions
+namespace SQLAid.Addin.Extension
 {
     public static class PackageExtension
     {

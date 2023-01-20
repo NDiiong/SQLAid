@@ -1,7 +1,4 @@
-﻿using SQLAid.Helpers;
-using System;
-
-namespace SQLAid.Theards
+﻿namespace SQLAid.Addin.Thread
 {
     public class TaskGeneric : IThreadTask
     {
@@ -10,12 +7,11 @@ namespace SQLAid.Theards
         private readonly TaskToRun _taskToRun;
         private readonly TaskToRun _taskToRunStarting;
         private readonly TaskToRun _taskToRunEnding;
-        private readonly bool _shouldExecuteInMainThread;
 
         public TaskGeneric(TaskToRun taskToRun, bool shouldExecuteInMainThread)
         {
             _taskToRun = taskToRun;
-            _shouldExecuteInMainThread = shouldExecuteInMainThread;
+            ShouldExecuteInMainThread = shouldExecuteInMainThread;
         }
 
         public TaskGeneric(TaskToRun taskToRun, TaskToRun taskToRunStarting, TaskToRun taskToRunEnding, bool shouldExecuteInMainThread)
@@ -23,37 +19,22 @@ namespace SQLAid.Theards
             _taskToRun = taskToRun;
             _taskToRunEnding = taskToRunEnding;
             _taskToRunStarting = taskToRunStarting;
-            _shouldExecuteInMainThread = shouldExecuteInMainThread;
+            ShouldExecuteInMainThread = shouldExecuteInMainThread;
         }
 
-        public bool ShouldExecuteInMainThread
-        {
-            get { return _shouldExecuteInMainThread; }
-        }
+        public bool ShouldExecuteInMainThread { get; }
 
-        public bool LogQueueStatus
-        {
-            get { return true; }
-        }
+        public bool LogQueueStatus => true;
 
         public void Execute()
         {
-            try
-            {
-                _taskToRun();
-            }
-            catch (Exception e)
-            {
-                Logger.Error(nameof(TaskGeneric), nameof(TaskGeneric.Execute), e);
-            }
+            _taskToRun();
         }
 
         public void Starting()
         {
-            if (null != _taskToRunStarting)
-            {
+            if (_taskToRunStarting != null)
                 _taskToRunStarting();
-            }
         }
 
         public void Ending()

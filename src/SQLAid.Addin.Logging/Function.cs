@@ -3,11 +3,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 
-namespace SQLAid.Helpers
+namespace SQLAid.Addin.Logging
 {
     public static class Function
     {
-        internal static void Run(Action action,
+        public static void Run(Action action,
             [CallerMemberName] string memberName = "",
             [CallerFilePath] string sourceFilePath = "",
             [CallerLineNumber] int sourceLineNumber = 0)
@@ -28,7 +28,7 @@ namespace SQLAid.Helpers
             }
         }
 
-        internal static T Run<T>(Func<T> action,
+        public static T Run<T>(Func<T> action,
             [CallerMemberName] string memberName = "",
             [CallerFilePath] string sourceFilePath = "",
             [CallerLineNumber] int sourceLineNumber = 0)

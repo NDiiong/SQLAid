@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.Shell.Interop;
-using SQLAid.Extensions;
+using SQLAid.Addin.Extension;
 
 namespace SQLAid.Integration.DTE
 {

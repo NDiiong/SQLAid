@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace SQLAid.Runtime
+namespace SQLAid.Addin.Thread
 {
     public class Singleton<T> where T : class
     {
@@ -8,10 +8,7 @@ namespace SQLAid.Runtime
         {
         }
 
-        public static T Instance
-        {
-            get { return Nested.Singleton; }
-        }
+        public static T Instance => Nested.Singleton;
 
         private sealed class Nested
         {
@@ -21,10 +18,7 @@ namespace SQLAid.Runtime
                 null,
                 null) as T;
 
-            internal static T Singleton
-            {
-                get { return _instance; }
-            }
+            internal static T Singleton => _instance;
         }
     }
 }

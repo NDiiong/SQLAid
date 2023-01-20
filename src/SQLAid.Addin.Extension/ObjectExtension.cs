@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 
-namespace SQLAid.Extensions
+namespace SQLAid.Addin.Extension
 {
     public static class ObjectExtension
     {
@@ -67,19 +67,19 @@ namespace SQLAid.Extensions
 
         public static object GetPublicField(object @object, string field)
         {
-            FieldInfo f = @object.GetType().GetField(field, BindingFlags.Public | BindingFlags.Instance);
+            var f = @object.GetType().GetField(field, BindingFlags.Public | BindingFlags.Instance);
             return f.GetValue(@object);
         }
 
         public static object GetPublicProperty(this object @object, string propertyName)
         {
-            PropertyInfo p = @object.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty);
+            var p = @object.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty);
             return p.GetValue(@object, null);
         }
 
         public static object GetNonPublicProperty(this object @object, string propertyName)
         {
-            PropertyInfo p = @object.GetType().GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty);
+            var p = @object.GetType().GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty);
             return p.GetValue(@object, null);
         }
     }

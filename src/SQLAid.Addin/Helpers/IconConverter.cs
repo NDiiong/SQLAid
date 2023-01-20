@@ -1,4 +1,4 @@
-﻿using SQLAid.Extensions;
+﻿using SQLAid.Addin.Extension;
 using stdole;
 using System.Drawing;
 using System.Windows.Forms;

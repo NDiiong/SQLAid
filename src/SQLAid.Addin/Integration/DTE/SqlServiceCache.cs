@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
-using SQLAid.Extensions;
+using SQLAid.Addin.Extension;
 using SQLAid.Integration.Clipboard;
 using System;
 

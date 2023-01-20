@@ -7,7 +7,6 @@ using Microsoft.SqlServer.Management.UI.Grid;
 using Microsoft.SqlServer.Management.UI.VSIntegration;
 using Microsoft.SqlServer.Management.UI.VSIntegration.Editors;
 using Microsoft.SqlServer.Management.UI.VSIntegration.ObjectExplorer;
-using SQLAid.Cores;
 using SQLAid.Integration.Exceptions;
 using System;
 using System.Data.SqlClient;
@@ -98,7 +97,7 @@ namespace SQLAid.Integration.DTE
                 Password = uIConnectionInfo.Password,
                 UserID = uIConnectionInfo.UserName,
                 InitialCatalog = uIConnectionInfo.AdvancedOptions["DATABASE"] ?? "master",
-                ApplicationName = Addin.NAME
+                ApplicationName = Cores.Addin.NAME
             };
 
             return builder.ToString();

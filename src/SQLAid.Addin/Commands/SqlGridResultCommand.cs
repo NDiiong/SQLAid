@@ -14,11 +14,11 @@ namespace SQLAid.Commands
         private const string SQL_RESULT_GRID_CONTEXT_NAME = "SQL Results Grid Tab Context";
         protected static CommandBar SqlResultGridContext { get; }
 
-        protected static readonly ISqlManagementService SqlManagementService;
+        protected static readonly IResultGridControl GridControl;
 
         static SqlGridResultCommand()
         {
-            SqlManagementService = new SqlManagementService();
+            GridControl = new ResultGridControl();
             var dte = Package.GetGlobalService(typeof(DTE)) as DTE2;
             SqlResultGridContext = ((CommandBars)dte.CommandBars)[SQL_RESULT_GRID_CONTEXT_NAME];
         }

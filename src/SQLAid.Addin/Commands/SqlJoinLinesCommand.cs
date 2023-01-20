@@ -1,7 +1,7 @@
 ﻿using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
-using SQLAid.Extensions;
+using SQLAid.Addin.Extension;
 using SQLAid.Helpers;
 using SQLAid.Integration;
 using SQLAid.Integration.DTE;

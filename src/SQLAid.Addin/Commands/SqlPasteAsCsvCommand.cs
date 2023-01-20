@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.Shell;
-using SQLAid.Extensions;
+using SQLAid.Addin.Extension;
 using SQLAid.Integration;
 using SQLAid.Integration.Clipboard;
 using SQLAid.Integration.DTE;
@@ -55,7 +55,7 @@ namespace SQLAid.Commands
                 var content = _clipboardService.GetFromClipboard();
                 if (!string.IsNullOrWhiteSpace(content))
                 {
-                    string replacement = "'," + Environment.NewLine + "'";
+                    var replacement = "'," + Environment.NewLine + "'";
                     var singleLine = $"'{Regex.Replace(content, PATTERN, replacement, RegexOptions.Multiline)}'";
                     var editor = new Editor(_textDocumentService.GetTextDocument());
                     editor.SetContent(singleLine, count: 1);

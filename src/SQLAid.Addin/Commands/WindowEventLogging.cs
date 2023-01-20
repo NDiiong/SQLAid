@@ -1,8 +1,8 @@
 ﻿using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
-using SQLAid.Extensions;
-using SQLAid.Helpers;
+using SQLAid.Addin.Extension;
+using SQLAid.Addin.Logging;
 using SQLAid.Integration.DTE;
 using System.ComponentModel.Design;
 using Task = System.Threading.Tasks.Task;

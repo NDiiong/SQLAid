@@ -1,5 +1,5 @@
 ﻿using Microsoft.SqlServer.Management.UI.Grid;
-using SQLAid.Extensions;
+using SQLAid.Addin.Extension;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,7 +11,7 @@ namespace SQLAid.Integration.DTE.SqlControl
 {
     public class GridResultControl : IDisposable
     {
-        private readonly GridControl _gridControl;
+        private readonly IGridControl _gridControl;
 
         public int ColumnCount { get; private set; }
 
@@ -19,7 +19,7 @@ namespace SQLAid.Integration.DTE.SqlControl
 
         public bool IsDisposed { get; private set; }
 
-        public GridResultControl(GridControl gridControl)
+        public GridResultControl(IGridControl gridControl)
         {
             _gridControl = gridControl ?? throw new ArgumentNullException(nameof(gridControl));
             ColumnCount = gridControl.ColumnsNumber;
@@ -63,7 +63,7 @@ namespace SQLAid.Integration.DTE.SqlControl
         {
             if (nColIndex > 0 && nColIndex < ColumnCount)
             {
-                _gridControl.GetHeaderInfo(nColIndex, out string result, out Bitmap _);
+                _gridControl.GetHeaderInfo(nColIndex, out var result, out Bitmap _);
                 return result;
             }
 

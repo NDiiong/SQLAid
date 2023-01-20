@@ -55,7 +55,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SQLAid</RootNamespace>
     <AssemblyName>SQLAid</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>
@@ -97,7 +97,10 @@
     <Compile Include="Commands\SqlPasteAsInsertedQueryCommand.cs" />
     <Compile Include="Commands\SqlSaveAsGridResultCommand.cs" />
     <Compile Include="Commands\WindowEventLogging.cs" />
-    <Compile Include="Extensions\ExceptionExtensions.cs" />
+    <Compile Include="Integration\DTE\ResulGrid\ResultGridControl.cs" />
+    <Compile Include="Integration\DTE\ResulGrid\ResultGridControlWayFour.cs" />
+    <Compile Include="Integration\DTE\ResulGrid\ResultGridControlWayThree.cs" />
+    <Compile Include="Integration\DTE\ResulGrid\ResultGridControlWayTwo.cs" />
     <Compile Include="Integration\DTE\SqlServiceCache.cs" />
     <Compile Include="Integration\DTE\StatusBar.cs" />
     <Compile Include="Integration\Exceptions\ConnectionInfoException.cs" />
@@ -111,23 +114,20 @@
     <Compile Include="Integration\DTE\Editor.cs" />
     <Compile Include="Integration\IEditor.cs" />
     <Compile Include="Integration\IResultGrid.cs" />
+    <Compile Include="Integration\IResultGridControl.cs" />
     <Compile Include="Integration\IServerConnection.cs" />
     <Compile Include="Integration\IWindowsUser.cs" />
     <Compile Include="Integration\DTE\WindowsUser.cs" />
     <Compile Include="Integration\DTE\SqlControl\CommandBarControlBuilder.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Extensions\ObjectExtension.cs" />
-    <Compile Include="Extensions\PackageExtension.cs" />
     <Compile Include="Integration\Files\ExcelFileService.cs" />
     <Compile Include="Integration\Files\FileServiceFactory.cs" />
     <Compile Include="Integration\Files\HtmlService.cs" />
     <Compile Include="Integration\Files\IFileService.cs" />
     <Compile Include="Integration\Files\JsonFileService.cs" />
-    <Compile Include="Helpers\Function.cs" />
     <Compile Include="Helpers\IconConverter.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Integration\Clipboard\ClipboardService.cs" />
     <Compile Include="Integration\IClipboardService.cs" />
     <Compile Include="Integration\DTE\SqlControl\GridResultControl.cs" />
@@ -151,10 +151,6 @@
     <Compile Include="SqlAidAsyncPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\UndoTransaction.cs" />
-    <Compile Include="Theards\BackgroundTask.cs" />
-    <Compile Include="Theards\IThreadTask.cs" />
-    <Compile Include="Runtime\Singleton`1.cs" />
-    <Compile Include="Theards\TaskGeneric.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -199,7 +195,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Assemblies\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.SqlServer.GridControl, Version=14.100.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.SqlServer.GridControl, Version=16.200.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Assemblies\Microsoft.SqlServer.GridControl.dll</HintPath>
     </Reference>
@@ -403,6 +399,16 @@
     </Content>
     <Content Include="Properties\Resources\Command1Package.ico" />
     <Content Include="Resources\json-file.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SQLAid.Addin.Extension\SQLAid.Addin.Extension.csproj">
+      <Project>{a6176150-b593-4deb-a7eb-42b7da7b2627}</Project>
+      <Name>SQLAid.Addin.Extension</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SQLAid.Addin.Logging\SQLAid.Addin.Logging.csproj">
+      <Project>{75fdd5b3-ad13-4303-8bf7-b7456edef629}</Project>
+      <Name>SQLAid.Addin.Logging</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
