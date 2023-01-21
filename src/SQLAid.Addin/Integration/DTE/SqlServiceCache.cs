@@ -12,7 +12,6 @@ namespace SQLAid.Integration.DTE
     {
         public static IServiceProvider Service { get; }
         public static DTE2 ApplicationObject { get; }
-        public static IVsStatusbar Statusbar { get; }
         public static IVsTextManager VsTextManager { get; }
         public static IVsTextManager2 VsTextManager2 { get; }
         public static IVsStatusbar VsStatusbar { get; }
@@ -28,7 +27,6 @@ namespace SQLAid.Integration.DTE
 
             ApplicationObject = Package.GetGlobalService(typeof(EnvDTE.DTE)) as DTE2;
             Service = new ServiceProvider(ApplicationObject as Microsoft.VisualStudio.OLE.Interop.IServiceProvider);
-            Statusbar = Package.GetGlobalService(typeof(SVsStatusbar)).As<IVsStatusbar>();
             VsTextManager = Service.GetService(typeof(SVsTextManager)).As<IVsTextManager>();
             VsTextManager2 = Service.GetService(typeof(SVsTextManager)).As<IVsTextManager2>();
             VsStatusbar = Service.GetService(typeof(SVsStatusbar)).As<IVsStatusbar>();

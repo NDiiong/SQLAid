@@ -1,10 +1,8 @@
 ﻿using Microsoft.SqlServer.Management.UI.Grid;
 using Microsoft.SqlServer.Management.UI.VSIntegration;
-using Microsoft.SqlServer.Management.UI.VSIntegration.Editors;
 using System;
 using System.Reflection;
 using System.Windows.Forms;
-using IVsMonitorSelection = Microsoft.SqlServer.Management.UI.VSIntegration.IVsMonitorSelection;
 
 namespace SQLAid.Integration.DTE.SqlControl
 {
@@ -14,24 +12,24 @@ namespace SQLAid.Integration.DTE.SqlControl
         {
             const BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public;
 
-            IScriptFactory scriptFactor = ServiceCache.ScriptFactory;
-            IVsMonitorSelection monitorSelection = ServiceCache.VSMonitorSelection;
+            var scriptFactor = ServiceCache.ScriptFactory;
+            var monitorSelection = ServiceCache.VSMonitorSelection;
 
-            object editorControl = ServiceCache.ScriptFactory
+            var sqlScriptEditorControl = ServiceCache.ScriptFactory
                 .GetType()
                 .GetMethod("GetCurrentlyActiveFrameDocView", bindingFlags)
                 .Invoke(scriptFactor, new object[] { monitorSelection, false, null });
 
-            FieldInfo resultControlField = editorControl
+            var resultControlField = sqlScriptEditorControl
                 .GetType()
                 .GetField("m_sqlResultsControl", bindingFlags);
 
             if (resultControlField == null)
                 return null;
 
-            object resultsControl = resultControlField.GetValue(editorControl);
+            var resultsControl = resultControlField.GetValue(sqlScriptEditorControl);
 
-            object resultsTabPage = resultsControl
+            var resultsTabPage = resultsControl
                 .GetType()
                 .GetField("m_gridResultsPage", bindingFlags)
                 .GetValue(resultsControl);

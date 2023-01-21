@@ -3,14 +3,12 @@ using EnvDTE80;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo.RegSvrEnum;
 using Microsoft.SqlServer.Management.UI.ConnectionDlg;
-using Microsoft.SqlServer.Management.UI.Grid;
 using Microsoft.SqlServer.Management.UI.VSIntegration;
 using Microsoft.SqlServer.Management.UI.VSIntegration.Editors;
 using Microsoft.SqlServer.Management.UI.VSIntegration.ObjectExplorer;
 using SQLAid.Integration.Exceptions;
 using System;
 using System.Data.SqlClient;
-using System.Reflection;
 
 namespace SQLAid.Integration.DTE
 {
@@ -37,43 +35,6 @@ namespace SQLAid.Integration.DTE
         {
             ServiceCache.ScriptFactory.CreateNewBlankScript(ScriptType.Sql);
             return GetCurrentEditor();
-        }
-
-        public IResultGrid GetFocusedResultGrid()
-        {
-            var bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance;
-
-            var scriptFactor = ServiceCache.ScriptFactory;
-            var monitorSelection = ServiceCache.VSMonitorSelection;
-
-            var editorControl = ServiceCache.ScriptFactory
-                .GetType()
-                .GetMethod("GetCurrentlyActiveFrameDocView", bindingFlags)
-                .Invoke(scriptFactor, new object[] { monitorSelection, false, null });
-
-            var resultControlField = editorControl.GetType()
-                .GetField("m_sqlResultsControl", bindingFlags);
-
-            if (resultControlField == null)
-                return null;
-
-            var resultsControl = resultControlField.GetValue(editorControl);
-
-            var resultsTabPage = resultsControl
-                .GetType()
-                .GetField("m_gridResultsPage", bindingFlags)
-                .GetValue(resultsControl);
-
-            var grid = (IGridControl)resultsTabPage
-                .GetType()
-                .BaseType
-                .GetProperty("FocusedGrid", bindingFlags)
-                .GetValue(resultsTabPage, null);
-
-            if (grid == null)
-                return null;
-
-            return new ResultGrid(grid);
         }
 
         public IServerConnection CloneCurrentConnection(string database)
@@ -166,6 +127,11 @@ namespace SQLAid.Integration.DTE
         private IObjectExplorerService GetObjectExplorer()
         {
             return (IObjectExplorerService)ServiceCache.ServiceProvider.GetService(typeof(IObjectExplorerService));
+        }
+
+        public IResultGrid GetFocusedResultGrid()
+        {
+            throw new NotImplementedException();
         }
     }
 }

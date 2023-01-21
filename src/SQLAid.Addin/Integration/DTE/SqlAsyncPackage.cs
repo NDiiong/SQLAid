@@ -20,7 +20,7 @@ namespace SQLAid.Integration.DTE
         public DTE2 Application { get; private set; }
         public IMenuCommandService MenuCommand { get; private set; }
 
-        public SqlAsyncPackage(string packageGuidString)
+        protected SqlAsyncPackage(string packageGuidString)
         {
             _packageGuidString = packageGuidString;
         }
