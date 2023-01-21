@@ -53,7 +53,7 @@ namespace SQLAid.Commands
 
         private static void SqlSaveAsExcelGridResultEventHandler(IServiceProvider serviceProvider, DTE2 dte)
         {
-            Function.Run(() =>
+            Func.Run(() =>
             {
                 var saveDialog = new SaveFileDialog
                 {
@@ -69,7 +69,7 @@ namespace SQLAid.Commands
 
         private static void SqlSaveAsJsonGridResultEventHandler(IServiceProvider serviceProvider, DTE2 dte)
         {
-            Function.Run(() =>
+            Func.Run(() =>
             {
                 var saveDialog = new SaveFileDialog
                 {

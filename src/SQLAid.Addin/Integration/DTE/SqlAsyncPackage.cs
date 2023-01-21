@@ -38,7 +38,7 @@ namespace SQLAid.Integration.DTE
         protected override void Initialize()
         {
             base.Initialize();
-            Logger.Initialize(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Cores.Addin.NAME));
+            Logger.Initialize(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), SqlAidAsyncPackage.NAME));
             ThreadHelper.JoinableTaskFactory.Run(InitializeAsync);
         }
 

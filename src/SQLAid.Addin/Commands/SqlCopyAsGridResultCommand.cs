@@ -49,7 +49,7 @@ namespace SQLAid.Commands
 
         private static void SqlCopyAsJsonGridResultEventHandler(IServiceProvider serviceProvider, DTE2 dte)
         {
-            Function.Run(() =>
+            Func.Run(() =>
             {
                 var currentGridControl = GridControl.GetCurrentGridControl();
                 if (currentGridControl != null)

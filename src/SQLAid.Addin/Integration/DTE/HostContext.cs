@@ -97,7 +97,7 @@ namespace SQLAid.Integration.DTE
                 Password = uIConnectionInfo.Password,
                 UserID = uIConnectionInfo.UserName,
                 InitialCatalog = uIConnectionInfo.AdvancedOptions["DATABASE"] ?? "master",
-                ApplicationName = Cores.Addin.NAME
+                ApplicationName = SqlAidAsyncPackage.NAME
             };
 
             return builder.ToString();

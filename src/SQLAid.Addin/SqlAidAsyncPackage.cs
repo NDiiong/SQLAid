@@ -11,6 +11,8 @@ namespace SQLAid
     [InstalledProductRegistration("#110", "#112", Vsix.Version, IconResourceID = 400)]
     public sealed class SqlAidAsyncPackage : SqlAsyncPackage
     {
+        public const string NAME = "SQLAid";
+
         public SqlAidAsyncPackage() : base(PackageGuids.guidSQLAidPackageString)
         {
         }

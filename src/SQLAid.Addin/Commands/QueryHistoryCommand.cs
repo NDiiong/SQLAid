@@ -19,7 +19,7 @@ namespace SQLAid.Commands
 
         static QueryHistoryCommand()
         {
-            var localPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Cores.Addin.NAME);
+            var localPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), SqlAidAsyncPackage.NAME);
             _location = Path.Combine(localPath, "histories");
             Directory.CreateDirectory(_location);
         }

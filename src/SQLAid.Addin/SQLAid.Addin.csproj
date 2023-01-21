@@ -137,7 +137,6 @@
     <Compile Include="Integration\DTE\SqlAsyncPackage.cs" />
     <Compile Include="Integration\ITextDocumentService.cs" />
     <Compile Include="Integration\DTE\TextDocumentService.cs" />
-    <Compile Include="Cores\Constants.cs" />
     <Compile Include="source.extension.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
