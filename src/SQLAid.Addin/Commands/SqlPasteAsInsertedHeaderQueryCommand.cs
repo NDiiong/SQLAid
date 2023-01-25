@@ -70,7 +70,7 @@ namespace SQLAid.Commands
                             var columnsJoin = string.Join(", ", columns);
 
                             var editor = new Editor(_textDocumentService.GetTextDocument());
-                            content = editor.Sanitize(content, columnsJoin);
+                            content = editor.SetContent(content, columnsJoin);
 
                             var undoTransaction = new UndoTransaction(dte, "SqlPasteAsInsertedHeaderQuery");
                             undoTransaction.Run(() => editor.SetContent(content, count: 1));

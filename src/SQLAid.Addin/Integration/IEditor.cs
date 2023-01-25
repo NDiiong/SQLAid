@@ -10,7 +10,7 @@ namespace SQLAid.Integration
 
         void SetContent(StringCollection content);
 
-        string Sanitize(string content, string columns);
+        string SetContent(string content, string columns);
 
         void SetContent(string text, int count);
     }

@@ -18,22 +18,22 @@ namespace SQLAid.Integration.DTE
 
         public EditedLine GetEditedLine()
         {
-            TextSelection textSelection = _document.Selection;
+            var textSelection = _document.Selection;
             if (!String.IsNullOrEmpty(textSelection.Text))
                 return new EditedLine(textSelection.Text, 0);
 
-            VirtualPoint point = textSelection.ActivePoint;
-            EditPoint editPoint = point.CreateEditPoint();
+            var point = textSelection.ActivePoint;
+            var editPoint = point.CreateEditPoint();
 
-            string line = editPoint.GetLines(point.Line, point.Line + 1);
-            int caret = point.LineCharOffset - 1;
+            var line = editPoint.GetLines(point.Line, point.Line + 1);
+            var caret = point.LineCharOffset - 1;
 
             return new EditedLine(line, caret);
         }
 
         public void SetContent(string content)
         {
-            EditPoint start = _document.CreateEditPoint(_document.StartPoint);
+            var start = _document.CreateEditPoint(_document.StartPoint);
             start.Delete(_document.EndPoint);
             start.Insert(content);
         }
@@ -58,11 +58,23 @@ namespace SQLAid.Integration.DTE
             textSelection.MoveToLineAndOffset(currentline, currentColumn);
         }
 
+        public string SetContent(string content, string columns)
+        {
+            var result = Regex.Replace(content, @"\t", "', '", RegexOptions.Multiline);
+            var queryInsert = Regex.Replace(result, "(.*[^\r\n])", "\t('$1'),", RegexOptions.Multiline);
+            queryInsert = queryInsert.TrimEnd(',');
+
+            return _template
+                .Replace("{{_datatable}}", queryInsert)
+                .Replace("{{_columns}}", columns)
+                .Replace("'NULL'", "NULL");
+        }
+
         public void SetContent(StringCollection content)
         {
-            EditPoint start = _document.CreateEditPoint(_document.StartPoint);
+            var start = _document.CreateEditPoint(_document.StartPoint);
             start.Delete(_document.EndPoint);
-            foreach (string part in content)
+            foreach (var part in content)
                 start.Insert(part);
         }
 
@@ -76,18 +88,6 @@ namespace SQLAid.Integration.DTE
             }
 
             return textSelected;
-        }
-
-        public string Sanitize(string content, string columns)
-        {
-            var result = Regex.Replace(content, @"\t", "', '", RegexOptions.Multiline);
-            var queryInsert = Regex.Replace(result, "(.*[^\r\n])", "\t('$1'),", RegexOptions.Multiline);
-            queryInsert = queryInsert.TrimEnd(',');
-
-            return _template
-                .Replace("{{_datatable}}", queryInsert)
-                .Replace("{{_columns}}", columns)
-                .Replace("'NULL'", "NULL");
         }
     }
 }

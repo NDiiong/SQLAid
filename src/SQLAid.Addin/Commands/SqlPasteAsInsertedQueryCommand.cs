@@ -68,7 +68,7 @@ namespace SQLAid.Commands
                         var columns = string.Join(", ", columnArray.Select((_, index) => "column" + index));
 
                         var editor = new Editor(_textDocumentService.GetTextDocument());
-                        content = editor.Sanitize(content, columns);
+                        content = editor.SetContent(content, columns);
 
                         var undoTransaction = new UndoTransaction(dte, "SqlPasteAsInsertedQuery");
                         undoTransaction.Run(() => editor.SetContent(content, count: 1));
