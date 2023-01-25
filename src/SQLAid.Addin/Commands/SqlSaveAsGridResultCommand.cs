@@ -22,7 +22,7 @@ namespace SQLAid.Commands
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             var dte = Package.GetGlobalService(typeof(DTE)) as DTE2;
-            var localPath = package.GetExtensionInstallationDirectory();
+            var localPath = package.ExtensionInstallationDirectory;
             var saveResultSpecialAsCommandBar = SqlResultGridContext.Controls
                 .Add(MsoControlType.msoControlPopup, Type.Missing, Type.Missing, Type.Missing, true)
                 .Visible(true)

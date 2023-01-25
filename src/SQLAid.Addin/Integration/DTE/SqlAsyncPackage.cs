@@ -20,6 +20,15 @@ namespace SQLAid.Integration.DTE
         public DTE2 Application { get; private set; }
         public IMenuCommandService MenuCommand { get; private set; }
 
+        public string ExtensionInstallationDirectory
+        {
+            get
+            {
+                var uri = new Uri(GetType().Assembly.CodeBase, UriKind.Absolute);
+                return Path.GetDirectoryName(uri.LocalPath);
+            }
+        }
+
         protected SqlAsyncPackage(string packageGuidString)
         {
             _packageGuidString = packageGuidString;
@@ -52,12 +61,6 @@ namespace SQLAid.Integration.DTE
             }
             catch
             { }
-        }
-
-        public string GetExtensionInstallationDirectory()
-        {
-            var uri = new Uri(GetType().Assembly.CodeBase, UriKind.Absolute);
-            return Path.GetDirectoryName(uri.LocalPath);
         }
     }
 }
