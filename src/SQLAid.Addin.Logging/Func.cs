@@ -46,7 +46,7 @@ namespace SQLAid.Addin.Logging
             return default;
         }
 
-        public static async Task<TResult> Ignore<TResult, TException>(this Task<TResult> task, TResult defaultValue) where TException : Exception
+        public static async Task<TResult> IgnoreAsync<TResult, TException>(this Task<TResult> task, TResult defaultValue) where TException : Exception
         {
             try
             {
@@ -60,7 +60,7 @@ namespace SQLAid.Addin.Logging
             }
         }
 
-        public static async Task<TResult> Ignore<TResult, TException>(this Task task, TResult defaultValue) where TException : Exception
+        public static async Task<TResult> IgnoreAsync<TResult, TException>(this Task task, TResult defaultValue) where TException : Exception
         {
             try
             {
@@ -74,7 +74,18 @@ namespace SQLAid.Addin.Logging
             }
         }
 
-        public static Task Ignore<TException>(this Task task) where TException : Exception
+        public static void Ignore<TException>(this Action action) where TException : Exception
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception ex) when (ex is TException)
+            {
+            }
+        }
+
+        public static Task IgnoreAsync<TException>(this Task task) where TException : Exception
         {
             try
             {

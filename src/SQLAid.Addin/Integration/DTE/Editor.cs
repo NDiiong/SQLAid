@@ -1,47 +1,43 @@
 ﻿using EnvDTE;
-using System;
 using System.Collections.Specialized;
-using System.Text.RegularExpressions;
 
 namespace SQLAid.Integration.DTE
 {
     public class Editor : IEditor
     {
-        private const string _template = "SELECT *\r\nFROM\r\n(\r\n\tVALUES\r\n{{_datatable}}\r\n)_tables({{_columns}})";
+        private readonly IFrameDocumentView _frameDocumentView;
 
-        private readonly TextDocument _document;
-
-        public Editor(TextDocument textDocument)
+        public Editor(IFrameDocumentView frameDocumentView)
         {
-            _document = textDocument;
+            _frameDocumentView = frameDocumentView;
         }
 
         public EditedLine GetEditedLine()
         {
-            var textSelection = _document.Selection;
-            if (!String.IsNullOrEmpty(textSelection.Text))
+            var textSelection = _frameDocumentView.GetTextSelection();
+            if (!string.IsNullOrEmpty(textSelection.Text))
                 return new EditedLine(textSelection.Text, 0);
 
-            var point = textSelection.ActivePoint;
-            var editPoint = point.CreateEditPoint();
+            var activePoint = textSelection.ActivePoint;
+            var editPoint = activePoint.CreateEditPoint();
 
-            var line = editPoint.GetLines(point.Line, point.Line + 1);
-            var caret = point.LineCharOffset - 1;
+            var line = editPoint.GetLines(activePoint.Line, activePoint.Line + 1);
+            var caret = activePoint.LineCharOffset - 1;
 
             return new EditedLine(line, caret);
         }
 
         public void SetContent(string content)
         {
-            var start = _document.CreateEditPoint(_document.StartPoint);
-            start.Delete(_document.EndPoint);
-            start.Insert(content);
+            var textDocument = _frameDocumentView.GetTextDocument();
+            var startPoint = textDocument.CreateEditPoint(textDocument.StartPoint);
+            startPoint.Delete(textDocument.EndPoint);
+            startPoint.Insert(content);
         }
 
         public void SetContent(string text, int count)
         {
-            var textDocument = _document;
-            var textSelection = textDocument.Selection;
+            var textSelection = _frameDocumentView.GetTextSelection();
             var currentline = textSelection.TopPoint.Line;
             var currentColumn = textSelection.TopPoint.DisplayColumn;
 
@@ -60,31 +56,28 @@ namespace SQLAid.Integration.DTE
 
         public string SetContent(string content, string columns)
         {
-            var result = Regex.Replace(content, @"\t", "', '", RegexOptions.Multiline);
-            var queryInsert = Regex.Replace(result, "(.*[^\r\n])", "\t('$1'),", RegexOptions.Multiline);
-            queryInsert = queryInsert.TrimEnd(',');
-
-            return _template
-                .Replace("{{_datatable}}", queryInsert)
-                .Replace("{{_columns}}", columns)
-                .Replace("'NULL'", "NULL");
+            return string.Empty;
         }
 
         public void SetContent(StringCollection content)
         {
-            var start = _document.CreateEditPoint(_document.StartPoint);
-            start.Delete(_document.EndPoint);
+            var textDocument = _frameDocumentView.GetTextDocument();
+            var start = textDocument.CreateEditPoint(textDocument.StartPoint);
+            start.Delete(textDocument.EndPoint);
+
             foreach (var part in content)
                 start.Insert(part);
         }
 
         public string GetSqlString()
         {
-            var textSelected = _document.Selection.Text;
+            var textDocument = _frameDocumentView.GetTextDocument();
+            var textSelection = _frameDocumentView.GetTextSelection();
+            var textSelected = textSelection.Text;
             if (textSelected.Length == 0)
             {
-                _document.Selection.SelectAll();
-                textSelected = _document.Selection.Text;
+                textDocument.Selection.SelectAll();
+                textSelected = textDocument.Selection.Text;
             }
 
             return textSelected;

@@ -71,10 +71,10 @@
     <DefineConstants>TRACE;DEBUG;SSMS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CopyVsixExtensionFiles>False</CopyVsixExtensionFiles>
+    <CopyVsixExtensionFiles>True</CopyVsixExtensionFiles>
     <CopyVsixExtensionLocation>C:\Program Files %28x86%29\Microsoft SQL Server Management Studio 19\Common7\IDE\Extensions\SQLAid</CopyVsixExtensionLocation>
-    <CreateVsixContainer>False</CreateVsixContainer>
-    <DeployExtension>False</DeployExtension>
+    <CreateVsixContainer>True</CreateVsixContainer>
+    <DeployExtension>True</DeployExtension>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -87,38 +87,39 @@
     <CopyVsixExtensionLocation>C:\Program Files %28x86%29\Microsoft SQL Server Management Studio 18\Common7\IDE\Extensions\SQLAid</CopyVsixExtensionLocation>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Commands\QueryHistoryCommand.cs" />
-    <Compile Include="Commands\SqlCopyAsGridResultCommand.cs" />
-    <Compile Include="Commands\SqlGridResultCommand.cs" />
-    <Compile Include="Commands\SqlInsertScriptGridResultCommand.cs" />
-    <Compile Include="Commands\SqlJoinLinesCommand.cs" />
-    <Compile Include="Commands\SqlPasteAsCsvCommand.cs" />
-    <Compile Include="Commands\SqlPasteAsInsertedHeaderQueryCommand.cs" />
-    <Compile Include="Commands\SqlPasteAsInsertedQueryCommand.cs" />
-    <Compile Include="Commands\SqlSaveAsGridResultCommand.cs" />
-    <Compile Include="Commands\WindowEventLogging.cs" />
-    <Compile Include="Integration\DTE\ResulGrid\ResultGridControl.cs" />
-    <Compile Include="Integration\DTE\ResulGrid\ResultGridControlWayFour.cs" />
-    <Compile Include="Integration\DTE\ResulGrid\ResultGridControlWayThree.cs" />
-    <Compile Include="Integration\DTE\ResulGrid\ResultGridControlWayTwo.cs" />
-    <Compile Include="Integration\DTE\SqlConnection\SqlConnectionWayFour.cs" />
+    <Compile Include="Commands\Events\QueryHistoryCommand.cs" />
+    <Compile Include="Commands\ResultGrid\SqlResultGridAsCopyCommand.cs" />
+    <Compile Include="Commands\ResultGrid\SqlResultGridCommandBase.cs" />
+    <Compile Include="Commands\ResultGrid\SqlResultGridAsInsertScriptCommand.cs" />
+    <Compile Include="Commands\ResultGrid\SqlResultGridFrozenColumnCommand.cs" />
+    <Compile Include="Commands\TextEditor\SqlJoinLinesCommand.cs" />
+    <Compile Include="Commands\TextEditor\SqlPasteAsCsvCommand.cs" />
+    <Compile Include="Commands\TextEditor\SqlPasteAsInsertedHeaderQueryCommand.cs" />
+    <Compile Include="Commands\TextEditor\SqlPasteAsInsertedQueryCommand.cs" />
+    <Compile Include="Commands\ResultGrid\SqlResultGridAsSaveCommand.cs" />
+    <Compile Include="Commands\Events\WindowEventLogging.cs" />
+    <Compile Include="Integration\DTE\Commandbars\CommandBarButtonBuilder.cs" />
+    <Compile Include="Integration\DTE\IVsStatusBar.cs" />
+    <Compile Include="Integration\DTE\Grid\ResultGridControlAdaptor.cs" />
+    <Compile Include="Integration\DTE\Grid\ResultGridControl.cs" />
+    <Compile Include="Integration\DTE\Grid\ResultGridControlBase.cs" />
+    <Compile Include="Integration\DTE\Grid\ResultGridControlWayFour.cs" />
+    <Compile Include="Integration\DTE\Grid\ResultGridControlWayThree.cs" />
+    <Compile Include="Integration\DTE\Grid\ResultGridControlWayTwo.cs" />
+    <Compile Include="Integration\DTE\Connection\SqlConnectionWayFour.cs" />
     <Compile Include="Integration\ISqlConnection.cs" />
-    <Compile Include="Integration\DTE\SqlConnection\SqlConnection.cs" />
-    <Compile Include="Integration\DTE\SqlConnection\SqlConnectionWayThree.cs" />
-    <Compile Include="Integration\DTE\SqlConnection\SqlConnectionWayTwo.cs" />
-    <Compile Include="Integration\DTE\SqlServiceCache.cs" />
-    <Compile Include="Integration\DTE\StatusBar.cs" />
+    <Compile Include="Integration\DTE\Connection\SqlConnection.cs" />
+    <Compile Include="Integration\DTE\Connection\SqlConnectionWayThree.cs" />
+    <Compile Include="Integration\DTE\Connection\SqlConnectionWayTwo.cs" />
     <Compile Include="Integration\Exceptions\ConnectionInfoException.cs" />
     <Compile Include="Integration\DTE\HostContext.cs" />
     <Compile Include="Integration\DTE\HostServerConnection.cs" />
-    <Compile Include="Integration\DTE\ResultGrid.cs" />
     <Compile Include="Integration\Files\IHtmlService.cs" />
     <Compile Include="Integration\Files\IJsonService.cs" />
     <Compile Include="Integration\IHostContext.cs" />
     <Compile Include="Integration\EditedLine.cs" />
     <Compile Include="Integration\DTE\Editor.cs" />
     <Compile Include="Integration\IEditor.cs" />
-    <Compile Include="Integration\IResultGrid.cs" />
     <Compile Include="Integration\IResultGridControl.cs" />
     <Compile Include="Integration\IServerConnection.cs" />
     <Compile Include="Integration\IWindowsUser.cs" />
@@ -135,11 +136,10 @@
     </Compile>
     <Compile Include="Integration\Clipboard\ClipboardService.cs" />
     <Compile Include="Integration\IClipboardService.cs" />
-    <Compile Include="Integration\DTE\ResulGrid\GridResultControl.cs" />
-    <Compile Include="Integration\DTE\ResulGrid\GridResultSelectedCell.cs" />
+    <Compile Include="Integration\DTE\Grid\ResultGridSelectedCell.cs" />
     <Compile Include="Integration\DTE\SqlAsyncPackage.cs" />
-    <Compile Include="Integration\ITextDocumentService.cs" />
-    <Compile Include="Integration\DTE\TextDocumentService.cs" />
+    <Compile Include="Integration\IFrameDocumentView.cs" />
+    <Compile Include="Integration\DTE\FrameDocumentView.cs" />
     <Compile Include="source.extension.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -392,10 +392,22 @@
     <Content Include="Assemblies\SqlPackageBase.dll" />
     <Content Include="Assemblies\SqlWorkbench.Interfaces.dll" />
     <Content Include="Assets\json.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Assets\excel.ico">
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\ms.excel.ico">
+    <Content Include="Assets\snowflake.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Assets\xlsx.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Templates\SQL.INSERT.INTO.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

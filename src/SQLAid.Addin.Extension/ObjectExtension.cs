@@ -1,17 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Reflection;
 
 namespace SQLAid.Addin.Extension
 {
     public static class ObjectExtension
     {
-        public static T As<T>(this object @value)
-        {
-            return (T)@value.As(typeof(T));
-        }
-
-        public static object As(this object @value, Type conversionType)
+        private static object As(this object @value, Type conversionType)
         {
             if (value == null)
                 return default;
@@ -58,29 +52,44 @@ namespace SQLAid.Addin.Extension
             return value;
         }
 
-        public static object GetNonPublicField(this object @object, string propertyName)
+        public static T As<T>(this object @value)
         {
-            var field = @object.GetType()
-                .GetField(propertyName, BindingFlags.NonPublic | BindingFlags.Instance);
-            return field.GetValue(@object);
+            return (T)@value.As(typeof(T));
         }
 
-        public static object GetPublicField(object @object, string field)
+        public static object GetField(this object @object, string propName)
         {
-            var f = @object.GetType().GetField(field, BindingFlags.Public | BindingFlags.Instance);
-            return f.GetValue(@object);
+            return Reflection.GetField(@object, propName);
         }
 
-        public static object GetPublicProperty(this object @object, string propertyName)
+        public static T GetField<T>(this object @object, string propName)
         {
-            var p = @object.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty);
-            return p.GetValue(@object, null);
+            return Reflection.GetField(@object, propName).As<T>();
         }
 
-        public static object GetNonPublicProperty(this object @object, string propertyName)
+        public static T GetBaseTypeField<T>(this object @object, string propName)
         {
-            var p = @object.GetType().GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetProperty);
-            return p.GetValue(@object, null);
+            return Reflection.GetBaseTypeField(@object, propName).As<T>();
+        }
+
+        public static object GetProperty(this object @object, string propName)
+        {
+            return Reflection.GetProperty(@object, propName);
+        }
+
+        public static T GetProperty<T>(this object @object, string propName)
+        {
+            return Reflection.GetProperty(@object, propName).As<T>();
+        }
+
+        public static object InvokeMethod(this object @object, string methodName, params object[] args)
+        {
+            return Reflection.InvokeMethod(@object, methodName, args);
+        }
+
+        public static T InvokeMethod<T>(this object @object, string methodName, params object[] args)
+        {
+            return Reflection.InvokeMethod(@object, methodName, args).As<T>();
         }
     }
 }

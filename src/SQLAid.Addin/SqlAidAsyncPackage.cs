@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualStudio.Shell;
-using SQLAid.Commands;
+using SQLAid.Commands.Events;
+using SQLAid.Commands.ResultGrid;
+using SQLAid.Commands.TextEditor;
 using SQLAid.Integration.DTE;
 using System;
 using System.Runtime.InteropServices;
@@ -19,14 +21,20 @@ namespace SQLAid
 
         protected override async Task InitializeAsync()
         {
-            //await WindowEventLogging.InitializeAsync(this).ConfigureAwait(false);
+            //SQL EVENTS
+            await WindowEventLogging.InitializeAsync(this).ConfigureAwait(false);
             await QueryHistoryCommand.InitializeAsync(this).ConfigureAwait(false);
+
+            //SQL GRID RESULT
+            await SqlResultGridFrozenColumnCommand.InitializeAsync(this).ConfigureAwait(false);
+            await SqlResultGridAsCopyCommand.InitializeAsync(this).ConfigureAwait(false);
+            await SqlResultGridAsSaveCommand.InitializeAsync(this).ConfigureAwait(false);
+
+            //SQL TEXT EDITOR
             await SqlJoinLinesCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlPasteAsCsvCommand.InitializeAsync(this).ConfigureAwait(false);
-            await SqlCopyAsGridResultCommand.InitializeAsync(this).ConfigureAwait(false);
-            await SqlSaveAsGridResultCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlPasteAsInsertedQueryCommand.InitializeAsync(this).ConfigureAwait(false);
-            //await SqlInsertScriptGridResultCommand.InitializeAsync(this).ConfigureAwait(false);
+            await SqlResultGridAsInsertScriptCommand.InitializeAsync(this).ConfigureAwait(false);
         }
     }
 
@@ -44,4 +52,12 @@ namespace SQLAid
      *  2017            >= 14.0
      *
      */
+
+    //PropertyInfo piObjectExplorerContext = contextService.GetType().GetProperty("ObjectExplorerContext", System.Reflection.BindingFlags.Public | BindingFlags.Instance);
+    //Object objectExplorerContext = piObjectExplorerContext.GetValue(contextService, null);
+
+    //EventInfo ei = objectExplorerContext.GetType().GetEvent("CurrentContextChanged", System.Reflection.BindingFlags.Public | BindingFlags.Instance);
+
+    //Delegate del = Delegate.CreateDelegate(ei.EventHandlerType, this, mi);
+    //ei.AddEventHandler(objectExplorerContext, del);
 }

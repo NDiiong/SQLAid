@@ -1,31 +1,25 @@
-﻿using System;
-using System.Windows;
+﻿using SQLAid.Addin.Logging;
+using System;
+using TextDataFormat = System.Windows.Forms.TextDataFormat;
 
 namespace SQLAid.Integration.Clipboard
 {
     internal class ClipboardService : IClipboardService
     {
+        public void SetDataObject(object @object)
+        {
+            Func.Ignore<Exception>(() => System.Windows.Forms.Clipboard.SetDataObject(@object, true));
+        }
+
         public void Set(string value)
         {
-            try
-            {
-                System.Windows.Clipboard.SetText(value, TextDataFormat.UnicodeText);
-            }
-            catch (Exception)
-            {
-            }
+            Func.Ignore<Exception>(() => System.Windows.Forms.Clipboard.SetText(value));
         }
 
         public string GetFromClipboard()
         {
-            try
-            {
-                if (System.Windows.Clipboard.ContainsText())
-                    return System.Windows.Clipboard.GetText(TextDataFormat.UnicodeText);
-            }
-            catch (Exception)
-            {
-            }
+            if (System.Windows.Forms.Clipboard.ContainsText())
+                return System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText);
 
             return string.Empty;
         }

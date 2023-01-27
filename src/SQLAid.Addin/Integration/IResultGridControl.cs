@@ -4,6 +4,8 @@ namespace SQLAid.Integration
 {
     public interface IResultGridControl
     {
+        string GetQueryText();
+
         IGridControl GetCurrentGridControl();
     }
 }
