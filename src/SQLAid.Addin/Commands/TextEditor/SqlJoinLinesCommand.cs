@@ -65,7 +65,7 @@ namespace SQLAid.Commands.TextEditor
 
                 if (textDocument != null)
                 {
-                    var undoTransaction = new UndoTransaction(dte, "SqlJoinLines");
+                    var undoTransaction = new UndoTransaction(dte, nameof(SqlJoinLinesCommand));
                     undoTransaction.Run(() => JoinLine(textDocument.Selection));
                 }
             }

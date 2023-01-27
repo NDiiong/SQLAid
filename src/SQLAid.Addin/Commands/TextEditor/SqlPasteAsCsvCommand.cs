@@ -22,12 +22,11 @@ namespace SQLAid.Commands.TextEditor
             _clipboardService = new ClipboardService();
         }
 
-        public static async Task InitializeAsync(Package package)
+        public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            var commandService = package.GetService<IMenuCommandService, OleMenuCommandService>();
-
+            var commandService = sqlAsyncPackage.GetService<IMenuCommandService, OleMenuCommandService>();
             var cmdId = new CommandID(PackageGuids.guidCommands, PackageIds.PasteAsCsvCommand);
             var menuItem = new OleMenuCommand((s, e) => Execute(), cmdId);
             menuItem.BeforeQueryStatus += (s, e) => CanExecute(s);

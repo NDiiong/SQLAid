@@ -1,5 +1,4 @@
-﻿using EnvDTE;
-using EnvDTE80;
+﻿using Microsoft.SqlServer.Management.UI.VSIntegration;
 using Microsoft.VisualStudio.Shell;
 using SQLAid.Addin.Extension;
 using SQLAid.Helpers;
@@ -24,14 +23,13 @@ namespace SQLAid.Commands.TextEditor
             _frameDocumentView = new FrameDocumentView();
         }
 
-        public static async Task InitializeAsync(Package package)
+        public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            var commandService = package.GetService<IMenuCommandService, OleMenuCommandService>();
-            var dte = Package.GetGlobalService(typeof(DTE)) as DTE2;
+            var commandService = sqlAsyncPackage.GetService<IMenuCommandService, OleMenuCommandService>();
             var cmdId = new CommandID(PackageGuids.guidCommands, PackageIds.PasteAsInsertedWithHeaderCommand);
-            var menuItem = new OleMenuCommand((s, e) => Execute(dte), cmdId);
+            var menuItem = new OleMenuCommand((s, e) => Execute(), cmdId);
             menuItem.BeforeQueryStatus += (s, e) => CanExecute(s);
             commandService.AddCommand(menuItem);
         }
@@ -50,7 +48,7 @@ namespace SQLAid.Commands.TextEditor
             }
         }
 
-        private static void Execute(DTE2 dte)
+        private static void Execute()
         {
             try
             {
@@ -72,7 +70,7 @@ namespace SQLAid.Commands.TextEditor
                             var editor = new Editor(_frameDocumentView);
                             content = editor.SetContent(content, columnsJoin);
 
-                            var undoTransaction = new UndoTransaction(dte, "SqlPasteAsInsertedHeaderQuery");
+                            var undoTransaction = new UndoTransaction(ServiceCache.ExtensibilityModel, nameof(SqlPasteAsInsertedHeaderQueryCommand));
                             undoTransaction.Run(() => editor.SetContent(content, count: 1));
                         }
                     }

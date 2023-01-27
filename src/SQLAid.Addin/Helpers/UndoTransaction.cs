@@ -1,14 +1,14 @@
-﻿using EnvDTE80;
+﻿using EnvDTE;
 using System;
 
 namespace SQLAid.Helpers
 {
     internal class UndoTransaction
     {
-        private readonly DTE2 _dte;
+        private readonly _DTE _dte;
         private readonly string _transactionName;
 
-        public UndoTransaction(DTE2 dte, string transactionName)
+        public UndoTransaction(_DTE dte, string transactionName)
         {
             _dte = dte;
             _transactionName = transactionName;

@@ -1,13 +1,13 @@
 ﻿#pragma warning disable IDE1006
 
-using EnvDTE;
-using EnvDTE80;
+using Microsoft.SqlServer.Management.UI.VSIntegration;
 using Microsoft.VisualStudio.CommandBars;
 using Microsoft.VisualStudio.Shell;
 using SQLAid.Addin.Extension;
 using SQLAid.Addin.Logging;
 using SQLAid.Integration;
 using SQLAid.Integration.Clipboard;
+using SQLAid.Integration.DTE;
 using SQLAid.Integration.DTE.Commandbars;
 using SQLAid.Integration.DTE.Grid;
 using SQLAid.Integration.Files;
@@ -25,10 +25,9 @@ namespace SQLAid.Commands.ResultGrid
             _clipboardService = new ClipboardService();
         }
 
-        public static async Task InitializeAsync(Package package)
+        public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            var dte = Package.GetGlobalService(typeof(DTE)) as DTE2;
 
             var copyAsCommandBar = SqlAidGridControl
                 .As<CommandBarPopup>().Controls
@@ -43,10 +42,11 @@ namespace SQLAid.Commands.ResultGrid
                 .Visible(true)
                 .Caption("JSON")
                 .As<CommandBarButton>()
-                .Click += (CommandBarButton _, ref bool __) => CopyAsJsonGridResultEventHandler(package, dte);
+                .AddIcon($"{sqlAsyncPackage.ExtensionInstallationDirectory}/Assets/json.ico")
+                .Click += (CommandBarButton _, ref bool __) => CopyAsJsonGridResultEventHandler();
         }
 
-        private static void CopyAsJsonGridResultEventHandler(IServiceProvider serviceProvider, DTE2 dte)
+        private static void CopyAsJsonGridResultEventHandler()
         {
             Func.Run(() =>
             {
@@ -60,7 +60,7 @@ namespace SQLAid.Commands.ResultGrid
                         if (!string.IsNullOrEmpty(json))
                         {
                             _clipboardService.Set(json);
-                            dte.StatusBar.Text = "Copied";
+                            ServiceCache.ExtensibilityModel.StatusBar.Text = "Copied";
                         }
                     }
                 }

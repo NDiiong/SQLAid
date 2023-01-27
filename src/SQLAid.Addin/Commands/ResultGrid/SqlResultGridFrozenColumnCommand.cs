@@ -51,34 +51,34 @@ namespace SQLAid.Commands.ResultGrid
 
             if (currentGridControl != null)
             {
-                var grid = currentGridControl.As<GridControl>();
-                using (var gridControlAdaptor = new ResultGridControlAdaptor(grid))
+                var gridControl = currentGridControl.As<GridControl>();
+                using (var gridControlAdaptor = new ResultGridControlAdaptor(gridControl))
                 {
-                    if (grid.FirstScrollableColumn == 1)
+                    if (gridControl.FirstScrollableColumn == 1)
                     {
                         _commandBarButton.Caption("Unfrozen");
-                        grid.GetCurrentCell(out _, out var col);
-                        if (1 <= col && (col + 1) < grid.GridColumnsInfo.Count)
+                        gridControl.GetCurrentCell(out _, out var col);
+                        if (1 <= col && (col + 1) < gridControl.GridColumnsInfo.Count)
                         {
                             _columnIndexLastest = col + 1;
-                            grid.FirstScrollableColumn = _columnIndexLastest;
+                            gridControl.FirstScrollableColumn = _columnIndexLastest;
                             gridControlAdaptor.SetRangeColumnBackground(1, _columnIndexLastest, Color.PowderBlue);
                         }
                         else
                         {
-                            grid.FirstScrollableColumn = 1;
+                            gridControl.FirstScrollableColumn = 1;
                         }
                     }
                     else
                     {
-                        grid.FirstScrollableColumn = 1;
+                        gridControl.FirstScrollableColumn = 1;
                         gridControlAdaptor.SetRangeColumnBackground(1, _columnIndexLastest, Color.White);
                         _commandBarButton.Caption("Frozen");
                     }
 
-                    grid.GridColumnsInfo[grid.FirstScrollableColumn].IsWithRightGridLine = true;
-                    grid.UpdateGrid();
-                    grid.Refresh();
+                    gridControl.GridColumnsInfo[gridControl.FirstScrollableColumn].IsWithRightGridLine = true;
+                    gridControl.UpdateGrid();
+                    gridControl.Refresh();
                 }
             }
         }
