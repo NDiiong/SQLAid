@@ -52,7 +52,7 @@ namespace SQLAid.Commands.ResultGrid
             if (currentGridControl != null)
             {
                 var grid = currentGridControl.As<GridControl>();
-                using (var resultGridControlAdaptor = new ResultGridControlAdaptor(grid))
+                using (var gridControlAdaptor = new ResultGridControlAdaptor(grid))
                 {
                     if (grid.FirstScrollableColumn == 1)
                     {
@@ -62,7 +62,7 @@ namespace SQLAid.Commands.ResultGrid
                         {
                             _columnIndexLastest = col + 1;
                             grid.FirstScrollableColumn = _columnIndexLastest;
-                            resultGridControlAdaptor.SetRangeColumnBackground(1, _columnIndexLastest, Color.PowderBlue);
+                            gridControlAdaptor.SetRangeColumnBackground(1, _columnIndexLastest, Color.PowderBlue);
                         }
                         else
                         {
@@ -72,7 +72,7 @@ namespace SQLAid.Commands.ResultGrid
                     else
                     {
                         grid.FirstScrollableColumn = 1;
-                        resultGridControlAdaptor.SetRangeColumnBackground(1, _columnIndexLastest, Color.White);
+                        gridControlAdaptor.SetRangeColumnBackground(1, _columnIndexLastest, Color.White);
                         _commandBarButton.Caption("Frozen");
                     }
 
