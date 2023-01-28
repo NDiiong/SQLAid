@@ -13,9 +13,4 @@ namespace SQLAid.Commands.Grid
     internal sealed class SqlResultGridSearchColumnCommand : SqlResultGridCommandBase
     {
     }
-
-    public class BraceMatcher
-    {
-        //https://github.com/gregfullman/VSGenero/blob/master/VSGenero/EditorExtensions/BraceHighlighter.cs
-    }
 }

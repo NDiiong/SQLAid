@@ -75,7 +75,7 @@ namespace SQLAid.Commands.Grid
                             syntaxes.Add(syntax);
                         }
 
-                        var condition = "WHERE " + string.Join("AND ", syntaxes);
+                        var condition = string.Join("AND ", syntaxes);
                         var textDocument = _frameDocumentView.GetTextDocument();
                         textDocument.EndPoint.CreateEditPoint().Insert(condition);
                     }
