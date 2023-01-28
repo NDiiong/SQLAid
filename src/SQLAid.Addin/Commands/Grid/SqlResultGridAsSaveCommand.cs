@@ -14,7 +14,7 @@ using System.IO;
 using System.Windows.Forms;
 using Task = System.Threading.Tasks.Task;
 
-namespace SQLAid.Commands.ResultGrid
+namespace SQLAid.Commands.Grid
 {
     internal sealed class SqlResultGridAsSaveCommand : SqlResultGridCommandBase
     {
@@ -33,7 +33,7 @@ namespace SQLAid.Commands.ResultGrid
                 .Visible(true)
                 .Caption("JSON")
                 .As<CommandBarButton>()
-                .AddIcon($"{package.ExtensionInstallationDirectory}/Assets/json.ico")
+                .AddIcon($"{package.InstallationDirectory}/Assets/json.ico")
                 .Click += (CommandBarButton _, ref bool __) => SaveJsonGridResultEventHandler();
 
             //Save Result As Excel
@@ -42,7 +42,7 @@ namespace SQLAid.Commands.ResultGrid
                 .Visible(true)
                 .Caption("EXCEL")
                 .As<CommandBarButton>()
-                .AddIcon($"{package.ExtensionInstallationDirectory}/Assets/excel.ico")
+                .AddIcon($"{package.InstallationDirectory}/Assets/excel.ico")
                 .Click += (CommandBarButton _, ref bool __) => SaveExcelGridResultEventHandler();
         }
 
@@ -53,6 +53,7 @@ namespace SQLAid.Commands.ResultGrid
                 var saveFileDialog = new SaveFileDialog
                 {
                     FileName = "",
+                    DefaultExt = "xlsx",
                     Title = "Save Results As Excel",
                     Filter = "Excel (*.xlsx)|*.xlsx",
                     InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
@@ -69,6 +70,7 @@ namespace SQLAid.Commands.ResultGrid
                 var saveFileDialog = new SaveFileDialog
                 {
                     FileName = "",
+                    DefaultExt = "json",
                     Title = "Save Results As Json",
                     Filter = "Json (*.json)|*.json",
                     InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),

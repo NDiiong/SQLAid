@@ -20,7 +20,7 @@ namespace SQLAid.Integration.DTE
         public DTE2 Application { get; private set; }
         public IMenuCommandService MenuCommand { get; private set; }
 
-        public string ExtensionInstallationDirectory
+        public string InstallationDirectory
         {
             get
             {

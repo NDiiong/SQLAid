@@ -9,11 +9,12 @@ using SQLAid.Integration.DTE;
 using SQLAid.Integration.DTE.Commandbars;
 using SQLAid.Integration.DTE.Grid;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Task = System.Threading.Tasks.Task;
 
-namespace SQLAid.Commands.ResultGrid
+namespace SQLAid.Commands.Grid
 {
     internal sealed class SqlResultGridAsInsertScriptCommand : SqlResultGridCommandBase
     {
@@ -40,10 +41,17 @@ namespace SQLAid.Commands.ResultGrid
                 .Visible(true)
                 .Caption("INSERT")
                 .As<CommandBarButton>()
-                .Click += (CommandBarButton _, ref bool __) => Execute(package);
+                .Click += (CommandBarButton _, ref bool __) => InsertEventHandler(package);
+
+            generateScriptCommbarPopup.Controls
+                .Add(MsoControlType.msoControlButton, 2, Type.Missing, Type.Missing, false)
+                .Visible(true)
+                .Caption("WHERE IN()")
+                .As<CommandBarButton>()
+                .Click += (CommandBarButton _, ref bool __) => WhereInEventHandler(package);
         }
 
-        private static void Execute(SqlAidAsyncPackage asyncPackage)
+        private static void WhereInEventHandler(SqlAidAsyncPackage _)
         {
             Func.Run(() =>
             {
@@ -52,7 +60,39 @@ namespace SQLAid.Commands.ResultGrid
                 {
                     using (var gridResultControl = new ResultGridControlAdaptor(currentGridControl))
                     {
-                        var templates = File.ReadAllText($"{asyncPackage.ExtensionInstallationDirectory}/Templates/SQL.INSERT.INTO.sql");
+                        var syntaxes = new List<string>();
+                        foreach (var item in gridResultControl.GetResultGridSelected())
+                        {
+                            if (item.Value.Count < 1)
+                                continue;
+
+                            var syntax = "";
+                            if (item.Value.Count > 1)
+                                syntax = $"{item.Key} IN ({string.Join(", ", item.Value)})";
+                            else
+                                syntax = $"{item.Key} = {item.Value[0]}";
+
+                            syntaxes.Add(syntax);
+                        }
+
+                        var condition = "WHERE " + string.Join("AND ", syntaxes);
+                        var textDocument = _frameDocumentView.GetTextDocument();
+                        textDocument.EndPoint.CreateEditPoint().Insert(condition);
+                    }
+                }
+            });
+        }
+
+        private static void InsertEventHandler(SqlAidAsyncPackage asyncPackage)
+        {
+            Func.Run(() =>
+            {
+                var currentGridControl = GridControl.GetCurrentGridControl();
+                if (currentGridControl != null)
+                {
+                    using (var gridResultControl = new ResultGridControlAdaptor(currentGridControl))
+                    {
+                        var templates = File.ReadAllText($"{asyncPackage.InstallationDirectory}/Templates/SQL.INSERT.INTO.tt");
 
                         var gridResultSelected = gridResultControl.GridSelectedAsQuerySql();
                         var columnHeaders = gridResultSelected.ElementAt(0);

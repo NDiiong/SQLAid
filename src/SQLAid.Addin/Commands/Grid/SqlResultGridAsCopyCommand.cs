@@ -14,7 +14,7 @@ using SQLAid.Integration.Files;
 using System;
 using Task = System.Threading.Tasks.Task;
 
-namespace SQLAid.Commands.ResultGrid
+namespace SQLAid.Commands.Grid
 {
     internal sealed class SqlResultGridAsCopyCommand : SqlResultGridCommandBase
     {
@@ -42,7 +42,7 @@ namespace SQLAid.Commands.ResultGrid
                 .Visible(true)
                 .Caption("JSON")
                 .As<CommandBarButton>()
-                .AddIcon($"{sqlAsyncPackage.ExtensionInstallationDirectory}/Assets/json.ico")
+                .AddIcon($"{sqlAsyncPackage.InstallationDirectory}/Assets/json.ico")
                 .Click += (CommandBarButton _, ref bool __) => CopyAsJsonGridResultEventHandler();
         }
 

@@ -8,7 +8,7 @@ using SQLAid.Integration;
 using SQLAid.Integration.DTE.Grid;
 using System;
 
-namespace SQLAid.Commands.ResultGrid
+namespace SQLAid.Commands.Grid
 {
     internal abstract class SqlResultGridCommandBase
     {

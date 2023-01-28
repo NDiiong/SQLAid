@@ -35,15 +35,16 @@ namespace SQLAid.Integration.DTE.Grid
             return cellText;
         }
 
-        public IEnumerable<(Type, string)> GetColumnTypes()
+        public IEnumerable<(Type, string, bool)> GetColumnTypes()
         {
-            var result = new List<(Type, string)>();
+            var result = new List<(Type, string, bool)>();
             var schema = _gridControl.GridStorage.GetField<DataTable>("m_schemaTable");
             for (var column = 1; column < ColumnCount; column++)
             {
                 var columnType = schema.Rows[column - 1][12].As<Type>();
+                var nullable = schema.Rows[column - 1][13].As<bool>();
                 var columnText = GetColumnName(column);
-                result.Add((columnType, columnText));
+                result.Add((columnType, columnText, nullable));
             }
 
             return result;
@@ -93,7 +94,7 @@ namespace SQLAid.Integration.DTE.Grid
             var datatable = new DataTable();
             var columnHeaders = GetColumnTypes();
 
-            foreach (var (type, name) in columnHeaders)
+            foreach (var (type, name, _) in columnHeaders)
                 datatable.Columns.Add(name, type);
 
             for (var nRowIndex = 0L; nRowIndex < RowCount; ++nRowIndex)
@@ -159,17 +160,6 @@ namespace SQLAid.Integration.DTE.Grid
                     for (var col = cell.X; col <= cell.Right; col++)
                     {
                         var column = headers[col].Text.Trim();
-                        if (column.StartsWith("<"))
-                        {
-                            try
-                            {
-                                var cols = column.Split('(');
-                                if (cols.Length > 1)
-                                    column = cols[1].TrimEnd(")>".ToArray());
-                            }
-                            catch { }
-                        }
-
                         if (!gridResult.ContainsKey(column))
                             gridResult.Add(column, new List<string>());
 

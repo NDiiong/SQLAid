@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.Shell;
 using SQLAid.Commands.Events;
-using SQLAid.Commands.ResultGrid;
+using SQLAid.Commands.Grid;
 using SQLAid.Commands.TextEditor;
 using SQLAid.Integration.DTE;
 using System;
@@ -26,15 +26,16 @@ namespace SQLAid
             await QueryHistoryCommand.InitializeAsync(this).ConfigureAwait(false);
 
             //SQL GRID RESULT
+            await SqlResultGridAsCsharpClassCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridFrozenColumnCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridAsCopyCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridAsSaveCommand.InitializeAsync(this).ConfigureAwait(false);
+            await SqlPasteAsInsertedQueryCommand.InitializeAsync(this).ConfigureAwait(false);
 
             //SQL TEXT EDITOR
             await SqlJoinLinesCommand.InitializeAsync(this).ConfigureAwait(false);
-            await SqlPasteAsCsvCommand.InitializeAsync(this).ConfigureAwait(false);
-            await SqlPasteAsInsertedQueryCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridAsInsertScriptCommand.InitializeAsync(this).ConfigureAwait(false);
+            await SqlPasteAsCsvCommand.InitializeAsync(this).ConfigureAwait(false);
         }
     }
 

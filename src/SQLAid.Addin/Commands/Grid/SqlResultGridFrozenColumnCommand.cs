@@ -12,7 +12,7 @@ using System;
 using System.Drawing;
 using Task = System.Threading.Tasks.Task;
 
-namespace SQLAid.Commands.ResultGrid
+namespace SQLAid.Commands.Grid
 {
     internal sealed class SqlResultGridFrozenColumnCommand : SqlResultGridCommandBase
     {
@@ -20,7 +20,7 @@ namespace SQLAid.Commands.ResultGrid
         private static int _columnIndexLastest;
         private static CommandEvents _executeEvent;
 
-        public static async Task InitializeAsync(SqlAidAsyncPackage package)
+        public static async Task InitializeAsync(SqlAidAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
@@ -34,7 +34,7 @@ namespace SQLAid.Commands.ResultGrid
                 .As<CommandBarButton>();
 
             _commandBarButton
-                .AddIcon($"{package.ExtensionInstallationDirectory}/Assets/snowflake.ico")
+                .AddIcon($"{sqlAsyncPackage.InstallationDirectory}/Assets/snowflake.ico")
                 .AddStyle(MsoButtonStyle.msoButtonIconAndCaption)
                 .Click += (CommandBarButton _, ref bool __) => FrozenColumnEventHandle();
         }
