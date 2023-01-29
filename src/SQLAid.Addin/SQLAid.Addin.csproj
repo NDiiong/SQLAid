@@ -93,6 +93,7 @@
     <Compile Include="Commands\Grid\SqlResultGridAsInsertScriptCommand.cs" />
     <Compile Include="Commands\Grid\SqlResultGridFrozenColumnCommand.cs" />
     <Compile Include="Commands\Grid\SqlResultGridSearchCommand.cs" />
+    <Compile Include="Commands\TextEditor\Highlighter\BackgroundSearch.cs" />
     <Compile Include="Commands\TextEditor\Highlighter\HighlightCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlJoinLinesCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlPasteAsCsvCommand.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Commands\TextEditor\SqlPasteAsInsertedQueryCommand.cs" />
     <Compile Include="Commands\Grid\SqlResultGridAsSaveCommand.cs" />
     <Compile Include="Commands\Events\WindowEventLogging.cs" />
+    <Compile Include="Commands\TextEditor\SqlTextEditorBraceMatchCommand.cs" />
     <Compile Include="Helpers\OutputWindows.cs" />
     <Compile Include="Helpers\TypeHelper.cs" />
     <Compile Include="Integration\DTE\Commandbars\CommandBarButtonBuilder.cs" />
