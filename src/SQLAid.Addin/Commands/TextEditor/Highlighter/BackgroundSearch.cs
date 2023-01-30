@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.Text;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace SQLAid.Commands.TextEditor.Highlighter
 {
@@ -18,61 +17,53 @@ namespace SQLAid.Commands.TextEditor.Highlighter
         {
             this.Snapshot = snapshot;
 
-            ThreadPool.QueueUserWorkItem(delegate (object state)
+            var newMatches = new List<SnapshotSpan>();
+
+            var start = 0;
+            while (true)
             {
-                System.Threading.Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-                System.Threading.Thread.CurrentThread.IsBackground = true;
+                var end = Math.Min(snapshot.Length, start + 4096);
+                var text = snapshot.GetText(start, end - start);
 
-                var newMatches = new List<SnapshotSpan>();
-
-                var start = 0;
+                var offset = (start == 0) ? 0 : 1;
                 while (true)
                 {
-                    var end = Math.Min(snapshot.Length, start + 4096);
-                    var text = snapshot.GetText(start, end - start);
-
-                    var offset = (start == 0) ? 0 : 1;
-                    while (true)
-                    {
-                        var match = text.IndexOf(searchText, offset, StringComparison.Ordinal);
-                        if (match == -1)
-                            break;
-
-                        if (matchWholeWord)
-                        {
-                            if ((match == 0) || !BackgroundSearch.IsWordCharacter(text[match - 1]))
-                            {
-                                if ((match + searchText.Length == text.Length)
-                                    ? (end == snapshot.Length)
-                                    : !BackgroundSearch.IsWordCharacter(text[match + searchText.Length]))
-                                {
-                                    var matchSpan = new SnapshotSpan(snapshot, match + start, searchText.Length);
-                                    newMatches.Add(matchSpan);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            var matchSpan = new SnapshotSpan(snapshot, match + start, searchText.Length);
-                            newMatches.Add(matchSpan);
-                        }
-
-                        offset = match + searchText.Length;
-                    }
-
-                    if (_abort)
-                        return;
-
-                    if (end == snapshot.Length)
+                    var match = text.IndexOf(searchText, offset, StringComparison.Ordinal);
+                    if (match == -1)
                         break;
 
-                    start = end - (searchText.Length + 1);
+                    if (matchWholeWord)
+                    {
+                        if ((match == 0) || !BackgroundSearch.IsWordCharacter(text[match - 1]))
+                        {
+                            if ((match + searchText.Length == text.Length)
+                                ? (end == snapshot.Length)
+                                : !BackgroundSearch.IsWordCharacter(text[match + searchText.Length]))
+                            {
+                                var matchSpan = new SnapshotSpan(snapshot, match + start, searchText.Length);
+                                newMatches.Add(matchSpan);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var matchSpan = new SnapshotSpan(snapshot, match + start, searchText.Length);
+                        newMatches.Add(matchSpan);
+                    }
+
+                    offset = match + searchText.Length;
                 }
 
-                _matches = newMatches;
+                if (_abort)
+                    return;
 
-                //completionCallback();
-            });
+                if (end == snapshot.Length)
+                    break;
+
+                start = end - (searchText.Length + 1);
+            }
+
+            _matches = newMatches;
         }
 
         public static bool IsWordCharacter(char c)

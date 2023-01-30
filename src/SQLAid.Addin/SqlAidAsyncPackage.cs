@@ -2,7 +2,6 @@
 using SQLAid.Commands.Events;
 using SQLAid.Commands.Grid;
 using SQLAid.Commands.TextEditor;
-using SQLAid.Commands.TextEditor.Highlighter;
 using SQLAid.Integration.DTE;
 using System;
 using System.Runtime.InteropServices;
@@ -38,7 +37,7 @@ namespace SQLAid
             await SqlResultGridAsInsertScriptCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlPasteAsCsvCommand.InitializeAsync(this).ConfigureAwait(false);
 
-            await HighlightCommand.InitializeAsync(this).ConfigureAwait(false);
+            //await HighlightCommand.InitializeAsync(this).ConfigureAwait(false);
         }
     }
 
