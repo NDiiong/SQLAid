@@ -1,13 +1,10 @@
-﻿using Microsoft.SqlServer.Management.UI.VSIntegration;
-using Microsoft.VisualStudio.Shell;
+﻿using Microsoft.VisualStudio.Shell;
 using SQLAid.Extensions;
-using SQLAid.Helpers;
 using SQLAid.Integration;
 using SQLAid.Integration.Clipboard;
 using SQLAid.Integration.DTE;
 using System;
 using System.ComponentModel.Design;
-using System.Linq;
 using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.TextEditor
@@ -50,35 +47,6 @@ namespace SQLAid.Commands.TextEditor
 
         private static void Execute()
         {
-            try
-            {
-                var content = _clipboardService.GetFromClipboard();
-                if (!string.IsNullOrWhiteSpace(content))
-                {
-                    var lines = content.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                    if (lines.Length > 0)
-                    {
-                        var columns = lines.ElementAtOrDefault(0)
-                        ?.Split('\t')
-                        ?.Select(q => q.Contains(" ") ? $"[{q}]" : q);
-
-                        if (columns != null)
-                        {
-                            content = string.Join(Environment.NewLine, lines.Skip(1));
-                            var columnsJoin = string.Join(", ", columns);
-
-                            var editor = new Editor(_frameDocumentView);
-                            content = editor.SetContent(content, columnsJoin);
-
-                            var undoTransaction = new UndoTransaction(ServiceCache.ExtensibilityModel, nameof(SqlPasteAsInsertedHeaderQueryCommand));
-                            undoTransaction.Run(() => editor.SetContent(content, count: 1));
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-            }
         }
     }
 }

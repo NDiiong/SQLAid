@@ -1,6 +1,5 @@
 ﻿using EnvDTE;
 using EnvDTE80;
-using Microsoft.SqlServer.Management.UI.VSIntegration;
 using Microsoft.VisualStudio.Shell;
 using SQLAid.Extensions;
 using SQLAid.Integration.DTE;
@@ -40,7 +39,7 @@ namespace SQLAid.Commands.Events
 
         private static void CommandEvents_BeforeExecute(string Guid, int ID, object CustomIn, object CustomOut, ref bool CancelDefault)
         {
-            var queryText = GetQueryText(ServiceCache.ExtensibilityModel);
+            var queryText = "";// GetQueryText(ServiceCache.ExtensibilityModel);
             if (string.IsNullOrWhiteSpace(queryText))
                 return;
 
@@ -72,6 +71,8 @@ namespace SQLAid.Commands.Events
 
         private static string GetQueryText(_DTE dte)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             var document = dte.ActiveDocument;
             if (document == null)
                 return null;

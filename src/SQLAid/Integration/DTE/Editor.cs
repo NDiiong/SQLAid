@@ -1,7 +1,4 @@
-﻿using EnvDTE;
-using System.Collections.Specialized;
-
-namespace SQLAid.Integration.DTE
+﻿namespace SQLAid.Integration.DTE
 {
     public class Editor : IEditor
     {
@@ -33,53 +30,6 @@ namespace SQLAid.Integration.DTE
             var startPoint = textDocument.CreateEditPoint(textDocument.StartPoint);
             startPoint.Delete(textDocument.EndPoint);
             startPoint.Insert(content);
-        }
-
-        public void SetContent(string text, int count)
-        {
-            var textSelection = _frameDocumentView.GetTextSelection();
-            var currentline = textSelection.TopPoint.Line;
-            var currentColumn = textSelection.TopPoint.DisplayColumn;
-
-            textSelection.Delete(count);
-            textSelection.Collapse();
-            textSelection.MoveToLineAndOffset(currentline, currentColumn);
-
-            var ed = textSelection.TopPoint.CreateEditPoint();
-            ed.Insert(text);
-
-            textSelection.StartOfLine(vsStartOfLineOptions.vsStartOfLineOptionsFirstText);
-            textSelection.EndOfLine(true);
-
-            textSelection.MoveToLineAndOffset(currentline, currentColumn);
-        }
-
-        //public void SetContent(string text)
-        //{
-        //    var textSelection = _frameDocumentView.GetTextSelection();
-        //    var currentline = textSelection.TopPoint.Line;
-        //    var currentColumn = textSelection.TopPoint.DisplayColumn;
-
-        //    var ed = textSelection.TopPoint.CreateEditPoint();
-        //    ed.Insert(text);
-
-        //    // Di chuyển con trỏ về vị trí ban đầu
-        //    textSelection.MoveToLineAndOffset(currentline, currentColumn);
-        //}
-
-        public string SetContent(string content, string columns)
-        {
-            return string.Empty;
-        }
-
-        public void SetContent(StringCollection content)
-        {
-            var textDocument = _frameDocumentView.GetTextDocument();
-            var start = textDocument.CreateEditPoint(textDocument.StartPoint);
-            start.Delete(textDocument.EndPoint);
-
-            foreach (var part in content)
-                start.Insert(part);
         }
 
         public string GetSqlString()

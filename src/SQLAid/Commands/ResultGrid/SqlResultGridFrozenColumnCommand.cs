@@ -8,7 +8,6 @@ using Microsoft.VisualStudio.Shell;
 using SQLAid.Extensions;
 using SQLAid.Integration.DTE.Commandbars;
 using SQLAid.Integration.DTE.Grid;
-using System;
 using System.Drawing;
 using Task = System.Threading.Tasks.Task;
 
@@ -16,9 +15,9 @@ namespace SQLAid.Commands.ResultGrid
 {
     internal sealed class SqlResultGridFrozenColumnCommand : SqlResultGridCommandBase
     {
-        private static CommandBarButton _commandBarButton;
         private static int _columnIndexLastest;
         private static CommandEvents _executeEvent;
+        private static CommandBarButton _commandBarButton;
 
         public static async Task InitializeAsync(SqlAidAsyncPackage package)
         {
@@ -28,15 +27,7 @@ namespace SQLAid.Commands.ResultGrid
             _executeEvent = ServiceCache.ExtensibilityModel.Events.get_CommandEvents(command.Guid, command.ID);
             _executeEvent.BeforeExecute += QueryExecuteEvent_BeforeExecute;
 
-            _commandBarButton = SqlAidGridControl.As<CommandBarPopup>().Controls
-                .Add(MsoControlType.msoControlButton, 1, Type.Missing, Type.Missing, false)
-                .Visible(true).Caption("Frozen")
-                .As<CommandBarButton>();
-
-            _commandBarButton
-                .AddIcon($"{package.ExtensionInstallationDirectory}/Assets/snowflake.ico")
-                .AddStyle(MsoButtonStyle.msoButtonIconAndCaption)
-                .Click += (CommandBarButton _, ref bool __) => FrozenColumnEventHandle();
+            _commandBarButton = GridCommandBar.AddButton("Frozen", $"{package.ExtensionInstallationDirectory}/Resources/Assets/snowflake.ico", MsoButtonStyle.msoButtonIconAndCaption, OnClick);
         }
 
         private static void QueryExecuteEvent_BeforeExecute(string Guid, int ID, object CustomIn, object CustomOut, ref bool CancelDefault)
@@ -45,10 +36,9 @@ namespace SQLAid.Commands.ResultGrid
                 _commandBarButton.Caption("Frozen");
         }
 
-        private static void FrozenColumnEventHandle()
+        private static void OnClick()
         {
-            var currentGridControl = GridControl.GetCurrentGridControl();
-
+            var currentGridControl = GridControl.GetFocusGridControl();
             if (currentGridControl != null)
             {
                 var gridControl = currentGridControl.As<GridControl>();
@@ -56,11 +46,11 @@ namespace SQLAid.Commands.ResultGrid
                 {
                     if (gridControl.FirstScrollableColumn == 1)
                     {
-                        _commandBarButton.Caption("Unfrozen");
                         gridControl.GetCurrentCell(out _, out var col);
                         if (1 <= col && (col + 1) < gridControl.GridColumnsInfo.Count)
                         {
                             _columnIndexLastest = col + 1;
+                            _commandBarButton.Caption("Unfrozen");
                             gridControl.FirstScrollableColumn = _columnIndexLastest;
                             gridControlAdaptor.SetRangeColumnBackground(1, _columnIndexLastest, Color.PowderBlue);
                         }

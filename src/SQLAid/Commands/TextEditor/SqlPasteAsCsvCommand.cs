@@ -49,19 +49,19 @@ namespace SQLAid.Commands.TextEditor
 
         private static void Execute()
         {
-            try
+            var content = _clipboardService.GetFromClipboard();
+            if (!string.IsNullOrWhiteSpace(content))
             {
-                var content = _clipboardService.GetFromClipboard();
-                if (!string.IsNullOrWhiteSpace(content))
-                {
-                    var replacement = "'," + Environment.NewLine + "'";
-                    var singleLine = $"'{Regex.Replace(content, PATTERN, replacement, RegexOptions.Multiline)}'";
-                    var editor = new Editor(_frameDocumentView);
-                    editor.SetContent(singleLine, count: 1);
-                }
-            }
-            catch (Exception)
-            {
+                var textSelection = _frameDocumentView.GetTextSelection();
+                var currentline = textSelection.TopPoint.Line;
+                var currentColumn = textSelection.TopPoint.DisplayColumn;
+
+                var replacement = "'," + Environment.NewLine + "'";
+                var singleLine = $"'{Regex.Replace(content, PATTERN, replacement, RegexOptions.Multiline)}'";
+
+                var ed = textSelection.TopPoint.CreateEditPoint();
+                ed.Insert(singleLine);
+                textSelection.MoveToLineAndOffset(currentline, currentColumn);
             }
         }
     }

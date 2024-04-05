@@ -1,4 +1,5 @@
 ﻿using Microsoft.SqlServer.Management.UI.Grid;
+using System.Collections;
 
 namespace SQLAid.Integration
 {
@@ -6,6 +7,10 @@ namespace SQLAid.Integration
     {
         string GetQueryText();
 
-        IGridControl GetCurrentGridControl();
+        object GetGridControl();
+
+        CollectionBase GetGridContainers();
+
+        IGridControl GetFocusGridControl();
     }
 }

@@ -37,6 +37,7 @@ namespace SQLAid.Commands.TextEditor
 
         private static void CanExcute(object sender, System.EventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             try
             {
                 var commandMenu = (OleMenuCommand)sender;
