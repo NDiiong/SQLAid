@@ -72,19 +72,6 @@ namespace SQLAid.Integration.DTE.Grid
             return datatable;
         }
 
-        public DataTable SchemaResultGridAliasType()
-        {
-            var datatable = new DataTable();
-            var schemaTable = _gridControl.GridStorage.GetField<DataTable>("m_schemaTable");
-            for (var column = 1; column < ColumnCount; column++)
-            {
-                var columnType = schemaTable.Rows[column - 1][24].As<string>().SqlToType();
-                var columnText = GetColumnName(column);
-                datatable.Columns.Add(columnText, columnType);
-            }
-            return datatable;
-        }
-
         public string GetCellValueAsString(long nRowIndex, int nColIndex)
         {
             var cellText = _gridControl.GridStorage.GetCellDataAsString(nRowIndex, nColIndex) ?? "";
