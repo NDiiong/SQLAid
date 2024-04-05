@@ -19,8 +19,8 @@ namespace SQLAid.Commands.ResultGrid
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            GridCommandBar.AddButton("Save Result As Json", $"{package.ExtensionInstallationDirectory}/Resources/Assets/json.ico", SaveJsonGridResultEventHandler);
-            GridCommandBar.AddButton("Save Result As Excel", $"{package.ExtensionInstallationDirectory}/Resources/Assets/excel.ico", SaveExcelGridResultEventHandler);
+            GridCommandBar.AddButton("Save Result As Json", $"{package.ExtensionInstallationDirectory}/Resources/Assets/json-download.ico", SaveJsonGridResultEventHandler);
+            GridCommandBar.AddButton("Save Result As Excel", $"{package.ExtensionInstallationDirectory}/Resources/Assets/xls-icon.ico", SaveExcelGridResultEventHandler);
         }
 
         private static void SaveExcelGridResultEventHandler()

@@ -7,16 +7,15 @@ using SQLAid.Integration;
 using SQLAid.Integration.Clipboard;
 using SQLAid.Integration.DTE;
 using SQLAid.Integration.DTE.Grid;
-using SQLAid.Integration.Files;
 using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.ResultGrid
 {
-    internal sealed class SqlResultGridCopyAsJsonCommand : SqlResultGridCommandBase
+    internal sealed class SqlResultGridCopyAsCsvCommand : SqlResultGridCommandBase
     {
         private static readonly IClipboardService _clipboardService;
 
-        static SqlResultGridCopyAsJsonCommand()
+        static SqlResultGridCopyAsCsvCommand()
         {
             _clipboardService = new ClipboardService();
         }
@@ -24,7 +23,7 @@ namespace SQLAid.Commands.ResultGrid
         public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            GridCommandBar.AddButton("Copy As Json", $"{sqlAsyncPackage.ExtensionInstallationDirectory}/Resources/Assets/json-icon.ico", OnClick);
+            GridCommandBar.AddButton("Copy As Csv", $"{sqlAsyncPackage.ExtensionInstallationDirectory}/Resources/Assets/csv-icon.ico", OnClick);
         }
 
         private static void OnClick()
@@ -33,12 +32,11 @@ namespace SQLAid.Commands.ResultGrid
             var activeGridControl = GridControl.GetFocusGridControl();
             using (var gridResultControl = new ResultGridControlAdaptor(activeGridControl))
             {
-                var json = FileServiceFactory.JsonService.AsJson(gridResultControl.GridFocusAsDatatable());
-                if (!string.IsNullOrEmpty(json))
-                {
-                    _clipboardService.Set(json);
-                    ServiceCache.ExtensibilityModel.StatusBar.Text = "Copied";
-                }
+                var datatable = gridResultControl.GridFocusAsDatatable();
+                var content = datatable.ToCsv();
+
+                _clipboardService.Set(content);
+                ServiceCache.ExtensibilityModel.StatusBar.Text = "Copied";
             }
         }
     }

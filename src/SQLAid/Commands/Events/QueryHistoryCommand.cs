@@ -12,6 +12,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.Events
 {
+    // ADD GUI FOR HISTORY
     internal sealed class QueryHistoryCommand
     {
         private static readonly string _location;

@@ -7,6 +7,7 @@ using SQLAid.Integration;
 using SQLAid.Integration.Clipboard;
 using SQLAid.Integration.DTE;
 using SQLAid.Integration.DTE.Grid;
+using System;
 using System.IO;
 using System.Linq;
 using Task = System.Threading.Tasks.Task;
@@ -27,7 +28,7 @@ namespace SQLAid.Commands.ResultGrid
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             templates = File.ReadAllText($"{sqlAsyncPackage.ExtensionInstallationDirectory}/Templates/SQL.INSERT.INTO.sql");
-            GridCommandBar.AddButton("Copy As #INSERT", OnClick);
+            GridCommandBar.AddButton("Copy As #INSERT", $"{sqlAsyncPackage.ExtensionInstallationDirectory}/Resources/Assets/insert-table.ico", OnClick);
         }
 
         private static void OnClick()
@@ -40,7 +41,7 @@ namespace SQLAid.Commands.ResultGrid
                 var columnHeaders = gridResultSelected.ElementAt(0);
                 var contentRows = gridResultSelected.Skip(1);
 
-                var rows = string.Join("\r\n\t,", contentRows.Select(r => $"({string.Join(", ", r)})"));
+                var rows = string.Join($",{Environment.NewLine}\t", contentRows.Select(r => $"({string.Join(", ", r)})"));
                 var sqlQuery = templates.Replace("{columnHeaders}", columnHeaders).Replace("{rows}", rows);
 
                 _clipboardService.Set(sqlQuery);

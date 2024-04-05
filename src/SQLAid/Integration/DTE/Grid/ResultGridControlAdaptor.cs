@@ -72,15 +72,25 @@ namespace SQLAid.Integration.DTE.Grid
             return datatable;
         }
 
-        public string GetCellValueAsString(long nRowIndex, int nColIndex)
+        public object GetCellValueAsString(long nRowIndex, int nColIndex)
         {
             var cellText = _gridControl.GridStorage.GetCellDataAsString(nRowIndex, nColIndex) ?? "";
-            cellText = cellText.Replace("'", "''");
 
-            if (!cellText.Equals("NULL", StringComparison.OrdinalIgnoreCase))
-                cellText = "N'" + cellText + "'";
+            if (cellText.Equals("NULL", StringComparison.OrdinalIgnoreCase))
+                return cellText;
 
-            return cellText;
+            var schema = _gridControl.GridStorage.GetField<DataTable>("m_schemaTable");
+            var columnType = schema.Rows[nColIndex - 1][12].As<Type>();
+            if (columnType == typeof(bool))
+            {
+                return cellText == "1" ? true : false;
+            }
+            else if (columnType == typeof(int) || columnType == typeof(decimal) || columnType == typeof(long) || columnType == typeof(double) || columnType == typeof(float) || columnType == typeof(byte))
+            {
+                return Convert.ChangeType(cellText, columnType, CultureInfo.InvariantCulture);
+            }
+
+            return string.Format("N'{0}'", cellText.Replace("'", "''"));
         }
 
         public IEnumerable<(Type, string)> GetColumnTypes()
@@ -129,12 +139,12 @@ namespace SQLAid.Integration.DTE.Grid
             return columnHeaders;
         }
 
-        public IEnumerable<IEnumerable<string>> GridAsQuerySql()
+        public IEnumerable<IEnumerable<object>> GridAsQuerySql()
         {
-            var rows = new List<List<string>>();
+            var rows = new List<List<object>>();
             for (var nRowIndex = 0L; nRowIndex < RowCount; ++nRowIndex)
             {
-                var columns = new List<string>();
+                var columns = new List<object>();
                 for (var nColIndex = 1; nColIndex < ColumnCount; nColIndex++)
                 {
                     var cellText = GetCellValueAsString(nRowIndex, nColIndex);
@@ -157,10 +167,10 @@ namespace SQLAid.Integration.DTE.Grid
             return linkedList;
         }
 
-        public Dictionary<string, List<string>> GetResultGridSelected()
+        public Dictionary<string, List<object>> GetResultGridSelected()
         {
             var gridHeader = _gridControl.GetField<GridHeader>("m_gridHeader");
-            var gridResult = new Dictionary<string, List<string>>();
+            var gridResult = new Dictionary<string, List<object>>();
             foreach (BlockOfCells cell in _gridControl.SelectedCells)
             {
                 for (var row = cell.Y; row <= cell.Bottom; row++)
@@ -180,7 +190,7 @@ namespace SQLAid.Integration.DTE.Grid
                         }
 
                         if (!gridResult.ContainsKey(column))
-                            gridResult.Add(column, new List<string>());
+                            gridResult.Add(column, new List<object>());
 
                         var cellText = GetCellValueAsString(row, col);
                         gridResult[column].Add(cellText);
