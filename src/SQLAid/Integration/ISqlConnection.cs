@@ -1,9 +1,9 @@
-﻿using Microsoft.SqlServer.Management.Common;
+﻿using SQLAid.Integration.DTE.Connection;
 
 namespace SQLAid.Integration
 {
     public interface ISqlConnection
     {
-        //SqlConnectionInfo GetCurrentSqlConnection();
+        ConnectionInfo GetCurrentSqlConnection();
     }
 }

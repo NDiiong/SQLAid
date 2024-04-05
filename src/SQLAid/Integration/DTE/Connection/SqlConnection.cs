@@ -1,35 +1,38 @@
-﻿using Microsoft.SqlServer.Management.Common;
+﻿using Microsoft.SqlServer.Management.Smo.RegSvrEnum;
 using Microsoft.SqlServer.Management.UI.VSIntegration;
+using System.Data.SqlClient;
 
 namespace SQLAid.Integration.DTE.Connection
 {
     public class SqlConnection : ISqlConnection
     {
-        public SqlConnectionInfo GetCurrentSqlConnection()
+        public ConnectionInfo GetCurrentSqlConnection()
         {
-            var connectionInfo = ServiceCache.ScriptFactory.CurrentlyActiveWndConnectionInfo;
-            var info = connectionInfo.UIConnectionInfo;
-            var serverName = info.ServerName;
-            var databaseName = info.AdvancedOptions["DATABASE"];
-            var blnIsUsingIntegratedSecurity = (0 == info.AuthenticationType);
-            var userName = info.UserName;
-            var passWord = info.Password;
+            UIConnectionInfo connection = ServiceCache.ScriptFactory.CurrentlyActiveWndConnectionInfo.UIConnectionInfo;
 
-            var version = info.ServerVersion;
-            var buildMajor = 0;
-            var buildMinor = 0;
-            var buildNumber = 0;
-            if (null != version)
+            var databaseName = connection.AdvancedOptions["DATABASE"];
+            if (string.IsNullOrEmpty(databaseName))
+                databaseName = "master";
+
+            var builder = new SqlConnectionStringBuilder
             {
-                buildMajor = version.Major;
-                buildMinor = version.Minor;
-                buildNumber = version.BuildNumber;
-            }
+                DataSource = connection.ServerName,
+                IntegratedSecurity = string.IsNullOrEmpty(connection.Password),
+                Password = connection.Password,
+                UserID = connection.UserName,
+                InitialCatalog = databaseName,
+                ApplicationName = "Axial SQL Tools"
+            };
 
-            if (null == serverName || null == databaseName)
-                return null;
+            ConnectionInfo connectionInfo = new ConnectionInfo
+            {
+                ConnectionString = builder.ToString(),
+                Database = databaseName,
+                ServerName = connection.ServerName,
+                ActiveConnectionInfo = connection
+            };
 
-            return new SqlConnectionInfo(serverName, userName, passWord);
+            return connectionInfo;
         }
     }
 }
