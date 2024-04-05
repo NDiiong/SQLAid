@@ -3,24 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.33130.400
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLAid.Addin", "SQLAid.Addin\SQLAid.Addin.csproj", "{B8CA7C7C-2A27-46B4-899F-BF5999E3D3A1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLAid.Addin.Infrastructure", "SQLAid.Addin.Infrastructure\SQLAid.Addin.Infrastructure.csproj", "{9370A322-35E8-4FEF-9A37-E72EC496EABD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLAid.Addin.Security", "SQLAid.Addin.Security\SQLAid.Addin.Security.csproj", "{54139DE7-1598-4EA1-BDA9-C92E6FC099AD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLAid.Addin.Zip", "SQLAid.Addin.Zip\SQLAid.Addin.Zip.csproj", "{3CD9A09E-6B84-4EC0-9E16-C2C36A1904CF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLAid.Addin.Thread", "SQLAid.Addin.Thread\SQLAid.Addin.Thread.csproj", "{F6FCDE75-63C9-4156-8452-CAAEA71E60B0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLAid.Addin.Logging", "SQLAid.Addin.Logging\SQLAid.Addin.Logging.csproj", "{75FDD5B3-AD13-4303-8BF7-B7456EDEF629}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLAid.Addin.Extension", "SQLAid.Addin.Extension\SQLAid.Addin.Extension.csproj", "{A6176150-B593-4DEB-A7EB-42B7DA7B2627}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLAid", "SQLAid\SQLAid.csproj", "{B8CA7C7C-2A27-46B4-899F-BF5999E3D3A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		s|Any CPU = s|Any CPU
 		VS-Debug|Any CPU = VS-Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
@@ -28,44 +17,10 @@ Global
 		{B8CA7C7C-2A27-46B4-899F-BF5999E3D3A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8CA7C7C-2A27-46B4-899F-BF5999E3D3A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8CA7C7C-2A27-46B4-899F-BF5999E3D3A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8CA7C7C-2A27-46B4-899F-BF5999E3D3A1}.s|Any CPU.ActiveCfg = s|Any CPU
+		{B8CA7C7C-2A27-46B4-899F-BF5999E3D3A1}.s|Any CPU.Build.0 = s|Any CPU
 		{B8CA7C7C-2A27-46B4-899F-BF5999E3D3A1}.VS-Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B8CA7C7C-2A27-46B4-899F-BF5999E3D3A1}.VS-Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9370A322-35E8-4FEF-9A37-E72EC496EABD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9370A322-35E8-4FEF-9A37-E72EC496EABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9370A322-35E8-4FEF-9A37-E72EC496EABD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9370A322-35E8-4FEF-9A37-E72EC496EABD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9370A322-35E8-4FEF-9A37-E72EC496EABD}.VS-Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9370A322-35E8-4FEF-9A37-E72EC496EABD}.VS-Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54139DE7-1598-4EA1-BDA9-C92E6FC099AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54139DE7-1598-4EA1-BDA9-C92E6FC099AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54139DE7-1598-4EA1-BDA9-C92E6FC099AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54139DE7-1598-4EA1-BDA9-C92E6FC099AD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{54139DE7-1598-4EA1-BDA9-C92E6FC099AD}.VS-Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54139DE7-1598-4EA1-BDA9-C92E6FC099AD}.VS-Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3CD9A09E-6B84-4EC0-9E16-C2C36A1904CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3CD9A09E-6B84-4EC0-9E16-C2C36A1904CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3CD9A09E-6B84-4EC0-9E16-C2C36A1904CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3CD9A09E-6B84-4EC0-9E16-C2C36A1904CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3CD9A09E-6B84-4EC0-9E16-C2C36A1904CF}.VS-Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3CD9A09E-6B84-4EC0-9E16-C2C36A1904CF}.VS-Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F6FCDE75-63C9-4156-8452-CAAEA71E60B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6FCDE75-63C9-4156-8452-CAAEA71E60B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F6FCDE75-63C9-4156-8452-CAAEA71E60B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F6FCDE75-63C9-4156-8452-CAAEA71E60B0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F6FCDE75-63C9-4156-8452-CAAEA71E60B0}.VS-Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6FCDE75-63C9-4156-8452-CAAEA71E60B0}.VS-Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75FDD5B3-AD13-4303-8BF7-B7456EDEF629}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{75FDD5B3-AD13-4303-8BF7-B7456EDEF629}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75FDD5B3-AD13-4303-8BF7-B7456EDEF629}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{75FDD5B3-AD13-4303-8BF7-B7456EDEF629}.Release|Any CPU.Build.0 = Release|Any CPU
-		{75FDD5B3-AD13-4303-8BF7-B7456EDEF629}.VS-Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{75FDD5B3-AD13-4303-8BF7-B7456EDEF629}.VS-Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A6176150-B593-4DEB-A7EB-42B7DA7B2627}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A6176150-B593-4DEB-A7EB-42B7DA7B2627}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A6176150-B593-4DEB-A7EB-42B7DA7B2627}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A6176150-B593-4DEB-A7EB-42B7DA7B2627}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A6176150-B593-4DEB-A7EB-42B7DA7B2627}.VS-Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A6176150-B593-4DEB-A7EB-42B7DA7B2627}.VS-Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<Extern href="stdidcmd.h" />
+	<Extern href="vsshlids.h" />
+	<Include href="KnownImageIds.vsct" />
+
+	<Commands package="guidSQLAidPackage">
+
+		<!--Groups-->
+		<Groups>
+			<!--Paste Special Context Menu Group-->
+			<Group guid="guidCommands" id="PasteSpecialContextMenuGroup" priority="0x0201">
+				<Parent guid="queryWindowContextCommandSet" id="queryWindowContextMenu" />
+			</Group>
+		</Groups>
+
+		<!--Buttons-->
+		<Buttons>
+			<!--Context.PasteAsCsvCommand-->
+			<Button guid="guidCommands" id="PasteAsCsvCommand" priority="0x0100" type="Button">
+				<Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
+				<Icon guid="ImageCatalogGuid" id="Paste" />
+				<CommandFlag>IconIsMoniker</CommandFlag>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultDisabled</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<ButtonText>Paste As Csv</ButtonText>
+				</Strings>
+			</Button>
+
+			<!--Context.PasteAsInsertedCommand-->
+			<Button guid="guidCommands" id="PasteAsInsertedCommand" priority="0x0100" type="Button">
+				<Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
+				<!--<Icon guid="ImageCatalogGuid" id="PasteAppend" />-->
+				<!--<CommandFlag>IconIsMoniker</CommandFlag>-->
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultDisabled</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<ButtonText>Paste As Inserted</ButtonText>
+				</Strings>
+			</Button>
+
+			<!--Context.PasteAsInsertedWithHeaderCommand-->
+			<Button guid="guidCommands" id="PasteAsInsertedWithHeaderCommand" priority="0x0100" type="Button">
+				<Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
+				<Icon guid="ImageCatalogGuid" id="PasteTable" />
+				<CommandFlag>IconIsMoniker</CommandFlag>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultDisabled</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<ButtonText>Paste As Inserted with Headers</ButtonText>
+				</Strings>
+			</Button>
+
+			<!--Context.JoinLinesCommand-->
+			<Button guid="guidCommands" id="JoinLinesCommand" priority="0x0100" type="Button">
+				<Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
+				<Icon guid="ImageCatalogGuid" id="Join" />
+				<CommandFlag>IconIsMoniker</CommandFlag>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultDisabled</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<ButtonText>Join Lines</ButtonText>
+				</Strings>
+			</Button>
+		</Buttons>
+
+		<!--Images-->
+		<!--<Bitmaps>
+      <Bitmap guid="guidImages" href="Resources\ExecutorCommand.png" usedList="bmpPic1, bmpPic2" />
+    </Bitmaps>-->
+	</Commands>
+
+	<!--KeyBindings-->
+	<KeyBindings>
+		<!--<KeyBinding guid="guidCommands" id="PasteAsCsvCommand" editor="guidSqlQueryEditor" mod1="CONTROL SHIFT" key1="V" />-->
+		<KeyBinding guid="guidCommands" id="JoinLinesCommand" editor="guidVSStd97" mod1="Control" key1="K" mod2="Control" key2="J" />
+	</KeyBindings>
+
+	<Symbols>
+
+		<!--Images-->
+		<GuidSymbol name="guidImages" value="{f5b57155-c84e-4bd1-812e-ed8512800bfd}">
+			<IDSymbol name="bmpPic1" value="1" />
+			<IDSymbol name="bmpPic2" value="2" />
+		</GuidSymbol>
+
+		<!--SqlQueryEditor-->
+		<GuidSymbol name="guidSqlQueryEditor" value="{B5A506EB-11BE-4782-9A18-21265C2CA0B4}" />
+
+		<!--ContextMenu-->
+		<GuidSymbol name="queryWindowContextCommandSet" value="{33F13AC3-80BB-4ECB-85BC-225435603A5E}">
+			<IDSymbol name="queryWindowContextMenu" value="0x0050" />
+		</GuidSymbol>
+
+		<!--SQLAidPackage-->
+		<GuidSymbol name="guidSQLAidPackage" value="{9dac5b5a-953b-456d-a667-2a1d20965229}" />
+
+		<!--Commands-->
+		<GuidSymbol name="guidCommands" value="{746c2fb4-20a2-4d26-b95d-f8db97c16875}">
+
+			<!--MenuGroup-->
+			<IDSymbol name="PasteSpecialContextMenuGroup" value="0x1020" />
+
+			<!--Command-->
+			<IDSymbol name="PasteAsCsvCommand" value="0x100" />
+			<IDSymbol name="JoinLinesCommand" value="0x101" />
+			<IDSymbol name="PasteAsInsertedCommand" value="0x102" />
+			<IDSymbol name="PasteAsInsertedWithHeaderCommand" value="0x103" />
+		</GuidSymbol>
+	</Symbols>
+</CommandTable>
