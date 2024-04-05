@@ -46,6 +46,7 @@ namespace SQLAid.Commands.ResultGrid
 
                 foreach (DataColumn column in schema.Columns)
                 {
+                    //Primitive Type
                     var compiler = new CSharpCodeProvider();
                     var type = new CodeTypeReference(column.DataType);
                     sb.AppendLine($"    public {compiler.GetTypeOutput(type)} {column.ColumnName} {{ get; set; }}");
