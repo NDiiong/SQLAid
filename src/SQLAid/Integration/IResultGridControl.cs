@@ -11,6 +11,8 @@ namespace SQLAid.Integration
 
         CollectionBase GetGridContainers();
 
+        void ChangeWindowTitle(string text);
+
         IGridControl GetFocusGridControl();
     }
 }

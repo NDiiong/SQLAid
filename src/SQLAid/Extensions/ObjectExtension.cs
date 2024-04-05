@@ -77,6 +77,11 @@ namespace SQLAid.Extensions
             return Reflection.GetProperty(@object, propName);
         }
 
+        public static object GetPropertyValue(this object @object, string propName)
+        {
+            return Reflection.GetPropertyValue(@object, propName);
+        }
+
         public static T GetProperty<T>(this object @object, string propName)
         {
             return Reflection.GetProperty(@object, propName).As<T>();
