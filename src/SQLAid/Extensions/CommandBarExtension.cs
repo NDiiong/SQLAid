@@ -2,6 +2,7 @@
 
 using Microsoft.VisualStudio.CommandBars;
 using SQLAid.Integration.DTE.Commandbars;
+using SQLAid.Logging;
 using System;
 
 namespace SQLAid.Extensions
@@ -15,8 +16,8 @@ namespace SQLAid.Extensions
                   .As<CommandBarButton>()
                   .AddIcon(icon)
                   .AddStyle(msoButtonStyle);
-            commandBarButton.Click += (CommandBarButton _, ref bool __) => onclick();
 
+            commandBarButton.Click += (CommandBarButton _, ref bool __) => Func.Run(onclick, message: $"Command{caption}");
             return commandBarButton;
         }
 
@@ -25,7 +26,7 @@ namespace SQLAid.Extensions
             CommandBar.Controls.Add(MsoControlType.msoControlButton, Type.Missing, Type.Missing, Type.Missing, true)
                 .Visible(true).Caption(caption)
                 .As<CommandBarButton>()
-                .Click += (CommandBarButton _, ref bool __) => onclick();
+                .Click += (CommandBarButton _, ref bool __) => Func.Run(onclick, message: $"Command{caption}");
         }
 
         public static void AddButton(this CommandBar CommandBar, string caption, string icon, Action onclick)
@@ -34,7 +35,7 @@ namespace SQLAid.Extensions
                 .Visible(true).Caption(caption)
                 .As<CommandBarButton>()
                 .AddIcon(icon)
-                .Click += (CommandBarButton _, ref bool __) => onclick();
+                .Click += (CommandBarButton _, ref bool __) => Func.Run(onclick, message: $"Command{caption}");
         }
     }
 }

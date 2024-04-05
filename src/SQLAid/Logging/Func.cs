@@ -8,6 +8,23 @@ namespace SQLAid.Logging
 {
     public static class Func
     {
+        public static void Run(Action action, string message)
+        {
+            var sw = Stopwatch.StartNew();
+            try
+            {
+                action.Invoke();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, $"Run {message}");
+            }
+            finally
+            {
+                Logger.Info($"Run {message} - in {sw.ElapsedMilliseconds} ms");
+            }
+        }
+
         public static void Run(Action action, [CallerMemberName] string memberName = "", [CallerFilePath] string sourceFilePath = "", [CallerLineNumber] int sourceLineNumber = 0)
         {
             var sw = Stopwatch.StartNew();
