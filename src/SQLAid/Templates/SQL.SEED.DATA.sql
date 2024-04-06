@@ -1,7 +1,7 @@
 ﻿
 GO
-IF NOT EXISTS (SELECT TOP 1 1 FROM #tempTable WHERE {key})
+IF NOT EXISTS (SELECT TOP 1 1 FROM {tableName} WHERE {key})
 BEGIN
-	INSERT #tempTable ({columnHeaders})
+	INSERT {tableName} ({columnHeaders})
 	VALUES {rows}
 END

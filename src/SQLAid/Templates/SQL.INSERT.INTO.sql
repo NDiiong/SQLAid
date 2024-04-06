@@ -1,6 +1,6 @@
 ﻿
--- INSERT INTO #GridResults ({columnHeaders})
 SELECT *
+--INTO #temp_table
 FROM
 (
     VALUES
