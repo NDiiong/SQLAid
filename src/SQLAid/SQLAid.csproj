@@ -191,7 +191,7 @@
       <HintPath>Assemblies\ssms19\SqlWorkbench.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="SQLEditors">
-      <HintPath>Assemblies\ssms19\SQLEditors</HintPath>
+      <HintPath>Assemblies\ssms19\SQLEditors.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SqlServer.ConnectionInfo">
       <HintPath>Assemblies\ssms19\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
