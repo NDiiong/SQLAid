@@ -34,22 +34,22 @@ namespace SQLAid.Commands.TextEditor
 
             if (Keypress == "\t")
             {
-                Selection.SelectLine();
-                var textTrim = Selection.Text.Trim();
-                if (textTrim.Equals("SEL", StringComparison.OrdinalIgnoreCase))
+                var textDocument = Selection.Parent as TextDocument;
+                var startPoint = Selection.ActivePoint.CreateEditPoint();
+                startPoint.StartOfLine();
+
+                while (!startPoint.AtEndOfLine && startPoint.GetText(1) == "\t")
                 {
-                    var query = "SELECT TOP 100 * FROM [TableName] WHERE";
-                    var editPoint = Selection.ActivePoint.CreateEditPoint();
-                    editPoint.Insert(query);
+                    startPoint.CharRight();
+                }
 
-                    Selection.MoveToPoint(editPoint);
-
+                if (startPoint.GetText(3).Equals("SEL", StringComparison.OrdinalIgnoreCase))
+                {
+                    startPoint.Delete(3);
+                    startPoint.Insert("SELECT TOP 100 * FROM [table_name] WHERE ");
+                    Selection.MoveToPoint(startPoint);
 
                     CancelKeypress = true;
-                }
-                else
-                {
-                    Selection.EndOfLine();
                 }
             }
         }
