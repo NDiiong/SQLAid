@@ -17,7 +17,18 @@ namespace SQLAid.Integration.DTE
     {
         private readonly string _packageGuidString;
 
-        public DTE2 Application { get; private set; }
+        public static DTE2 _application;
+        public DTE2 Application
+        {
+            get
+            {
+                if (_application != null)
+                    return _application;
+
+                _application = GetGlobalService(typeof(EnvDTE.DTE)) as DTE2;
+                return _application;
+            }
+        }
         public IMenuCommandService MenuCommand { get; private set; }
 
         public string ExtensionInstallationDirectory
