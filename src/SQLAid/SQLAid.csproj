@@ -107,7 +107,7 @@
     <Compile Include="Commands\TextEditor\SqlNewIdAndCopyCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlPasteAsCsvCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlPasteAsInsertedHeaderQueryCommand.cs" />
-    <Compile Include="Commands\TextEditor\SqlPasteAsInsertedQueryCommand.cs" />
+    <Compile Include="Commands\TextEditor\SqlEditorNewGuidThenCopyCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridAsSaveCommand.cs" />
     <Compile Include="Commands\Events\WindowEventLogging.cs" />
     <Compile Include="Extensions\CommandBarExtension.cs" />

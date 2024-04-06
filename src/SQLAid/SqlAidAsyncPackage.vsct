@@ -30,16 +30,16 @@
 				</Strings>
 			</Button>
 
-			<!--Context.PasteAsInsertedCommand-->
-			<Button guid="guidCommands" id="PasteAsInsertedCommand" priority="0x0100" type="Button">
+			<!--Context.NewGuidThenCopyCommand-->
+			<Button guid="guidCommands" id="NewGuidCommand" priority="0x0100" type="Button">
 				<Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
-				<!--<Icon guid="ImageCatalogGuid" id="PasteAppend" />-->
-				<!--<CommandFlag>IconIsMoniker</CommandFlag>-->
+				<Icon guid="ImageCatalogGuid" id="XWorldFile" />
+				<CommandFlag>IconIsMoniker</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>DefaultDisabled</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<ButtonText>Paste As Inserted</ButtonText>
+					<ButtonText>New Guid</ButtonText>
 				</Strings>
 			</Button>
 
@@ -110,7 +110,7 @@
 			<!--Command-->
 			<IDSymbol name="PasteAsCsvCommand" value="0x100" />
 			<IDSymbol name="JoinLinesCommand" value="0x101" />
-			<IDSymbol name="PasteAsInsertedCommand" value="0x102" />
+			<IDSymbol name="NewGuidCommand" value="0x102" />
 			<IDSymbol name="PasteAsInsertedWithHeaderCommand" value="0x103" />
 		</GuidSymbol>
 	</Symbols>

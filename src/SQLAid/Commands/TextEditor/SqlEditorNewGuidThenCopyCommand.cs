@@ -9,14 +9,12 @@ using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.TextEditor
 {
-    internal sealed class SqlPasteAsInsertedQueryCommand
+    internal sealed class SqlEditorNewGuidThenCopyCommand
     {
-        private static readonly IClipboardService _clipboardService;
         private static readonly IFrameDocumentView _frameDocumentView;
 
-        static SqlPasteAsInsertedQueryCommand()
+        static SqlEditorNewGuidThenCopyCommand()
         {
-            _clipboardService = new ClipboardService();
             _frameDocumentView = new FrameDocumentView();
         }
 
@@ -25,28 +23,25 @@ namespace SQLAid.Commands.TextEditor
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             var commandService = sqlAsyncPackage.GetService<IMenuCommandService, OleMenuCommandService>();
-            var cmdId = new CommandID(PackageGuids.guidCommands, PackageIds.PasteAsInsertedCommand);
+            var cmdId = new CommandID(PackageGuids.guidCommands, PackageIds.NewGuidCommand);
             var menuItem = new OleMenuCommand((s, e) => Execute(), cmdId);
             menuItem.BeforeQueryStatus += (s, e) => CanExecute(s);
             commandService.AddCommand(menuItem);
+
         }
 
         private static void CanExecute(object s)
         {
-            try
-            {
-                var oleMenuCommand = s as OleMenuCommand;
-
-                if (!string.IsNullOrWhiteSpace(_clipboardService.GetFromClipboard()))
-                    oleMenuCommand.Visible = true;
-            }
-            catch (Exception)
-            {
-            }
+            var oleMenuCommand = s as OleMenuCommand;
+            oleMenuCommand.Visible = oleMenuCommand.Enabled = true;
         }
 
         private static void Execute()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var guid = Guid.NewGuid().ToString().ToUpper();
+            var selection = _frameDocumentView.GetTextSelection();
+            selection.Insert("\"" + guid + "\"");
         }
     }
 }
