@@ -1,4 +1,5 @@
-﻿using EnvDTE;
+﻿using DocumentFormat.OpenXml.Drawing;
+using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using SQLAid.Integration.DTE;
@@ -34,14 +35,15 @@ namespace SQLAid.Commands.TextEditor
             if (Keypress == "\t")
             {
                 Selection.SelectLine();
-                if (Selection.Text.Equals("SEL", StringComparison.OrdinalIgnoreCase))
+                var textTrim = Selection.Text.Trim();
+                if (textTrim.Equals("SEL", StringComparison.OrdinalIgnoreCase))
                 {
                     var query = "SELECT TOP 100 * FROM [TableName] WHERE";
-                    Selection.Insert(query);
+                    var editPoint = Selection.ActivePoint.CreateEditPoint();
+                    editPoint.Insert(query);
 
-                    var tableNameIndex = query.IndexOf("[TableName]");
-                    Selection.MoveToAbsoluteOffset(tableNameIndex + 1);
-                    Selection.MoveToAbsoluteOffset(tableNameIndex + 1 + "[TableName]".Length, true);
+                    Selection.MoveToPoint(editPoint);
+
 
                     CancelKeypress = true;
                 }
