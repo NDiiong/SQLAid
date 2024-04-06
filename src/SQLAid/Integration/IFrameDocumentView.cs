@@ -11,6 +11,6 @@ namespace SQLAid.Integration
 
         TextSelection GetTextSelection();
 
-        //SqlScriptEditorControl GetCurrentlyActiveFrameDocView();
+        SqlScriptEditorControl GetCurrentlyActiveFrameDocView();
     }
 }
