@@ -94,7 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\Events\QueryHistoryCommand.cs" />
-    <Compile Include="Commands\ResultGrid\SqlResultGridAddSeedDataCommand.cs" />
+    <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsSeedDataCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridCommandBase.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsCsharpModelCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsCsvCommand.cs" />
@@ -184,35 +184,35 @@
     </None>
   </ItemGroup>
   <!-- <ItemGroup Condition=" '$(Configuration)' == 'SSMS20' "> -->
-		<!-- <Reference Include="SqlPackageBase"> -->
-			<!-- <HintPath>Resources\ssms20dll\SqlPackageBase.dll</HintPath> -->
-		<!-- </Reference> -->
-		<!-- <Reference Include="SqlWorkbench.Interfaces"> -->
-			<!-- <HintPath>SqlWorkbench.Interfaces.dll</HintPath> -->
-		<!-- </Reference> -->
-		<!-- <Reference Include="Microsoft.SqlServer.ConnectionInfo"> -->
-			<!-- <HintPath>Resources\ssms20dll\Microsoft.SqlServer.ConnectionInfo.dll</HintPath> -->
-		<!-- </Reference> -->
-		<!-- <Reference Include="Microsoft.SqlServer.GridControl"> -->
-			<!-- <HintPath>Resources\ssms20dll\Microsoft.SqlServer.GridControl.dll</HintPath> -->
-		<!-- </Reference> -->
-		<!-- <Reference Include="Microsoft.SqlServer.RegSvrEnum"> -->
-			<!-- <HintPath>Resources\ssms20dll\Microsoft.SqlServer.RegSvrEnum.dll</HintPath> -->
-		<!-- </Reference> -->
-		<!-- <Reference Include="Microsoft.SqlServer.Smo"> -->
-			<!-- <HintPath>Resources\ssms20dll\Microsoft.SqlServer.Smo.dll</HintPath> -->
-		<!-- </Reference> -->
-		<!-- <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom"> -->
-			<!-- <HintPath>Resources\ssms20dll\Microsoft.SqlServer.TransactSql.ScriptDom.dll</HintPath> -->
-		<!-- </Reference> -->
-		<!-- <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc"> -->
-			<!-- <HintPath>Resources\ssms20dll\Microsoft.SqlServer.Management.Sdk.Sfc.dll</HintPath> -->
-		<!-- </Reference> -->
-		<!-- <Reference Include="Microsoft.Data.SqlClient, Version=5.0.0.0, Culture=neutral, PublicKeyToken=23ec7fc2d6eaa4a5, processorArchitecture=MSIL"> -->
-			<!-- <SpecificVersion>False</SpecificVersion> -->
-			<!-- <HintPath>Resources\ssms20dll\Microsoft.Data.SqlClient.dll</HintPath> -->
-		<!-- </Reference> -->
-	<!-- </ItemGroup> -->
+  <!-- <Reference Include="SqlPackageBase"> -->
+  <!-- <HintPath>Resources\ssms20dll\SqlPackageBase.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- <Reference Include="SqlWorkbench.Interfaces"> -->
+  <!-- <HintPath>SqlWorkbench.Interfaces.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- <Reference Include="Microsoft.SqlServer.ConnectionInfo"> -->
+  <!-- <HintPath>Resources\ssms20dll\Microsoft.SqlServer.ConnectionInfo.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- <Reference Include="Microsoft.SqlServer.GridControl"> -->
+  <!-- <HintPath>Resources\ssms20dll\Microsoft.SqlServer.GridControl.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- <Reference Include="Microsoft.SqlServer.RegSvrEnum"> -->
+  <!-- <HintPath>Resources\ssms20dll\Microsoft.SqlServer.RegSvrEnum.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- <Reference Include="Microsoft.SqlServer.Smo"> -->
+  <!-- <HintPath>Resources\ssms20dll\Microsoft.SqlServer.Smo.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom"> -->
+  <!-- <HintPath>Resources\ssms20dll\Microsoft.SqlServer.TransactSql.ScriptDom.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc"> -->
+  <!-- <HintPath>Resources\ssms20dll\Microsoft.SqlServer.Management.Sdk.Sfc.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- <Reference Include="Microsoft.Data.SqlClient, Version=5.0.0.0, Culture=neutral, PublicKeyToken=23ec7fc2d6eaa4a5, processorArchitecture=MSIL"> -->
+  <!-- <SpecificVersion>False</SpecificVersion> -->
+  <!-- <HintPath>Resources\ssms20dll\Microsoft.Data.SqlClient.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- </ItemGroup> -->
   <ItemGroup Condition=" '$(Configuration)' == 'SSMS19' ">
     <Reference Include="SqlPackageBase">
       <HintPath>Assemblies\ssms19\SqlPackageBase.dll</HintPath>
@@ -247,32 +247,31 @@
     </Reference>
   </ItemGroup>
   <!-- <ItemGroup Condition=" '$(Configuration)' == 'SSMS18' "> -->
-		<!-- <Reference Include="SqlPackageBase"> -->
-			<!-- <HintPath>Resources\ssms18dll\SqlPackageBase.dll</HintPath> -->
-		<!-- </Reference> -->
-		<!-- <Reference Include="SqlWorkbench.Interfaces"> -->
-			<!-- <HintPath>Resources\ssms18dll\SqlWorkbench.Interfaces.dll</HintPath> -->
-		<!-- </Reference> -->
-		<!-- <Reference Include="Microsoft.SqlServer.ConnectionInfo"> -->
-			<!-- <HintPath>Resources\ssms18dll\Microsoft.SqlServer.ConnectionInfo.dll</HintPath> -->
-		<!-- </Reference> -->
-		<!-- <Reference Include="Microsoft.SqlServer.GridControl"> -->
-			<!-- <HintPath>Resources\ssms18dll\Microsoft.SqlServer.GridControl.dll</HintPath> -->
-		<!-- </Reference> -->
-		<!-- <Reference Include="Microsoft.SqlServer.RegSvrEnum"> -->
-			<!-- <HintPath>Resources\ssms18dll\Microsoft.SqlServer.RegSvrEnum.dll</HintPath> -->
-		<!-- </Reference> -->
-		<!-- <Reference Include="Microsoft.SqlServer.Smo"> -->
-			<!-- <HintPath>Resources\ssms18dll\Microsoft.SqlServer.Smo.dll</HintPath> -->
-		<!-- </Reference> -->
-		<!-- <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom"> -->
-			<!-- <HintPath>Resources\ssms19dll\Microsoft.SqlServer.TransactSql.ScriptDom.dll</HintPath> -->
-		<!-- </Reference> -->
-		<!-- <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc"> -->
-			<!-- <HintPath>Resources\ssms18dll\Microsoft.SqlServer.Management.Sdk.Sfc.dll</HintPath> -->
-		<!-- </Reference> -->
-	<!-- </ItemGroup> -->
-	
+  <!-- <Reference Include="SqlPackageBase"> -->
+  <!-- <HintPath>Resources\ssms18dll\SqlPackageBase.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- <Reference Include="SqlWorkbench.Interfaces"> -->
+  <!-- <HintPath>Resources\ssms18dll\SqlWorkbench.Interfaces.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- <Reference Include="Microsoft.SqlServer.ConnectionInfo"> -->
+  <!-- <HintPath>Resources\ssms18dll\Microsoft.SqlServer.ConnectionInfo.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- <Reference Include="Microsoft.SqlServer.GridControl"> -->
+  <!-- <HintPath>Resources\ssms18dll\Microsoft.SqlServer.GridControl.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- <Reference Include="Microsoft.SqlServer.RegSvrEnum"> -->
+  <!-- <HintPath>Resources\ssms18dll\Microsoft.SqlServer.RegSvrEnum.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- <Reference Include="Microsoft.SqlServer.Smo"> -->
+  <!-- <HintPath>Resources\ssms18dll\Microsoft.SqlServer.Smo.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom"> -->
+  <!-- <HintPath>Resources\ssms19dll\Microsoft.SqlServer.TransactSql.ScriptDom.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc"> -->
+  <!-- <HintPath>Resources\ssms18dll\Microsoft.SqlServer.Management.Sdk.Sfc.dll</HintPath> -->
+  <!-- </Reference> -->
+  <!-- </ItemGroup> -->
   <ItemGroup>
     <Reference Include="DocumentFormat.OpenXml, Version=3.0.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
       <HintPath>..\packages\DocumentFormat.OpenXml.3.0.1\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
@@ -471,13 +470,34 @@
     <Content Include="Assemblies\ssms20\SQLEditors.dll" />
     <Content Include="Assemblies\ssms20\SqlPackageBase.dll" />
     <Content Include="Assemblies\ssms20\SqlWorkbench.Interfaces.dll" />
-    <Content Include="Resources\Assets\csharp-icon.ico" />
-    <Content Include="Resources\Assets\csv-icon.ico" />
-    <Content Include="Resources\Assets\frozen.ico" />
-    <Content Include="Resources\Assets\insert-table.ico" />
-    <Content Include="Resources\Assets\json-download.ico" />
-    <Content Include="Resources\Assets\json-icon.ico" />
-    <Content Include="Resources\Assets\xls-icon.ico" />
+    <Content Include="Resources\Assets\csharp-icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\Assets\csv-icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\Assets\frozen.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\Assets\insert-table.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\Assets\json-download.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\Assets\json-icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Resources\Assets\xls-icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Templates\SQL.INSERT.INTO.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
