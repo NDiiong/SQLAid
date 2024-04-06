@@ -43,11 +43,17 @@ namespace SQLAid.Commands.TextEditor
                     startPoint.CharRight();
                 }
 
-                if (startPoint.GetText(3).Equals("SEL", StringComparison.OrdinalIgnoreCase))
+                if (startPoint.GetText(4).Equals("SEL", StringComparison.OrdinalIgnoreCase))
                 {
                     startPoint.Delete(3);
                     startPoint.Insert("SELECT TOP 100 * FROM [table_name] WHERE ");
                     Selection.MoveToPoint(startPoint);
+
+                    // Di chuyển đến vị trí cuối cùng của từ "table_name"
+                    Selection.FindPattern("[table_name]", (int)vsFindOptions.vsFindOptionsMatchCase | (int)vsFindOptions.vsFindOptionsBackwards);
+
+                    Selection.CharLeft(false, 1);
+                    Selection.CharRight(true, "[table_name]".Length);
 
                     CancelKeypress = true;
                 }
