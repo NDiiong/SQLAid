@@ -37,7 +37,7 @@ namespace SQLAid
             //SQL TEXT EDITOR
             await SqlJoinLinesCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlPasteAsCsvCommand.InitializeAsync(this).ConfigureAwait(false);
-            await SqlEditorNewGuidThenCopyCommand.InitializeAsync(this).ConfigureAwait(false);
+            await SqlEditorNewGuidCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlEditorSnippetCommand.InitializeAsync(this).ConfigureAwait(false);
             //await SqlPasteAsInsertedHeaderQueryCommand.InitializeAsync(this).ConfigureAwait(false);
         }

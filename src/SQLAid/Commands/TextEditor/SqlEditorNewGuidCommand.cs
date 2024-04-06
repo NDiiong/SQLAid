@@ -9,11 +9,11 @@ using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.TextEditor
 {
-    internal sealed class SqlEditorNewGuidThenCopyCommand
+    internal sealed class SqlEditorNewGuidCommand
     {
         private static readonly IFrameDocumentView _frameDocumentView;
 
-        static SqlEditorNewGuidThenCopyCommand()
+        static SqlEditorNewGuidCommand()
         {
             _frameDocumentView = new FrameDocumentView();
         }
