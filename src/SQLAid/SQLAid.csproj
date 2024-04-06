@@ -454,6 +454,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Animation\Animation-C#.gif" />
+    <Content Include="Resources\Animation\Animation-Insert.gif" />
+    <Content Include="Resources\Animation\Animation-Seeding.gif" />
+    <Content Include="Resources\Animation\Animation-Snippet.gif" />
     <Content Include="Resources\Assets\csharp-icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
