@@ -34,10 +34,8 @@ namespace SQLAid.Commands.TextEditor
 
             if (Keypress == "\t")
             {
-                var textDocument = Selection.Parent as TextDocument;
                 var startPoint = Selection.ActivePoint.CreateEditPoint();
                 startPoint.StartOfLine();
-
                 while (!startPoint.AtEndOfLine && startPoint.GetText(1) == "\t")
                 {
                     startPoint.CharRight();
