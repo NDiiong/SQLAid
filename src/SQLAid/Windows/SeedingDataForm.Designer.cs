@@ -87,7 +87,7 @@ namespace SQLAid.Windows
             this.Name = "SeedingDataForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Seeding...";
+            this.Text = "Seeding";
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -27,7 +27,7 @@ namespace SQLAid.Commands.ResultGrid
             _executeEvent = ServiceCache.ExtensibilityModel.Events.get_CommandEvents(command.Guid, command.ID);
             _executeEvent.BeforeExecute += QueryExecuteEvent_BeforeExecute;
 
-            _commandBarButton = GridCommandBar.AddButton("Frozen", $"{package.ExtensionInstallationDirectory}/Resources/Assets/frozen.ico", MsoButtonStyle.msoButtonIconAndCaption, OnClick);
+            _commandBarButton = GridCommandBar.AddButton("Frozen", $"{package.ExtensionInstallationDirectory}/Resources/Assets/frozen.ico", createNewGroup: true, MsoButtonStyle.msoButtonIconAndCaption, OnClick);
         }
 
         private static void QueryExecuteEvent_BeforeExecute(string Guid, int ID, object CustomIn, object CustomOut, ref bool CancelDefault)

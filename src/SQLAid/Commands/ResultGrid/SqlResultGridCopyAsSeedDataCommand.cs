@@ -31,7 +31,7 @@ namespace SQLAid.Commands.ResultGrid
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             templates = File.ReadAllText($"{sqlAsyncPackage.ExtensionInstallationDirectory}/Templates/SQL.SEED.DATA.sql");
-            GridCommandBar.AddButton("Copy As #Seed Data", $"{sqlAsyncPackage.ExtensionInstallationDirectory}/Resources/Assets/insert-table.ico", OnClick);
+            GridCommandBar.AddButton("Copy As Seeding Data", $"{sqlAsyncPackage.ExtensionInstallationDirectory}/Resources/Assets/seeding.ico", OnClick);
         }
 
         private static void OnClick()

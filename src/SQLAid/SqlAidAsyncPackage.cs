@@ -25,11 +25,12 @@ namespace SQLAid
             //await QueryHistoryCommand.InitializeAsync(this).ConfigureAwait(false);
 
             //SQL GRID RESULT
-            await SqlResultGridCopyAsJsonCommand.InitializeAsync(this).ConfigureAwait(false);
-            await SqlResultGridCopyAsCsvCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsInsertCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsCsharpModelCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsSeedDataCommand.InitializeAsync(this).ConfigureAwait(false);
+            await SqlResultGridCopyAsJsonCommand.InitializeAsync(this).ConfigureAwait(false);
+            await SqlResultGridCopyAsCsvCommand.InitializeAsync(this).ConfigureAwait(false);
+
             await SqlResultGridAsSaveCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridFrozenColumnCommand.InitializeAsync(this).ConfigureAwait(false);
 
