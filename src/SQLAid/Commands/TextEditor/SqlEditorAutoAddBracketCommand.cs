@@ -29,7 +29,7 @@ namespace SQLAid.Commands.TextEditor
             if (Keypress == "(" || Keypress == "[")
             {
                 var selectedText = Selection.Text.Trim();
-                if (!string.IsNullOrWhiteSpace(selectedText) && !selectedText.StartsWith("("))
+                if (!string.IsNullOrWhiteSpace(selectedText) && !selectedText.StartsWith(Keypress))
                 {
                     var result = string.Format("{0}{1}{2}", Keypress, selectedText, ReverseCharacter(Keypress[0]));
                     Selection.Insert(result);
