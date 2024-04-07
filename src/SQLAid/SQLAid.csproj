@@ -104,6 +104,7 @@
     <Compile Include="Commands\ResultGrid\SqlResultGridFrozenColumnCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlEditorInsertByTemplateCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlEditorSnippetCommand.cs" />
+    <Compile Include="Commands\TextEditor\SqlEditorAutoAddBracketCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlFormatQueryCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlJoinLinesCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlPasteAsCsvCommand.cs" />
