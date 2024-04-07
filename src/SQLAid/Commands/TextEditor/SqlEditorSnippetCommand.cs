@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Drawing;
-using EnvDTE;
+﻿using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using SQLAid.Integration.DTE;
@@ -20,12 +19,10 @@ namespace SQLAid.Commands.TextEditor
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-
             var dte = Package.GetGlobalService(typeof(DTE)) as DTE2;
             var events = dte.Events as Events2;
             _textDocumentKeyPressEvents = events.TextDocumentKeyPressEvents;
             _textDocumentKeyPressEvents.BeforeKeyPress += _textDocumentKeyPressEvents_BeforeKeyPress;
-
         }
 
         private static void _textDocumentKeyPressEvents_BeforeKeyPress(string Keypress, TextSelection Selection, bool InStatementCompletion, ref bool CancelKeypress)
@@ -44,16 +41,16 @@ namespace SQLAid.Commands.TextEditor
                 if (startPoint.GetText(4).Equals("SEL", StringComparison.OrdinalIgnoreCase))
                 {
                     startPoint.Delete(3);
-                    startPoint.Insert("SELECT TOP 100 * FROM [table_name] WHERE ");
+                    startPoint.Insert("SELECT TOP 100 * FROM [table_name]");
                     Selection.MoveToPoint(startPoint);
+                    Selection.WordLeft(true);
+                    CancelKeypress = true;
 
                     // Di chuyển đến vị trí cuối cùng của từ "table_name"
-                    Selection.FindPattern("[table_name]", (int)vsFindOptions.vsFindOptionsMatchCase | (int)vsFindOptions.vsFindOptionsBackwards);
-
-                    Selection.CharLeft(false, 1);
-                    Selection.CharRight(true, "[table_name]".Length);
-
-                    CancelKeypress = true;
+                    //Selection.FindPattern("[table_name]", (int)vsFindOptions.vsFindOptionsMatchCase | (int)vsFindOptions.vsFindOptionsBackwards);
+                    //Selection.CharLeft(true, "[table_name]".Length);
+                    //Selection.CharLeft(false, 1);
+                    //Selection.CharRight(true, "[table_name]".Length);
                 }
             }
         }
