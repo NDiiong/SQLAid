@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.Shell;
+using SQLAid.Commands.Events;
 using SQLAid.Commands.ResultGrid;
 using SQLAid.Commands.TextEditor;
 using SQLAid.Integration.DTE;
@@ -21,8 +22,8 @@ namespace SQLAid
         protected override async Task InitializeAsync()
         {
             //SQL EVENTS
-            //await WindowEventLogging.InitializeAsync(this).ConfigureAwait(false);
-            //await QueryHistoryCommand.InitializeAsync(this).ConfigureAwait(false);
+            await WindowEventLogging.InitializeAsync(this).ConfigureAwait(false);
+            await QueryHistoryCommand.InitializeAsync(this).ConfigureAwait(false);
 
             //SQL GRID RESULT
             await SqlResultGridCopyAsInsertCommand.InitializeAsync(this).ConfigureAwait(false);
