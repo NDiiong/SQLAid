@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.Shell;
 using SQLAid.Extensions;
 using SQLAid.Integration;
-using SQLAid.Integration.Clipboard;
 using SQLAid.Integration.DTE;
 using System;
 using System.ComponentModel.Design;
@@ -27,7 +26,6 @@ namespace SQLAid.Commands.TextEditor
             var menuItem = new OleMenuCommand((s, e) => Execute(), cmdId);
             menuItem.BeforeQueryStatus += (s, e) => CanExecute(s);
             commandService.AddCommand(menuItem);
-
         }
 
         private static void CanExecute(object s)

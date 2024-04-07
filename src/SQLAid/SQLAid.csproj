@@ -102,6 +102,7 @@
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsJsonCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridEnvironmentWarningCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridFrozenColumnCommand.cs" />
+    <Compile Include="Commands\TextEditor\SqlEditorInsertByTemplateCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlEditorSnippetCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlFormatQueryCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlJoinLinesCommand.cs" />
