@@ -1,5 +1,4 @@
 ﻿using EnvDTE;
-using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using SQLAid.Extensions;
 using SQLAid.Integration.DTE;
@@ -15,13 +14,10 @@ namespace SQLAid.Commands.Events
 
         public static async Task InitializeAsync(SqlAsyncPackage package)
         {
-            //ThreadHelper.JoinableTaskFactory.RunAsync(async () => { });
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             var commandService = package.GetService<IMenuCommandService, OleMenuCommandService>();
-            var dte = Package.GetGlobalService(typeof(DTE)) as DTE2;
-
-            _windowEvents = dte.Events.get_WindowEvents();
+            _windowEvents = package.Application.Events.get_WindowEvents();
             _windowEvents.WindowCreated += WindowEvents_WindowCreated;
             _windowEvents.WindowClosing += WindowEvents_WindowClosing;
             _windowEvents.WindowActivated += WindowEvents_WindowActivated;

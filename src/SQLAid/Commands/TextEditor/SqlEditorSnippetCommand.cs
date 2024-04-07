@@ -19,8 +19,7 @@ namespace SQLAid.Commands.TextEditor
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            var dte = Package.GetGlobalService(typeof(DTE)) as DTE2;
-            var events = dte.Events as Events2;
+            var events = sqlAsyncPackage.Application.Events as Events2;
             _textDocumentKeyPressEvents = events.TextDocumentKeyPressEvents;
             _textDocumentKeyPressEvents.BeforeKeyPress += _textDocumentKeyPressEvents_BeforeKeyPress;
         }

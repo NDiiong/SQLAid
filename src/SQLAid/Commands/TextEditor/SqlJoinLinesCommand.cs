@@ -1,5 +1,4 @@
 ﻿using EnvDTE;
-using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using SQLAid.Extensions;
 using SQLAid.Helpers;
@@ -27,10 +26,8 @@ namespace SQLAid.Commands.TextEditor
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             var commandService = package.GetService<IMenuCommandService, OleMenuCommandService>();
-            var dte = Package.GetGlobalService(typeof(DTE)) as DTE2;
-
             var menuCommandID = new CommandID(PackageGuids.guidCommands, PackageIds.JoinLinesCommand);
-            var menuItem = new OleMenuCommand((s, e) => Execute(package, dte), menuCommandID);
+            var menuItem = new OleMenuCommand((s, e) => Execute(package), menuCommandID);
             menuItem.BeforeQueryStatus += CanExcute;
             commandService.AddCommand(menuItem);
         }
@@ -58,7 +55,7 @@ namespace SQLAid.Commands.TextEditor
             }
         }
 
-        private static void Execute(SqlAsyncPackage _, DTE2 dte)
+        private static void Execute(SqlAsyncPackage package)
         {
             try
             {
@@ -66,7 +63,7 @@ namespace SQLAid.Commands.TextEditor
 
                 if (textDocument != null)
                 {
-                    var undoTransaction = new UndoTransaction(dte, nameof(SqlJoinLinesCommand));
+                    var undoTransaction = new UndoTransaction(package.Application, nameof(SqlJoinLinesCommand));
                     undoTransaction.Run(() => JoinLine(textDocument.Selection));
                 }
             }

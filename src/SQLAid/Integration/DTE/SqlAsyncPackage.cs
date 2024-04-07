@@ -18,6 +18,7 @@ namespace SQLAid.Integration.DTE
         private readonly string _packageGuidString;
 
         public static DTE2 _application;
+
         public DTE2 Application
         {
             get
@@ -29,6 +30,7 @@ namespace SQLAid.Integration.DTE
                 return _application;
             }
         }
+
         public IMenuCommandService MenuCommand { get; private set; }
 
         public string ExtensionInstallationDirectory

@@ -1,5 +1,4 @@
 ﻿using EnvDTE;
-using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using SQLAid.Extensions;
 using SQLAid.Integration.DTE;
@@ -30,10 +29,9 @@ namespace SQLAid.Commands.Events
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             var commandService = package.GetService<IMenuCommandService, OleMenuCommandService>();
-            var dte = Package.GetGlobalService(typeof(DTE)) as DTE2;
 
-            var command = dte.Commands.Item("Query.Execute");
-            _executeEvent = dte.Events.get_CommandEvents(command.Guid, command.ID);
+            var command = package.Application.Commands.Item("Query.Execute");
+            _executeEvent = package.Application.Events.get_CommandEvents(command.Guid, command.ID);
             _executeEvent.BeforeExecute += CommandEvents_BeforeExecute;
             _executeEvent.AfterExecute += CommandEvents_AfterExecute;
         }
