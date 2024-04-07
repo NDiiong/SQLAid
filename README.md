@@ -1,4 +1,4 @@
-# SQLAid | SQL Server Management Studio 19 Productivity Addin
+# SQLAid | SQL Server Management Studio (SSMS) 18, 19, and 20 Productivity Addin
 
 Welcome to **SQLAid**, the productivity addin for **SQL Server Management Studio (SSMS) 18, 19, and 20**!
 
