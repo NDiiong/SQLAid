@@ -1,4 +1,5 @@
 ﻿using EnvDTE;
+using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using SQLAid.Extensions;
 using SQLAid.Integration.DTE;
@@ -32,13 +33,13 @@ namespace SQLAid.Commands.Events
 
             var command = package.Application.Commands.Item("Query.Execute");
             _executeEvent = package.Application.Events.get_CommandEvents(command.Guid, command.ID);
-            _executeEvent.BeforeExecute += CommandEvents_BeforeExecute;
+            _executeEvent.BeforeExecute += (string Guid, int ID, object CustomIn, object CustomOut, ref bool CancelDefault) => SaveQueryEvent(package.Application);
             _executeEvent.AfterExecute += CommandEvents_AfterExecute;
         }
 
-        private static void CommandEvents_BeforeExecute(string Guid, int ID, object CustomIn, object CustomOut, ref bool CancelDefault)
+        private static void SaveQueryEvent(DTE2 dte)
         {
-            var queryText = "";// GetQueryText(ServiceCache.ExtensibilityModel);
+            var queryText = GetQueryText(dte);
             if (string.IsNullOrWhiteSpace(queryText))
                 return;
 
