@@ -81,14 +81,15 @@ namespace SQLAid.Integration.DTE.Grid
 
             var schema = _gridControl.GridStorage.GetField<DataTable>("m_schemaTable");
             var columnType = schema.Rows[nColIndex - 1][12].As<Type>();
+
             if (columnType == typeof(bool))
-            {
-                return cellText == "1" ? true : false;
-            }
-            else if (columnType == typeof(int) || columnType == typeof(decimal) || columnType == typeof(long) || columnType == typeof(double) || columnType == typeof(float) || columnType == typeof(byte))
-            {
+                return cellText == "1" ? 1 : 0;
+
+            if (columnType == typeof(Guid))
+                return string.Format("'{0}'", cellText);
+
+            if (columnType == typeof(int) || columnType == typeof(decimal) || columnType == typeof(long) || columnType == typeof(double) || columnType == typeof(float) || columnType == typeof(byte))
                 return Convert.ChangeType(cellText, columnType, CultureInfo.InvariantCulture);
-            }
 
             return string.Format("N'{0}'", cellText.Replace("'", "''"));
         }
