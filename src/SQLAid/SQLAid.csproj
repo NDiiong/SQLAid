@@ -50,7 +50,7 @@
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -70,7 +70,7 @@
     <StartProgram Condition="'$(DevEnvDir)' != ''">$(DevEnvDir)devenv.exe</StartProgram>
     <StartArguments>/rootsuffix Exp</StartArguments>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -81,7 +81,7 @@
     <CopyVsixExtensionFiles>True</CopyVsixExtensionFiles>
     <CopyVsixExtensionLocation>C:\Program Files %28x86%29\Microsoft SQL Server Management Studio 19\Common7\IDE\Extensions\SQLAid</CopyVsixExtensionLocation>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -193,37 +193,37 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <!-- <ItemGroup Condition=" '$(Configuration)' == 'SSMS20' "> -->
-  <!-- <Reference Include="SqlPackageBase"> -->
-  <!-- <HintPath>Assemblies\ssms20\SqlPackageBase.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- <Reference Include="SqlWorkbench.Interfaces"> -->
-  <!-- <HintPath>SqlWorkbench.Interfaces.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- <Reference Include="Microsoft.SqlServer.ConnectionInfo"> -->
-  <!-- <HintPath>Assemblies\ssms20\Microsoft.SqlServer.ConnectionInfo.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- <Reference Include="Microsoft.SqlServer.GridControl"> -->
-  <!-- <HintPath>Assemblies\ssms20\Microsoft.SqlServer.GridControl.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- <Reference Include="Microsoft.SqlServer.RegSvrEnum"> -->
-  <!-- <HintPath>Assemblies\ssms20\Microsoft.SqlServer.RegSvrEnum.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- <Reference Include="Microsoft.SqlServer.Smo"> -->
-  <!-- <HintPath>Assemblies\ssms20\Microsoft.SqlServer.Smo.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom"> -->
-  <!-- <HintPath>Assemblies\ssms20\Microsoft.SqlServer.TransactSql.ScriptDom.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc"> -->
-  <!-- <HintPath>Assemblies\ssms20\Microsoft.SqlServer.Management.Sdk.Sfc.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- <Reference Include="Microsoft.Data.SqlClient, Version=5.0.0.0, Culture=neutral, PublicKeyToken=23ec7fc2d6eaa4a5, processorArchitecture=MSIL"> -->
-  <!-- <SpecificVersion>False</SpecificVersion> -->
-  <!-- <HintPath>Assemblies\ssms20\Microsoft.Data.SqlClient.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- </ItemGroup> -->
-  <ItemGroup Condition=" '$(Configuration)' == 'SSMS19' ">
+  <ItemGroup Condition="'$(Configuration)' == 'SSMS20'">
+    <Reference Include="SqlPackageBase">
+      <HintPath>Assemblies\ssms20\SqlPackageBase.dll</HintPath>
+    </Reference>
+    <Reference Include="SqlWorkbench.Interfaces">
+      <HintPath>SqlWorkbench.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.ConnectionInfo">
+      <HintPath>Assemblies\ssms20\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.GridControl">
+      <HintPath>Assemblies\ssms20\Microsoft.SqlServer.GridControl.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.RegSvrEnum">
+      <HintPath>Assemblies\ssms20\Microsoft.SqlServer.RegSvrEnum.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Smo">
+      <HintPath>Assemblies\ssms20\Microsoft.SqlServer.Smo.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom">
+      <HintPath>Assemblies\ssms20\Microsoft.SqlServer.TransactSql.ScriptDom.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc">
+      <HintPath>Assemblies\ssms20\Microsoft.SqlServer.Management.Sdk.Sfc.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.SqlClient, Version=5.0.0.0, Culture=neutral, PublicKeyToken=23ec7fc2d6eaa4a5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Assemblies\ssms20\Microsoft.Data.SqlClient.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'SSMS19'">
     <Reference Include="SqlPackageBase">
       <HintPath>Assemblies\ssms19\SqlPackageBase.dll</HintPath>
     </Reference>
@@ -256,32 +256,35 @@
       <HintPath>Assemblies\ssms19\Microsoft.Data.SqlClient.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <!-- <ItemGroup Condition=" '$(Configuration)' == 'SSMS18' "> -->
-  <!-- <Reference Include="SqlPackageBase"> -->
-  <!-- <HintPath>Assemblies\ssms18\SqlPackageBase.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- <Reference Include="SqlWorkbench.Interfaces"> -->
-  <!-- <HintPath>Assemblies\ssms18\SqlWorkbench.Interfaces.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- <Reference Include="Microsoft.SqlServer.ConnectionInfo"> -->
-  <!-- <HintPath>Assemblies\ssms18\Microsoft.SqlServer.ConnectionInfo.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- <Reference Include="Microsoft.SqlServer.GridControl"> -->
-  <!-- <HintPath>Assemblies\ssms18\Microsoft.SqlServer.GridControl.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- <Reference Include="Microsoft.SqlServer.RegSvrEnum"> -->
-  <!-- <HintPath>Assemblies\ssms18\Microsoft.SqlServer.RegSvrEnum.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- <Reference Include="Microsoft.SqlServer.Smo"> -->
-  <!-- <HintPath>Assemblies\ssms18\Microsoft.SqlServer.Smo.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom"> -->
-  <!-- <HintPath>Assemblies\ssms18\Microsoft.SqlServer.TransactSql.ScriptDom.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc"> -->
-  <!-- <HintPath>Assemblies\ssms18\Microsoft.SqlServer.Management.Sdk.Sfc.dll</HintPath> -->
-  <!-- </Reference> -->
-  <!-- </ItemGroup> -->
+  <ItemGroup Condition="'$(Configuration)' == 'SSMS18'">
+    <Reference Include="SqlPackageBase">
+      <HintPath>Assemblies\ssms18\SqlPackageBase.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLEditors">
+      <HintPath>Assemblies\ssms18\SQLEditors.dll</HintPath>
+    </Reference>
+    <Reference Include="SqlWorkbench.Interfaces">
+      <HintPath>Assemblies\ssms18\SqlWorkbench.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.ConnectionInfo">
+      <HintPath>Assemblies\ssms18\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.GridControl">
+      <HintPath>Assemblies\ssms18\Microsoft.SqlServer.GridControl.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.RegSvrEnum">
+      <HintPath>Assemblies\ssms18\Microsoft.SqlServer.RegSvrEnum.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Smo">
+      <HintPath>Assemblies\ssms18\Microsoft.SqlServer.Smo.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.TransactSql.ScriptDom">
+      <HintPath>Assemblies\ssms18\Microsoft.SqlServer.TransactSql.ScriptDom.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc">
+      <HintPath>Assemblies\ssms18\Microsoft.SqlServer.Management.Sdk.Sfc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="DocumentFormat.OpenXml, Version=3.0.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
       <HintPath>..\packages\DocumentFormat.OpenXml.3.0.1\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
