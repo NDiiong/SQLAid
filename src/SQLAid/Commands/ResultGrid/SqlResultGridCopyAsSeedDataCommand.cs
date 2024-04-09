@@ -45,15 +45,5 @@ namespace SQLAid.Commands.ResultGrid
                 tableNameForm.Show();
             }
         }
-
-        private static void GeneratSeedScript(string tableName)
-        {
-            var focusGridControl = GridControl.GetFocusGridControl();
-            using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
-            {
-                var dataTable = gridResultControl.GridFocusAsDatatable();
-                
-            }
-        }
     }
 }
