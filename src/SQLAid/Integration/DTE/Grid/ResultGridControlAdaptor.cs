@@ -134,7 +134,7 @@ namespace SQLAid.Integration.DTE.Grid
                 if (columnHeaders.Contains("[" + columnName + "]"))
                     columnName = columnName + "_" + colIndex.ToString();
 
-                columnHeaders[colIndex - 1] = "[" + columnName + "]";
+                columnHeaders[colIndex - 1] = !columnName.StartsWith("[") ? "[" + columnName + "]" : columnName;
             }
 
             return columnHeaders;
@@ -161,7 +161,7 @@ namespace SQLAid.Integration.DTE.Grid
         public IEnumerable<string> GridSelectedAsQuerySql()
         {
             var resultGridSelected = GetResultGridSelected();
-            var columnJoins = string.Join(", ", resultGridSelected.Select(q => "[" + q.Key + "]"));
+            var columnJoins = string.Join(", ", resultGridSelected.Select(q => q.Key.StartsWith("[") ? q.Key : "[" + q.Key + "]"));
             var rowJoins = resultGridSelected.Select(q => q.Value).ZipIt(xs => string.Join(", ", xs));
             var linkedList = new LinkedList<string>(rowJoins);
             linkedList.AddFirst(columnJoins);

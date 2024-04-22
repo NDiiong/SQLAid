@@ -41,7 +41,7 @@ namespace SQLAid
             await SqlEditorNewGuidCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlEditorSnippetCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlEditorAutoAddBracketCommand.InitializeAsync(this).ConfigureAwait(false);
-            //await SqlPasteAsInsertedHeaderQueryCommand.InitializeAsync(this).ConfigureAwait(false);
+            await SqlPasteAsInsertedHeaderQueryCommand.InitializeAsync(this).ConfigureAwait(false);
         }
     }
 }
