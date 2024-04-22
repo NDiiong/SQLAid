@@ -51,6 +51,7 @@ namespace SQLAid.Commands.TextEditor
 
         private static void Execute()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             try
             {
                 var content = _clipboardService.GetFromClipboard();
@@ -59,10 +60,7 @@ namespace SQLAid.Commands.TextEditor
                     var lines = content.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                     if (lines.Length > 0)
                     {
-                        var columns = lines.ElementAtOrDefault(0)
-                        ?.Split('\t')
-                        ?.Select(q => q.Contains(" ") ? $"[{q}]" : q);
-
+                        var columns = lines.ElementAtOrDefault(0)?.Split('\t');
                         if (columns != null)
                         {
                             var result = new List<string>();
@@ -84,16 +82,15 @@ namespace SQLAid.Commands.TextEditor
                                 result.Add(@string);
                             }
 
-                            var columnsJoin = string.Join(", ", columns.Select(x => x.StartsWith("[") ? x : $"[{x}]"));
-
                             var rows = string.Join($",{Environment.NewLine}\t", result.Select(r => $"({string.Join(", ", r)})"));
-                            var sqlQuery = templates.Replace("{rows}", rows).Replace("{columnHeaders}", columnsJoin);
+                            var columnsJoined = string.Join(", ", columns.Select(x => x.StartsWith("[") ? x : $"[{x}]"));
+                            var sqlQuery = templates.Replace("{rows}", rows).Replace("{columnHeaders}", columnsJoined);
 
                             var textSelection = _frameDocumentView.GetTextSelection();
                             var currentline = textSelection.TopPoint.Line;
                             var currentColumn = textSelection.TopPoint.DisplayColumn;
-                            var ed = textSelection.TopPoint.CreateEditPoint();
-                            ed.Insert(sqlQuery);
+                            var editPoint = textSelection.TopPoint.CreateEditPoint();
+                            editPoint.Insert(sqlQuery);
                             textSelection.MoveToLineAndOffset(currentline, currentColumn);
                         }
                     }
