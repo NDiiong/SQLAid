@@ -1,5 +1,6 @@
-﻿using ClosedXML.Excel;
-using System.Data;
+﻿using System.Data;
+using System.IO;
+using WeihanLi.Npoi;
 
 namespace SQLAid.Integration.Files
 {
@@ -7,12 +8,8 @@ namespace SQLAid.Integration.Files
     {
         public void WriteFile(string path, DataTable datatable)
         {
-            using (var workbook = new XLWorkbook(XLEventTracking.Disabled))
-            {
-                var workSheet = workbook.Worksheets.Add(datatable, "GridResult");
-                workSheet.Columns().AdjustToContents();
-                workbook.SaveAs(path);
-            }
+            var bytes = datatable.ToExcelBytes();
+            File.WriteAllBytes(path, bytes);
         }
     }
 }
