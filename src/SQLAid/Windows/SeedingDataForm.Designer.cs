@@ -58,7 +58,7 @@ namespace SQLAid.Windows
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 2;
-            this.btnAdd.Text = "Add";
+            this.btnAdd.Text = "Copy";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.AddOnClick);
             // 
