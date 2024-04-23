@@ -39,7 +39,7 @@ namespace SQLAid.Commands.TextEditor
             ThreadHelper.ThrowIfNotOnUIThread();
             var guid = Guid.NewGuid().ToString().ToUpper();
             var selection = _frameDocumentView.GetTextSelection();
-            selection.Insert("\"" + guid + "\"");
+            selection.Insert("'" + guid + "'");
         }
     }
 }
