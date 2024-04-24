@@ -1,24 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-	<Metadata>
-		<Identity Id="f6bb9eff-8832-4cfc-e6fb-08daf943be5c" Version="2.0.1" Language="en-US" Publisher="duong.nguyen"/>
-		<DisplayName>SQL Aid</DisplayName>
-		<Description xml:space="preserve">SQL Aid is a SQL Server Management Studio Add-in.</Description>
-		<MoreInfo>https://github.com/NDiiong/SQLAid</MoreInfo>
-	</Metadata>
-	<Installation AllUsers="true">
-		<InstallationTarget Id="ssms" Version="[13.0,)"/>
-		<InstallationTarget Id="SQL Server Management Studio" Version="[13.0,)"/>
-	</Installation>
-	<Dependencies>
-		<Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)"/>
-		<Dependency Id="Microsoft.VisualStudio.MPF.14.0" DisplayName="Visual Studio MPF 14.0" d:Source="Installed" Version="[14.0]"/>
-	</Dependencies>
-	<Prerequisites>
-		<Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[11.0,)" DisplayName="Visual Studio core editor"/>
-	</Prerequisites>
-	<Assets>
-		<Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|"/>
-	</Assets>
-	
+    <Metadata>
+        <Identity Id="55ee9134-b925-4767-aab2-ed675fdfd978" Version="2.0.1" Language="en-US" Publisher="duong.nguyen"/>
+        <DisplayName>SQL Aid</DisplayName>
+        <Description xml:space="preserve">SQL Aid is a SQL Server Management Studio Add-in.</Description>
+        <MoreInfo>https://github.com/NDiiong/SQLAid</MoreInfo>
+    </Metadata>
+    <Installation AllUsers="true">
+        <InstallationTarget Id="ssms" Version="[13.0,)"/>
+        <InstallationTarget Id="SQL Server Management Studio" Version="[13.0,)"/>
+    </Installation>
+    <Dependencies>
+        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)"/>
+        <Dependency Id="Microsoft.VisualStudio.MPF.14.0" DisplayName="Visual Studio MPF 14.0" d:Source="Installed" Version="[14.0]"/>
+    </Dependencies>
+    <Prerequisites>
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[11.0,)" DisplayName="Visual Studio core editor"/>
+    </Prerequisites>
+    <Assets>
+        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|"/>
+    </Assets>
+
 </PackageManifest>

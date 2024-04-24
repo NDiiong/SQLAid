@@ -7,7 +7,7 @@ namespace SQLAid
 {
     internal sealed partial class Vsix
     {
-        public const string Id = "f6bb9eff-8832-4cfc-e6fb-08daf943be5c";
+        public const string Id = "55ee9134-b925-4767-aab2-ed675fdfd978";
         public const string Name = "SQL Aid";
         public const string Description = @"SQL Aid is a SQL Server Management Studio Add-in.";
         public const string Language = "en-US";

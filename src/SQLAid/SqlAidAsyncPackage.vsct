@@ -99,7 +99,7 @@
     </GuidSymbol>
 
     <!--SQLAidPackage-->
-    <GuidSymbol name="guidSQLAidPackage" value="{9dac5b5a-953b-456d-a667-2a1d20965229}" />
+    <GuidSymbol name="guidSQLAidPackage" value="{55ee9134-b925-4767-aab2-ed675fdfd978}" />
 
     <!--Commands-->
     <GuidSymbol name="guidCommands" value="{746c2fb4-20a2-4d26-b95d-f8db97c16875}">

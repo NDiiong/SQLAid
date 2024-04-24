@@ -21,7 +21,7 @@ namespace SQLAid
         public const string queryWindowContextCommandSetString = "33f13ac3-80bb-4ecb-85bc-225435603a5e";
         public static Guid queryWindowContextCommandSet = new Guid(queryWindowContextCommandSetString);
 
-        public const string guidSQLAidPackageString = "9dac5b5a-953b-456d-a667-2a1d20965229";
+        public const string guidSQLAidPackageString = "55ee9134-b925-4767-aab2-ed675fdfd978";
         public static Guid guidSQLAidPackage = new Guid(guidSQLAidPackageString);
 
         public const string guidCommandsString = "746c2fb4-20a2-4d26-b95d-f8db97c16875";
