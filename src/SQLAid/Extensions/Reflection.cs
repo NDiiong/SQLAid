@@ -38,7 +38,7 @@ namespace SQLAid.Extensions
 
         public static object GetPropertyValue(object target, string propName)
         {
-            return target.GetType().GetProperty(propName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(target);
+            return target.GetType().GetProperty(propName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance).GetValue(target);
         }
 
         public static object GetProperty(object target, string propName)

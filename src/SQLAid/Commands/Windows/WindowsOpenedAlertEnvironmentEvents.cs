@@ -1,25 +1,37 @@
 ﻿#pragma warning disable IDE1006
 
 using EnvDTE;
+using Microsoft.SqlServer.Management.UI.VSIntegration.Editors;
 using Microsoft.VisualStudio.Shell;
 using SQLAid.Extensions;
 using SQLAid.Integration;
 using SQLAid.Integration.DTE;
-using SQLAid.Logging;
+using SQLAid.Integration.DTE.Connection;
+using SQLAid.Options;
+using System;
 using System.ComponentModel.Design;
 using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.ResultGrid
 {
     internal sealed class WindowsOpenedAlertEnvironmentEvents
     {
+        private const string YELLOW_COLOR = "#f0e68c";
+        private const string RED_COLOR = "#ff8080";
+        private const string GREEN_COLOR = "#80ff80";
+
         private static WindowEvents _windowEvents;
+        private static StatusStrip _statusStrip;
+        private static readonly ISqlConnection _sqlConnection;
         private static readonly IFrameDocumentView _frameDocumentView;
 
         static WindowsOpenedAlertEnvironmentEvents()
         {
             _frameDocumentView = new FrameDocumentView();
+            _sqlConnection = new SqlConnection();
         }
 
         public static async Task InitializeAsync(SqlAsyncPackage package)
@@ -28,41 +40,43 @@ namespace SQLAid.Commands.ResultGrid
 
             var commandService = package.GetService<IMenuCommandService, OleMenuCommandService>();
             _windowEvents = package.Application.Events.get_WindowEvents();
-            _windowEvents.WindowCreated += WindowEvents_WindowCreated;
-            _windowEvents.WindowClosing += WindowEvents_WindowClosing;
             _windowEvents.WindowActivated += WindowEvents_WindowActivated;
         }
 
         private static void WindowEvents_WindowActivated(Window GotFocus, Window LostFocus)
         {
-            Logger.Info("Call [WindowEvents_WindowActivated]");
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (GotFocus.Object is SqlScriptEditorControl)
+            {
+                var connection = _sqlConnection.GetCurrentSqlConnection();
+                var options = SQLAidOptions.GetSettings();
+                var alertColorOptions = options.AlertColors.FirstOrDefault(opt => string.Equals(opt.ColorKey, connection.ColorKey, StringComparison.OrdinalIgnoreCase));
+                if (alertColorOptions != null)
+                {
+                    SetColor(alertColorOptions.ColorHex);
+                }
+                else
+                {
+                    SetColor(YELLOW_COLOR);
+                }
+            }
+        }
 
+        private static void SetColor(string htmlColor)
+        {
             var sqlScriptEditorControl = _frameDocumentView.GetCurrentlyActiveFrameDocView();
             var statusBarManager = sqlScriptEditorControl.StatusBarManager;
-            var generalPanel = Reflection.GetField(statusBarManager, "generalPanel");
-            var statusStrip = Reflection.GetField(statusBarManager, "statusStrip");
-
-            var production_color = ColorTranslator.FromHtml("#ff8080");
-            var dev_color = ColorTranslator.FromHtml("#80ff80");
-            var normalColor = ColorTranslator.FromHtml("#fdf4bf");
-
-            // Background Color
-            Reflection.SetProperty(generalPanel, "BackColor", normalColor);
-            Reflection.SetProperty(statusStrip, "BackColor", normalColor);
-
-            //// Font Color
-            //Reflection.SetProperty(statusStrip, "ForeColor", normalColor);
-            //Reflection.SetProperty(statusStrip, "ForeColor", normalColor);
+            _statusStrip = Reflection.GetField(statusBarManager, "statusStrip") as StatusStrip;
+            _statusStrip.LayoutCompleted += (s, e) => _statusStrip_LayoutCompleted(s, ColorTranslator.FromHtml(htmlColor), e);
         }
 
-        private static void WindowEvents_WindowClosing(Window Window)
+        private static void _statusStrip_LayoutCompleted(object statusStrip, Color colorValue, EventArgs e)
         {
-            Logger.Info("Call [WindowEvents_WindowClosing]");
-        }
-
-        private static void WindowEvents_WindowCreated(Window Window)
-        {
-            Logger.Info("Call [WindowEvents_WindowClosing]");
+            if (statusStrip is StatusStrip _statusStrip && _statusStrip.Items.Count > 1 && _statusStrip.Items[_statusStrip.Items.Count - 1].Text.StartsWith("0 rows"))
+            {
+                if (_statusStrip.BackColor != colorValue)
+                    _statusStrip.BackColor = colorValue;
+            }
         }
     }
 }

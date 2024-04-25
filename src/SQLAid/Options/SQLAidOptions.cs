@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.IO;
+using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Options
 {
@@ -20,24 +21,43 @@ namespace SQLAid.Options
             AlertColors = Array.Empty<AlertColor>();
         }
 
-        public void Save()
-        {
-            var optionsAsJson = JsonConvert.SerializeObject(this, Formatting.Indented);
-            File.WriteAllText(Path.Combine(SettingsDirectory, "settings.json"), optionsAsJson);
-        }
-
-        public static SQLAidOptions Get()
+        public static Task InitOptionsAsync()
         {
             if (File.Exists(SettingsFullPath))
-                return JsonConvert.DeserializeObject<SQLAidOptions>(File.ReadAllText(SettingsFullPath));
+                return Task.CompletedTask;
 
-            return new SQLAidOptions();
+            var options = new SQLAidOptions
+            {
+                AlertColors = new AlertColor[] {
+                    new AlertColor
+                    {
+                        ServerName = "ServerName",
+                        Database = "DatabaseName",
+                        ColorHex = "#ff8080"
+                    }
+                }
+            };
+
+            var optionsAsJson = JsonConvert.SerializeObject(options, Formatting.Indented);
+            File.WriteAllText(SettingsFullPath, optionsAsJson);
+
+            return Task.CompletedTask;
+        }
+
+        public static SQLAidOptions GetSettings()
+        {
+            return File.Exists(SettingsFullPath)
+                ? JsonConvert.DeserializeObject<SQLAidOptions>(File.ReadAllText(SettingsFullPath))
+                : throw new FileNotFoundException("File " + SettingsFullPath + "not found!");
         }
     }
 
     public class AlertColor
     {
         public string ServerName { get; set; }
+        public string Database { get; set; }
         public string ColorHex { get; set; }
+
+        [JsonIgnore] public string ColorKey => $"{ServerName}/{Database}";
     }
 }

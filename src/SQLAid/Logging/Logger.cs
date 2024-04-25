@@ -75,7 +75,7 @@ namespace SQLAid.Logging
             Directory.CreateDirectory(location);
 
             var path = Path.Combine(location, "log.txt");
-            _writer = new StreamWriter(path);
+            _writer = new StreamWriter(path, true);
         }
     }
 }
