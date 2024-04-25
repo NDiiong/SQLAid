@@ -6,9 +6,11 @@ namespace SQLAid.Options
 {
     public class SQLAidOptions
     {
-        public static string LocalData => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), SqlAidAsyncPackage.NAME);
-        public static string HistoryDirectory => Path.Combine(LocalData, "histories");
-        public static string SettingsDirectory => Path.Combine(LocalData, "settings");
+        [JsonIgnore] public static string LocalData => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), SqlAidAsyncPackage.NAME);
+        [JsonIgnore] public static string HistoryDirectory => Path.Combine(LocalData, "histories");
+        [JsonIgnore] public static string SettingsDirectory => Path.Combine(LocalData, "settings");
+        [JsonIgnore] public static string SettingsFullPath => Path.Combine(SettingsDirectory, "settings.json");
+
         public AlertColor[] AlertColors { get; set; }
 
         public SQLAidOptions()
@@ -26,8 +28,10 @@ namespace SQLAid.Options
 
         public static SQLAidOptions Get()
         {
-            var content = File.ReadAllText(Path.Combine(SettingsDirectory, "settings.json"));
-            return JsonConvert.DeserializeObject<SQLAidOptions>(content);
+            if (File.Exists(SettingsFullPath))
+                return JsonConvert.DeserializeObject<SQLAidOptions>(File.ReadAllText(SettingsFullPath));
+
+            return new SQLAidOptions();
         }
     }
 
