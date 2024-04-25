@@ -21,11 +21,14 @@ namespace SQLAid
 
         protected override async Task InitializeAsync()
         {
-            //SQL EVENTS
+            // SQL EVENTS
             await WindowEventLogging.InitializeAsync(this).ConfigureAwait(false);
             await QueryHistoryCommand.InitializeAsync(this).ConfigureAwait(false);
 
-            //SQL GRID RESULT
+            // DOCUMENT EVENT
+            //await WindowsOpenedAlertEnvironmentEvents.InitializeAsync(this).ConfigureAwait(false);
+
+            // SQL GRID RESULT
             await SqlResultGridCopyAsInsertCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsCsharpModelCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsSeedDataCommand.InitializeAsync(this).ConfigureAwait(false);
@@ -35,7 +38,7 @@ namespace SQLAid
             await SqlResultGridAsSaveCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridFrozenColumnCommand.InitializeAsync(this).ConfigureAwait(false);
 
-            //SQL TEXT EDITOR
+            // SQL TEXT EDITOR
             await SqlJoinLinesCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlPasteAsCsvCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlEditorNewGuidCommand.InitializeAsync(this).ConfigureAwait(false);

@@ -103,7 +103,7 @@
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsCsvCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsInsertCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsJsonCommand.cs" />
-    <Compile Include="Commands\ResultGrid\SqlResultGridEnvironmentWarningCommand.cs" />
+    <Compile Include="Commands\Windows\WindowsOpenedAlertEnvironmentEvents.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridFrozenColumnCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlEditorInsertByTemplateCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlEditorSnippetCommand.cs" />
@@ -161,6 +161,7 @@
     <Compile Include="Integration\DTE\FrameDocumentView.cs" />
     <Compile Include="Logging\Func.cs" />
     <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Options\SQLAidOptions.cs" />
     <Compile Include="Security\Encrypter.cs" />
     <Compile Include="source.extension.cs">
       <AutoGen>True</AutoGen>
