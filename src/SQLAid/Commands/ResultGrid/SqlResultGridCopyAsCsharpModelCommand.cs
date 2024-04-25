@@ -48,6 +48,8 @@ namespace SQLAid.Commands.ResultGrid
                     var compiler = new CSharpCodeProvider();
                     if (column.DataType == typeof(DateTime))
                         sb.AppendLine($"    public DateTime {column.ColumnName} {{ get; set; }}");
+                    else if (column.DataType == typeof(DateTimeOffset))
+                        sb.AppendLine($"    public DateTimeOffset {column.ColumnName} {{ get; set; }}");
                     else if (column.DataType == typeof(Guid))
                         sb.AppendLine($"    public Guid {column.ColumnName} {{ get; set; }}");
                     else
