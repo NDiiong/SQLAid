@@ -45,7 +45,7 @@ namespace SQLAid.Commands.ResultGrid
                 foreach (DataColumn column in schema.Columns)
                 {
                     //Primitive Type
-                    var compiler = new CSharpCodeProvider();
+
                     if (column.DataType == typeof(DateTime))
                         sb.AppendLine($"    public DateTime {column.ColumnName} {{ get; set; }}");
                     else if (column.DataType == typeof(DateTimeOffset))
@@ -53,7 +53,10 @@ namespace SQLAid.Commands.ResultGrid
                     else if (column.DataType == typeof(Guid))
                         sb.AppendLine($"    public Guid {column.ColumnName} {{ get; set; }}");
                     else
+                    {
+                        var compiler = new CSharpCodeProvider();
                         sb.AppendLine($"    public {compiler.GetTypeOutput(new CodeTypeReference(column.DataType))} {column.ColumnName} {{ get; set; }}");
+                    }
                 }
 
                 sb.AppendLine("}");
