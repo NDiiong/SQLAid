@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.Shell;
 using SQLAid.Extensions;
 using SQLAid.Integration.DTE;
 using SQLAid.Logging;
+using SQLAid.Options;
 using System;
 using System.Collections.Concurrent;
 using System.ComponentModel.Design;
@@ -16,14 +17,12 @@ namespace SQLAid.Commands.Events
     internal sealed class QueryHistoryCommand
     {
         private static readonly string _location;
-        private static readonly ConcurrentQueue<QueryItem> _itemsQueue = new ConcurrentQueue<QueryItem>();
         private static CommandEvents _executeEvent;
+        private static readonly ConcurrentQueue<QueryItem> _itemsQueue = new ConcurrentQueue<QueryItem>();
 
         static QueryHistoryCommand()
         {
-            var localPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), SqlAidAsyncPackage.NAME);
-            _location = Path.Combine(localPath, "histories");
-            Directory.CreateDirectory(_location);
+            _location = SQLAidOptions.HistoryDirectory;
         }
 
         public static async Task InitializeAsync(SqlAsyncPackage package)
