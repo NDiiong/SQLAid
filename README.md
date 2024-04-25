@@ -32,7 +32,11 @@ Choose between the SSMS 18, 19 and 20 versions.
 - For SSMS 20, place the folder with the compiled files into the following directory:<br/>
 `C:\Program Files (x86)\Microsoft SQL Server Management Studio 20\Common7\IDE\Extensions`
 
+## Frequently Questions
 
+- If you can't open it, check the following:<br/>
+> **Unblock**: `This file came from another computer and maybe blocked to proect this computer. Unblock, apply. Not sure if this is a permissions, or attributes issues`
+  
 ## Thank You!
 
 Thank you for using **SQLAid Tools SSMS Addin**! We're here to make your SQL Server work smoother!
