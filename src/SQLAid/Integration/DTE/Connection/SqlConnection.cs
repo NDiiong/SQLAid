@@ -21,7 +21,7 @@ namespace SQLAid.Integration.DTE.Connection
                 Password = connection.Password,
                 UserID = connection.UserName,
                 InitialCatalog = databaseName,
-                ApplicationName = "Axial SQL Tools"
+                ApplicationName = "SQLAid"
             };
 
             ConnectionInfo connectionInfo = new ConnectionInfo
