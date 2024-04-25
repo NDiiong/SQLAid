@@ -454,6 +454,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Animation\MainFeatures.png" />
     <Content Include="Resources\Animation\Animation-C#.gif" />
     <Content Include="Resources\Animation\Animation-Insert.gif" />
     <Content Include="Resources\Animation\Animation-Seeding.gif" />
