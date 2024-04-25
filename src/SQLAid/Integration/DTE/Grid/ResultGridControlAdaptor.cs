@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 
 namespace SQLAid.Integration.DTE.Grid
 {
@@ -48,8 +49,17 @@ namespace SQLAid.Integration.DTE.Grid
                     if (column.DataType == typeof(bool))
                         cellText = cellText == "0" ? "False" : "True";
 
-                    var typedValue = Convert.ChangeType(cellText, column.DataType, CultureInfo.InvariantCulture);
-                    rows.Add(typedValue);
+                    if (column.DataType == typeof(Guid))
+                        rows.Add(new Guid(cellText));
+                    else if (column.DataType == typeof(DateTime) || column.DataType == typeof(DateTimeOffset))
+                        rows.Add(DateTime.Parse(cellText));
+                    else if (column.DataType == typeof(byte[]))
+                        rows.Add(Encoding.UTF8.GetBytes(cellText));
+                    else
+                    {
+                        var typedValue = Convert.ChangeType(cellText, column.DataType, CultureInfo.InvariantCulture);
+                        rows.Add(typedValue);
+                    }
                 }
 
                 datatable.Rows.Add(rows.ToArray());
@@ -90,6 +100,13 @@ namespace SQLAid.Integration.DTE.Grid
 
             if (columnType == typeof(int) || columnType == typeof(decimal) || columnType == typeof(long) || columnType == typeof(double) || columnType == typeof(float) || columnType == typeof(byte))
                 return Convert.ChangeType(cellText, columnType, CultureInfo.InvariantCulture);
+
+            if (columnType == typeof(Guid) || columnType == typeof(DateTime) || columnType == typeof(DateTimeOffset) || columnType == typeof(byte[]))
+            {
+                columnType = typeof(string);
+                var @values = Convert.ChangeType(cellText, columnType, CultureInfo.InvariantCulture);
+                return string.Format("N'{0}'", @values);
+            }
 
             return string.Format("N'{0}'", cellText.Replace("'", "''"));
         }
