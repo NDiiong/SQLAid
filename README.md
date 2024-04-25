@@ -20,17 +20,20 @@ Happy querying!!
 
 ## Installation
 
-**Download:** For a faster setup, download the latest version from the [Releases](https://github.com/NDiiong/SQLAid/releases) section of this GitHub repository.
-Choose between the SSMS 18, 19 and 20 versions.
+1. Download the latest version from the [Releases](https://github.com/NDiiong/SQLAid/releases) section of this GitHub repository.
+2. Find the Extenstion folder of your SSMS Version and unzip the folder into it.
 
-- For SSMS 18, use this directory instead:<br/>
-`C:\Program Files (x86)\Microsoft SQL Server Management Studio 18\Common7\IDE\Extensions`
+   **SSMS 18 Default install location:**
+   
+   `C:\Program Files (x86)\Microsoft SQL Server Management Studio 18\Common7\IDE\Extensions`
+  
+   **SSMS 19 Default install location:**
+   
+   `C:\Program Files (x86)\Microsoft SQL Server Management Studio 19\Common7\IDE\Extensions`
 
-- For SSMS 19, use this directory instead:<br/>
-`C:\Program Files (x86)\Microsoft SQL Server Management Studio 19\Common7\IDE\Extensions`
-
-- For SSMS 20, place the folder with the compiled files into the following directory:<br/>
-`C:\Program Files (x86)\Microsoft SQL Server Management Studio 20\Common7\IDE\Extensions`
+   **SSMS 20 Default install location:**
+   
+   `C:\Program Files (x86)\Microsoft SQL Server Management Studio 20\Common7\IDE\Extensions`
 
 ## Frequently Questions
 
