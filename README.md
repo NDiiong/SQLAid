@@ -12,7 +12,7 @@ Happy querying!!
 
 ## Main Features
 
-<img src="https://github.com/NDiiong/SQLAid/blob/main/src/SQLAid/Resources/Animation/MainFeatures.png?raw=true" />
+<img src="https://github.com/NDiiong/SQLAid/blob/main/src/SQLAid/Resources/Animation/MainFeatures.png" />
 
 ## Features Detail
 
