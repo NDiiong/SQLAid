@@ -10,7 +10,11 @@ If **SQLAid** improves your SSMS experience, consider giving it a star ⭐️ on
 
 Happy querying!!
 
-## Features
+## Main Features
+
+<img src="https://github.com/NDiiong/SQLAid/blob/main/src/SQLAid/Resources/Animation/MainFeatures.png?raw=true" />
+
+## Features Detail
 
 - **Export Grid As Excel**: Quickly export results from the grid view directly into Excel file
   
