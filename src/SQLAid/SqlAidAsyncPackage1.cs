@@ -40,5 +40,7 @@ namespace SQLAid
         public const int JoinLinesCommand = 0x0101;
         public const int NewGuidCommand = 0x0102;
         public const int PasteAsInsertedWithHeaderCommand = 0x0103;
+        public const int HistoryDirectoryCommand = 0x0104;
+        public const int SettingsFullPathCommand = 0x0105;
     }
 }

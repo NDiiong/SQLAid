@@ -63,7 +63,7 @@ namespace SQLAid.Commands.Events
                 while (_itemsQueue.TryDequeue(out var item))
                 {
                     var path = Path.Combine(_location, item.ExecutionDate.ToString("dd.MM.yyyy.hh.mm.ss.fff") + Path.GetRandomFileName());
-                    File.AppendAllText(path, $"{item.ExecutionDate}" + Environment.NewLine + item.Query);
+                    File.AppendAllText(path + ".txt", $"{item.ExecutionDate}" + Environment.NewLine + item.Query);
                 }
             }
         }

@@ -57,7 +57,5 @@ namespace SQLAid.Options
         public string ServerName { get; set; }
         public string Database { get; set; }
         public string ColorHex { get; set; }
-
-        [JsonIgnore] public string ColorKey => $"{ServerName}/{Database}";
     }
 }

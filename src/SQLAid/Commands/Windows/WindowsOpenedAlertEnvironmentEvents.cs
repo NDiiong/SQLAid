@@ -50,15 +50,9 @@ namespace SQLAid.Commands.ResultGrid
             {
                 var connection = _sqlConnection.GetCurrentSqlConnection();
                 var options = SQLAidOptions.GetSettings();
-                var alertColorOptions = options.AlertColors.FirstOrDefault(opt => string.Equals(opt.ColorKey, connection.ColorKey, StringComparison.OrdinalIgnoreCase));
+                var alertColorOptions = options.AlertColors.FirstOrDefault(opt => opt.ServerName == connection.ServerName && (connection.Database == "." || opt.Database == connection.Database));
                 if (alertColorOptions != null)
-                {
                     SetColor(alertColorOptions.ColorHex);
-                }
-                else
-                {
-                    SetColor(YELLOW_COLOR);
-                }
             }
         }
 

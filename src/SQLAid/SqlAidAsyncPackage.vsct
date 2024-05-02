@@ -43,6 +43,32 @@
         </Strings>
       </Button>
 
+      <!--Context.HistoryDirectoryCommand-->
+      <Button guid="guidCommands" id="HistoryDirectoryCommand" priority="0x0100" type="Button">
+        <Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
+        <Icon guid="ImageCatalogGuid" id="History" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>History</ButtonText>
+        </Strings>
+      </Button>
+
+      <!--Context.SettingsFullPathCommand-->
+      <Button guid="guidCommands" id="SettingsFullPathCommand" priority="0x0100" type="Button">
+        <Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
+        <Icon guid="ImageCatalogGuid" id="Settings" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Settings</ButtonText>
+        </Strings>
+      </Button>
+
       <!--Context.PasteAsInsertedWithHeaderCommand-->
       <Button guid="guidCommands" id="PasteAsInsertedWithHeaderCommand" priority="0x0100" type="Button">
         <Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
@@ -112,6 +138,8 @@
       <IDSymbol name="JoinLinesCommand" value="0x101" />
       <IDSymbol name="NewGuidCommand" value="0x102" />
       <IDSymbol name="PasteAsInsertedWithHeaderCommand" value="0x103" />
+      <IDSymbol name="HistoryDirectoryCommand" value="0x104" />
+      <IDSymbol name="SettingsFullPathCommand" value="0x105" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>
