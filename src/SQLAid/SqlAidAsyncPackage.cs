@@ -39,9 +39,9 @@ namespace SQLAid
             await SqlEditorAutoAddBracketCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlPasteAsInsertedHeaderQueryCommand.InitializeAsync(this).ConfigureAwait(false);
             await WindowsOpenedAlertEnvironmentEvents.InitializeAsync(this).ConfigureAwait(false);
-            await OpenQueryHistoryFolderCommand.InitializeAsync(this).ConfigureAwait(false);
-            await OpenSettingsFileCommand.InitializeAsync(this).ConfigureAwait(false);
-            await OpenLogFolderCommand.InitializeAsync(this).ConfigureAwait(false);
+            await OpenQueryHistoryDirectoryCommand.InitializeAsync(this).ConfigureAwait(false);
+            await OpenFileSettingsCommand.InitializeAsync(this).ConfigureAwait(false);
+            await OpenLogDirectoryCommand.InitializeAsync(this).ConfigureAwait(false);
         }
     }
 }

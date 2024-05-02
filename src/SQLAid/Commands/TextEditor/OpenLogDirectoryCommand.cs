@@ -8,14 +8,14 @@ using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.TextEditor
 {
-    internal sealed class OpenSettingsFileCommand
+    internal sealed class OpenLogDirectoryCommand
     {
         public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             var commandService = sqlAsyncPackage.GetService<IMenuCommandService, OleMenuCommandService>();
-            var cmdId = new CommandID(PackageGuids.guidCommands, PackageIds.SettingsFullPathCommand);
+            var cmdId = new CommandID(PackageGuids.guidCommands, PackageIds.OpenLogCommand);
             var menuItem = new OleMenuCommand((s, e) => Execute(), cmdId);
             menuItem.BeforeQueryStatus += (s, e) => CanExecute(s);
             commandService.AddCommand(menuItem);
@@ -29,7 +29,7 @@ namespace SQLAid.Commands.TextEditor
 
         private static void Execute()
         {
-            Process.Start(SQLAidOptions.SettingsFullPath);
+            Process.Start("explorer.exe", SQLAidOptions.LogDirectory);
         }
     }
 }
