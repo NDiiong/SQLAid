@@ -41,6 +41,7 @@ namespace SQLAid
             await WindowsOpenedAlertEnvironmentEvents.InitializeAsync(this).ConfigureAwait(false);
             await OpenQueryHistoryFolderCommand.InitializeAsync(this).ConfigureAwait(false);
             await OpenSettingsFileCommand.InitializeAsync(this).ConfigureAwait(false);
+            await OpenLogFolderCommand.InitializeAsync(this).ConfigureAwait(false);
         }
     }
 }
