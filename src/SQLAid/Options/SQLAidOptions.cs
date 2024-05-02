@@ -8,6 +8,7 @@ namespace SQLAid.Options
     public class SQLAidOptions
     {
         [JsonIgnore] public static string LocalData => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), SqlAidAsyncPackage.NAME);
+        [JsonIgnore] public static string LogDirectory => Path.Combine(LocalData, "logs");
         [JsonIgnore] public static string HistoryDirectory => Path.Combine(LocalData, "histories");
         [JsonIgnore] public static string SettingsDirectory => Path.Combine(LocalData, "settings");
         [JsonIgnore] public static string SettingsFullPath => Path.Combine(SettingsDirectory, "settings.json");

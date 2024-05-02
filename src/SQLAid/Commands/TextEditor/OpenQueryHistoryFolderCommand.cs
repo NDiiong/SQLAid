@@ -8,7 +8,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.TextEditor
 {
-    internal sealed class OpenHistoryFolderCommand
+    internal sealed class OpenQueryHistoryFolderCommand
     {
         public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {

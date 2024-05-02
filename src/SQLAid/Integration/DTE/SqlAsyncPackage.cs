@@ -3,6 +3,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Win32;
 using SQLAid.Logging;
+using SQLAid.Options;
 using System;
 using System.ComponentModel.Design;
 using System.IO;
@@ -60,7 +61,7 @@ namespace SQLAid.Integration.DTE
         protected override void Initialize()
         {
             base.Initialize();
-            Logger.Initialize(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), SqlAidAsyncPackage.NAME));
+            Logger.Initialize(SQLAidOptions.LocalData);
             ThreadHelper.JoinableTaskFactory.Run(InitializeAsync);
         }
 

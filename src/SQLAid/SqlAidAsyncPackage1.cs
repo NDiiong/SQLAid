@@ -42,5 +42,6 @@ namespace SQLAid
         public const int PasteAsInsertedWithHeaderCommand = 0x0103;
         public const int HistoryDirectoryCommand = 0x0104;
         public const int SettingsFullPathCommand = 0x0105;
+        public const int OpenLogCommand = 0x0106;
     }
 }

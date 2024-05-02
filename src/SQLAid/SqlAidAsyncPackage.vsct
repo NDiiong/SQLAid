@@ -69,6 +69,18 @@
         </Strings>
       </Button>
 
+      <!--Context.OpenLogCommand-->
+      <Button guid="guidCommands" id="OpenLogCommand" priority="0x0100" type="Button">
+        <Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Open Logs</ButtonText>
+        </Strings>
+      </Button>
+
       <!--Context.PasteAsInsertedWithHeaderCommand-->
       <Button guid="guidCommands" id="PasteAsInsertedWithHeaderCommand" priority="0x0100" type="Button">
         <Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
@@ -140,6 +152,7 @@
       <IDSymbol name="PasteAsInsertedWithHeaderCommand" value="0x103" />
       <IDSymbol name="HistoryDirectoryCommand" value="0x104" />
       <IDSymbol name="SettingsFullPathCommand" value="0x105" />
+      <IDSymbol name="OpenLogCommand" value="0x106" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>
