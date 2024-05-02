@@ -52,7 +52,7 @@
         <CommandFlag>DefaultDisabled</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>History</ButtonText>
+          <ButtonText>Open History</ButtonText>
         </Strings>
       </Button>
 
@@ -65,7 +65,7 @@
         <CommandFlag>DefaultDisabled</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>Settings</ButtonText>
+          <ButtonText>Open Settings</ButtonText>
         </Strings>
       </Button>
 
