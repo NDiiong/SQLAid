@@ -32,8 +32,8 @@ namespace SQLAid.Options
                 AlertColors = new AlertColor[] {
                     new AlertColor
                     {
-                        ServerName = "ServerName",
-                        Database = "DatabaseName",
+                        ServerName = "localhost",
+                        Database = ".",
                         ColorHex = "#ff8080"
                     }
                 }
