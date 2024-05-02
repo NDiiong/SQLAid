@@ -103,8 +103,9 @@
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsCsvCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsInsertCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsJsonCommand.cs" />
-    <Compile Include="Commands\TextEditor\OpenHistoryFolderCommand.cs" />
-    <Compile Include="Commands\TextEditor\OpenOptionsFileCommand.cs" />
+    <Compile Include="Commands\TextEditor\OpenLogFolderCommand.cs" />
+    <Compile Include="Commands\TextEditor\OpenQueryHistoryFolderCommand.cs" />
+    <Compile Include="Commands\TextEditor\OpenSettingsFileCommand.cs" />
     <Compile Include="Commands\Windows\WindowsOpenedAlertEnvironmentEvents.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridFrozenColumnCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlEditorInsertByTemplateCommand.cs" />
