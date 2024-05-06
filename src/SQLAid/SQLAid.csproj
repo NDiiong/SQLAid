@@ -96,6 +96,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Process\RedirectedProcess.cs" />
     <Compile Include="Commands\Events\QueryHistoryCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsSeedDataCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridCommandBase.cs" />
