@@ -25,7 +25,7 @@ namespace SQLAid.Commands.ResultGrid
         private const string GREEN_COLOR = "#80ff80";
 
         private static WindowEvents _windowEvents;
-        private static StatusStrip _statusStrip;
+        private static StatusStrip _statusStripCached;
         private static readonly ISqlConnection _sqlConnection;
         private static readonly IFrameDocumentView _frameDocumentView;
 
@@ -68,11 +68,6 @@ namespace SQLAid.Commands.ResultGrid
             }
         }
 
-        public static void QeSqlCmdNewConnection(object QEOLESQLExec, object b)
-        {
-            Console.WriteLine();
-        }
-
         public static void ScriptExecutionCompleted(object QEOLESQLExec, object b)
         {
             var sqlScriptEditorControl = _frameDocumentView.GetCurrentlyActiveFrameDocView();
@@ -84,8 +79,7 @@ namespace SQLAid.Commands.ResultGrid
                     if (Reflection.GetField(statusBarManager, "statusStrip") is StatusStrip statusStrip)
                     {
                         var htmlColor = GetColorSetting();
-                        if (!string.IsNullOrWhiteSpace(htmlColor))
-                            statusStrip.BackColor = ColorTranslator.FromHtml(htmlColor);
+                        statusStrip.BackColor = ColorTranslator.FromHtml(htmlColor);
                     }
                 }
             }
@@ -94,6 +88,7 @@ namespace SQLAid.Commands.ResultGrid
         private static void WindowEvents_WindowActivated(Window GotFocus, Window LostFocus)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+
             if (GotFocus.Object is SqlScriptEditorControl)
                 SetColorStatusStrip();
         }
@@ -101,21 +96,25 @@ namespace SQLAid.Commands.ResultGrid
         private static void SetColorStatusStrip()
         {
             var htmlColor = GetColorSetting();
-            if (!string.IsNullOrWhiteSpace(htmlColor))
+            var sqlScriptEditorControl = _frameDocumentView.GetCurrentlyActiveFrameDocView();
+            if (sqlScriptEditorControl != null)
             {
-                var sqlScriptEditorControl = _frameDocumentView.GetCurrentlyActiveFrameDocView();
                 var statusBarManager = sqlScriptEditorControl.StatusBarManager;
-                _statusStrip = Reflection.GetField(statusBarManager, "statusStrip") as StatusStrip;
-                _statusStrip.LayoutCompleted += (s, e) => StatusStrip_LayoutCompleted(s, ColorTranslator.FromHtml(htmlColor), e);
+                if (statusBarManager != null)
+                {
+                    _statusStripCached = Reflection.GetField(statusBarManager, "statusStrip") as StatusStrip;
+                    if (_statusStripCached != null)
+                        _statusStripCached.LayoutCompleted += (s, e) => StatusStrip_LayoutCompleted(s, ColorTranslator.FromHtml(htmlColor), e);
+                }
             }
         }
 
-        private static void StatusStrip_LayoutCompleted(object statusStrip, Color colorValue, EventArgs e)
+        private static void StatusStrip_LayoutCompleted(object statusStripSender, Color colorValue, EventArgs e)
         {
-            if (statusStrip is StatusStrip _statusStrip && _statusStrip.Items.Count > 1 && _statusStrip.Items[_statusStrip.Items.Count - 1].Text.StartsWith("0 rows"))
+            if (statusStripSender is StatusStrip statusStrip && statusStrip.Items.Count > 1 && statusStrip.Items[statusStrip.Items.Count - 1].Text.StartsWith("0 rows"))
             {
-                if (_statusStrip.BackColor != colorValue)
-                    _statusStrip.BackColor = colorValue;
+                if (statusStrip.BackColor != colorValue)
+                    statusStrip.BackColor = colorValue;
             }
         }
 
@@ -124,10 +123,7 @@ namespace SQLAid.Commands.ResultGrid
             var connection = _sqlConnection.GetCurrentSqlConnection();
             var options = SQLAidOptions.GetSettings();
             var alertColorOptions = options.AlertColors.FirstOrDefault(opt => opt.ServerName == connection.ServerName && (opt.Database == "." || opt.Database == connection.Database));
-            if (alertColorOptions != null)
-                return alertColorOptions.ColorHex;
-
-            return YELLOW_COLOR;
+            return alertColorOptions != null ? alertColorOptions.ColorHex : YELLOW_COLOR;
         }
     }
 }
