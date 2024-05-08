@@ -3,7 +3,6 @@ using SQLAid.Extensions;
 using SQLAid.Integration.DTE;
 using SQLAid.Options;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.TextEditor
@@ -29,7 +28,7 @@ namespace SQLAid.Commands.TextEditor
 
         private static void Execute()
         {
-            Process.Start(SQLAidOptions.SettingsFullPath);
+            System.Diagnostics.Process.Start(SQLAidOptions.SettingsFullPath);
         }
     }
 }

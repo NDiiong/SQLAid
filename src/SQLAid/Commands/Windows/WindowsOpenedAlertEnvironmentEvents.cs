@@ -13,6 +13,7 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using WeihanLi.Extensions;
 using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.ResultGrid
@@ -41,36 +42,92 @@ namespace SQLAid.Commands.ResultGrid
             var commandService = package.GetService<IMenuCommandService, OleMenuCommandService>();
             _windowEvents = package.Application.Events.get_WindowEvents();
             _windowEvents.WindowActivated += WindowEvents_WindowActivated;
+            _windowEvents.WindowCreated += WindowEvents_WindowCreated;
+        }
+
+        private static void WindowEvents_WindowCreated(Window Window)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            // this is DisplaySQLResultsControl class
+            var sqlResultsControl = Window.Object.GetField("m_sqlResultsControl");
+            if (sqlResultsControl != null)
+            {
+                var targetType = sqlResultsControl.GetType();
+                if (targetType != null)
+                {
+                    var scriptExecutionCompletedEvent = targetType.GetEvent("ScriptExecutionCompleted");
+                    if (scriptExecutionCompletedEvent != null)
+                    {
+                        EventHandler eventHandler = ScriptExecutionCompleted;
+                        var handlerDelegate = Delegate.CreateDelegate(scriptExecutionCompletedEvent.EventHandlerType, eventHandler.Target, eventHandler.Method);
+                        scriptExecutionCompletedEvent.RemoveEventHandler(sqlResultsControl, handlerDelegate);
+                        scriptExecutionCompletedEvent.AddEventHandler(sqlResultsControl, handlerDelegate);
+                    }
+                }
+            }
+        }
+
+        public static void QeSqlCmdNewConnection(object QEOLESQLExec, object b)
+        {
+            Console.WriteLine();
+        }
+
+        public static void ScriptExecutionCompleted(object QEOLESQLExec, object b)
+        {
+            var sqlScriptEditorControl = _frameDocumentView.GetCurrentlyActiveFrameDocView();
+            if (sqlScriptEditorControl != null)
+            {
+                var statusBarManager = sqlScriptEditorControl.StatusBarManager;
+                if (statusBarManager != null)
+                {
+                    if (Reflection.GetField(statusBarManager, "statusStrip") is StatusStrip statusStrip)
+                    {
+                        var htmlColor = GetColorSetting();
+                        if (!string.IsNullOrWhiteSpace(htmlColor))
+                            statusStrip.BackColor = ColorTranslator.FromHtml(htmlColor);
+                    }
+                }
+            }
         }
 
         private static void WindowEvents_WindowActivated(Window GotFocus, Window LostFocus)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             if (GotFocus.Object is SqlScriptEditorControl)
+                SetColorStatusStrip();
+        }
+
+        private static void SetColorStatusStrip()
+        {
+            var htmlColor = GetColorSetting();
+            if (!string.IsNullOrWhiteSpace(htmlColor))
             {
-                var connection = _sqlConnection.GetCurrentSqlConnection();
-                var options = SQLAidOptions.GetSettings();
-                var alertColorOptions = options.AlertColors.FirstOrDefault(opt => opt.ServerName == connection.ServerName && (opt.Database == "." || opt.Database == connection.Database));
-                if (alertColorOptions != null)
-                    SetColor(alertColorOptions.ColorHex);
+                var sqlScriptEditorControl = _frameDocumentView.GetCurrentlyActiveFrameDocView();
+                var statusBarManager = sqlScriptEditorControl.StatusBarManager;
+                _statusStrip = Reflection.GetField(statusBarManager, "statusStrip") as StatusStrip;
+                _statusStrip.LayoutCompleted += (s, e) => StatusStrip_LayoutCompleted(s, ColorTranslator.FromHtml(htmlColor), e);
             }
         }
 
-        private static void SetColor(string htmlColor)
-        {
-            var sqlScriptEditorControl = _frameDocumentView.GetCurrentlyActiveFrameDocView();
-            var statusBarManager = sqlScriptEditorControl.StatusBarManager;
-            _statusStrip = Reflection.GetField(statusBarManager, "statusStrip") as StatusStrip;
-            _statusStrip.LayoutCompleted += (s, e) => _statusStrip_LayoutCompleted(s, ColorTranslator.FromHtml(htmlColor), e);
-        }
-
-        private static void _statusStrip_LayoutCompleted(object statusStrip, Color colorValue, EventArgs e)
+        private static void StatusStrip_LayoutCompleted(object statusStrip, Color colorValue, EventArgs e)
         {
             if (statusStrip is StatusStrip _statusStrip && _statusStrip.Items.Count > 1 && _statusStrip.Items[_statusStrip.Items.Count - 1].Text.StartsWith("0 rows"))
             {
                 if (_statusStrip.BackColor != colorValue)
                     _statusStrip.BackColor = colorValue;
             }
+        }
+
+        private static string GetColorSetting()
+        {
+            var connection = _sqlConnection.GetCurrentSqlConnection();
+            var options = SQLAidOptions.GetSettings();
+            var alertColorOptions = options.AlertColors.FirstOrDefault(opt => opt.ServerName == connection.ServerName && (opt.Database == "." || opt.Database == connection.Database));
+            if (alertColorOptions != null)
+                return alertColorOptions.ColorHex;
+
+            return YELLOW_COLOR;
         }
     }
 }
