@@ -53,6 +53,7 @@ namespace SQLAid.Commands.ResultGrid
 
             // this is DisplaySQLResultsControl class
             var sqlResultsControl = Window.Object.GetField("m_sqlResultsControl");
+
             if (sqlResultsControl != null)
             {
                 var targetType = sqlResultsControl.GetType();
@@ -61,16 +62,25 @@ namespace SQLAid.Commands.ResultGrid
                     var scriptExecutionCompletedEvent = targetType.GetEvent("ScriptExecutionCompleted");
                     if (scriptExecutionCompletedEvent != null)
                     {
-                        EventHandler eventHandler = ScriptExecutionCompleted;
+                        EventHandler eventHandler = UpdateStatusStripBackColorEventHandler;
                         var handlerDelegate = Delegate.CreateDelegate(scriptExecutionCompletedEvent.EventHandlerType, eventHandler.Target, eventHandler.Method);
                         scriptExecutionCompletedEvent.RemoveEventHandler(sqlResultsControl, handlerDelegate);
                         scriptExecutionCompletedEvent.AddEventHandler(sqlResultsControl, handlerDelegate);
+                    }
+
+                    var scriptExecutionStarted = targetType.GetEvent("ScriptExecutionStarted");
+                    if (scriptExecutionStarted != null)
+                    {
+                        EventHandler eventHandler = UpdateStatusStripBackColorEventHandler;
+                        var handlerDelegate = Delegate.CreateDelegate(scriptExecutionStarted.EventHandlerType, eventHandler.Target, eventHandler.Method);
+                        scriptExecutionStarted.RemoveEventHandler(sqlResultsControl, handlerDelegate);
+                        scriptExecutionStarted.AddEventHandler(sqlResultsControl, handlerDelegate);
                     }
                 }
             }
         }
 
-        public static void ScriptExecutionCompleted(object QEOLESQLExec, object b)
+        public static void UpdateStatusStripBackColorEventHandler(object QEOLESQLExec, object b)
         {
             var sqlScriptEditorControl = _frameDocumentView.GetCurrentlyActiveFrameDocView();
             if (sqlScriptEditorControl != null)
