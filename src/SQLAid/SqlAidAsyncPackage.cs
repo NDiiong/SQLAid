@@ -23,6 +23,8 @@ namespace SQLAid
         {
             await WindowEventLogging.InitializeAsync(this).ConfigureAwait(false);
             await QueryHistoryCommand.InitializeAsync(this).ConfigureAwait(false);
+            await WindowsOpenedAlertEnvironmentEvents.InitializeAsync(this).ConfigureAwait(false);
+
             await TeamsChatCopyKeepFormattingCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsInsertCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsCsharpModelCommand.InitializeAsync(this).ConfigureAwait(false);
@@ -31,13 +33,13 @@ namespace SQLAid
             await SqlResultGridCopyAsCsvCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridAsSaveCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridFrozenColumnCommand.InitializeAsync(this).ConfigureAwait(false);
+
             await SqlJoinLinesCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlPasteAsCsvCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlEditorNewGuidCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlEditorSnippetCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlEditorAutoAddBracketCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlPasteAsInsertedHeaderQueryCommand.InitializeAsync(this).ConfigureAwait(false);
-            await WindowsOpenedAlertEnvironmentEvents.InitializeAsync(this).ConfigureAwait(false);
             await OpenQueryHistoryCommand.InitializeAsync(this).ConfigureAwait(false);
             await OpenSettingsCommand.InitializeAsync(this).ConfigureAwait(false);
             await OpenFolderTemplatesCommand.InitializeAsync(this).ConfigureAwait(false);

@@ -51,7 +51,7 @@ namespace SQLAid.Commands.ResultGrid
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            // this is DisplaySQLResultsControl class
+            // this is SqlScriptEditorControl class
             var sqlResultsControl = Window.Object.GetField("m_sqlResultsControl");
 
             if (sqlResultsControl != null)
