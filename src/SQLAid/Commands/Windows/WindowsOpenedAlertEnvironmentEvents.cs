@@ -91,7 +91,9 @@ namespace SQLAid.Commands.ResultGrid
                     if (Reflection.GetField(statusBarManager, "statusStrip") is StatusStrip statusStrip)
                     {
                         var htmlColor = GetColorSetting();
-                        statusStrip.BackColor = ColorTranslator.FromHtml(htmlColor);
+                        var settingColor = ColorTranslator.FromHtml(htmlColor);
+                        if (settingColor != statusStrip.BackColor)
+                            statusStrip.BackColor = ColorTranslator.FromHtml(htmlColor);
                     }
                 }
             }
