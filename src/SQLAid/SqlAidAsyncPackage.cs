@@ -23,6 +23,7 @@ namespace SQLAid
         {
             await WindowEventLogging.InitializeAsync(this).ConfigureAwait(false);
             await QueryHistoryCommand.InitializeAsync(this).ConfigureAwait(false);
+            await TeamsChatCopyKeepFormattingCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsInsertCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsCsharpModelCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsSeedDataCommand.InitializeAsync(this).ConfigureAwait(false);

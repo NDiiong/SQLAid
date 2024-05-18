@@ -96,6 +96,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\ResultGrid\TeamsChatCopyKeepFormattingCommand.cs" />
     <Compile Include="Commands\TextEditor\OpenFolderTemplatesCommand.cs" />
     <Compile Include="Commands\TextEditor\OpenStatisticsParserCommand.cs" />
     <Compile Include="Process\RedirectedProcess.cs" />
@@ -464,6 +465,10 @@
     <Content Include="Resources\Animation\Animation-Insert.gif" />
     <Content Include="Resources\Animation\Animation-Seeding.gif" />
     <Content Include="Resources\Animation\Animation-Snippet.gif" />
+    <Content Include="Resources\Assets\copy-special.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\Assets\csharp-icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -504,6 +509,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="Templates\Internal\MSTeamMessageChatsFormat.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Templates\nindex.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -512,12 +521,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Templates\SQL.INSERT.INTO.sql">
+    <Content Include="Templates\Internal\SQL.INSERT.INTO.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="Properties\Resources\Command1Package.ico" />
-    <Content Include="Templates\SQL.SEED.DATA.sql">
+    <Content Include="Templates\Internal\SQL.SEED.DATA.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

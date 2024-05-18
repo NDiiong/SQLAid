@@ -27,8 +27,8 @@ namespace SQLAid.Commands.ResultGrid
         public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            templates = File.ReadAllText($"{sqlAsyncPackage.ExtensionInstallationDirectory}/Templates/SQL.INSERT.INTO.sql");
-            GridCommandBar.AddButton("Copy As #INSERT", $"{sqlAsyncPackage.ExtensionInstallationDirectory}/Resources/Assets/insert-table.ico", OnClick);
+            templates = File.ReadAllText($"{sqlAsyncPackage.ExtensionInstallationDirectory}/Templates/Internal/SQL.INSERT.INTO.sql");
+            GridCommandBar.AddButton("Copy As #INSERT", $"{sqlAsyncPackage.ExtensionInstallationDirectory}/Resources/Assets/insert-table.ico", createNewGroup: true, OnClick);
         }
 
         private static void OnClick()

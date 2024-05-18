@@ -27,7 +27,7 @@ namespace SQLAid.Commands.TextEditor
         public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            templates = File.ReadAllText($"{sqlAsyncPackage.ExtensionInstallationDirectory}/Templates/SQL.INSERT.INTO.sql");
+            templates = File.ReadAllText($"{sqlAsyncPackage.ExtensionInstallationDirectory}/Templates/Internal/SQL.INSERT.INTO.sql");
             var commandService = sqlAsyncPackage.GetService<IMenuCommandService, OleMenuCommandService>();
             var cmdId = new CommandID(PackageGuids.guidCommands, PackageIds.PasteAsInsertedWithHeaderCommand);
             var menuItem = new OleMenuCommand((s, e) => Execute(), cmdId);

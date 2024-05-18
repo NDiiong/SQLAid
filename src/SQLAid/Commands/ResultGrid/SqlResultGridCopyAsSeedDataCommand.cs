@@ -7,12 +7,7 @@ using SQLAid.Integration.Clipboard;
 using SQLAid.Integration.DTE;
 using SQLAid.Integration.DTE.Grid;
 using SQLAid.Windows;
-using System;
-using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.ResultGrid
@@ -30,7 +25,7 @@ namespace SQLAid.Commands.ResultGrid
         public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            templates = File.ReadAllText($"{sqlAsyncPackage.ExtensionInstallationDirectory}/Templates/SQL.SEED.DATA.sql");
+            templates = File.ReadAllText($"{sqlAsyncPackage.ExtensionInstallationDirectory}/Templates/Internal/SQL.SEED.DATA.sql");
             GridCommandBar.AddButton("Copy As Seeding Data", $"{sqlAsyncPackage.ExtensionInstallationDirectory}/Resources/Assets/seeding.ico", OnClick);
         }
 

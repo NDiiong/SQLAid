@@ -5,7 +5,6 @@ using SQLAid.Integration.DTE;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using WeihanLi.Extensions;
 using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.TextEditor
@@ -39,9 +38,10 @@ namespace SQLAid.Commands.TextEditor
             while (!startPoint.AtEndOfLine && startPoint.GetText(1) == "\t")
                 startPoint.CharRight();
 
-            var fileTemplates = Directory.GetFiles(_sqlAsyncPackage.Options.TemplateDirectory).ToList();
-            fileTemplates.AddRangeIf(x => !Path.GetFileName(x).StartsWith("SQL"), Directory.GetFiles($"{_sqlAsyncPackage.ExtensionInstallationDirectory}/Templates"));
-            CancelKeypress = CreateSnippet(Selection, startPoint, fileTemplates);
+            var defaultTemplates = Directory.GetFiles($"{_sqlAsyncPackage.ExtensionInstallationDirectory}/Templates");
+            var customTemplates = Directory.GetFiles(_sqlAsyncPackage.Options.TemplateDirectory).ToList();
+            customTemplates.AddRange(defaultTemplates);
+            CancelKeypress = CreateSnippet(Selection, startPoint, customTemplates);
         }
 
         private static bool CreateSnippet(TextSelection Selection, EditPoint startPoint, List<string> paths)

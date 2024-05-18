@@ -177,7 +177,7 @@ namespace SQLAid.Integration.DTE.Grid
 
         public IEnumerable<string> GridSelectedAsQuerySql()
         {
-            var resultGridSelected = GetResultGridSelected();
+            var resultGridSelected = GridSelectedAsDictionary();
             var columnJoins = string.Join(", ", resultGridSelected.Select(q => q.Key.StartsWith("[") ? q.Key : "[" + q.Key + "]"));
             var rowJoins = resultGridSelected.Select(q => q.Value).ZipIt(xs => string.Join(", ", xs));
             var linkedList = new LinkedList<string>(rowJoins);
@@ -185,7 +185,63 @@ namespace SQLAid.Integration.DTE.Grid
             return linkedList;
         }
 
-        public Dictionary<string, List<object>> GetResultGridSelected()
+        public DataTable GridSelectedAsDataTable()
+        {
+            var datatable = new DataTable();
+
+            var schemaTable = _gridControl.GridStorage.GetField<DataTable>("m_schemaTable");
+
+            foreach (BlockOfCells cell in _gridControl.SelectedCells)
+            {
+                for (var col = cell.X; col <= cell.Right; col++)
+                {
+                    var columnType = schemaTable.Rows[col - 1][12].As<Type>();
+                    var columnText = GetColumnName(col);
+                    datatable.Columns.Add(columnText, columnType);
+                }
+            }
+
+            foreach (BlockOfCells cell in _gridControl.SelectedCells)
+            {
+                for (var row = cell.Y; row <= cell.Bottom; row++)
+                {
+                    var rows = new List<object>();
+                    for (var col = cell.X; col <= cell.Right; col++)
+                    {
+                        var cellText = _gridControl.GridStorage.GetCellDataAsString(row, col);
+
+                        if (cellText == "NULL")
+                        {
+                            rows.Add(null);
+                            continue;
+                        }
+
+                        var column = datatable.Columns[col - col + 1];
+
+                        if (column.DataType == typeof(bool))
+                            cellText = cellText == "0" ? "False" : "True";
+
+                        if (column.DataType == typeof(Guid))
+                            rows.Add(new Guid(cellText));
+                        else if (column.DataType == typeof(DateTime) || column.DataType == typeof(DateTimeOffset))
+                            rows.Add(DateTime.Parse(cellText));
+                        else if (column.DataType == typeof(byte[]))
+                            rows.Add(Encoding.UTF8.GetBytes(cellText));
+                        else
+                        {
+                            var typedValue = Convert.ChangeType(cellText, column.DataType, CultureInfo.InvariantCulture);
+                            rows.Add(typedValue);
+                        }
+                    }
+                    datatable.Rows.Add(rows.ToArray());
+                }
+            }
+
+            datatable.AcceptChanges();
+            return datatable;
+        }
+
+        public Dictionary<string, List<object>> GridSelectedAsDictionary()
         {
             var gridHeader = _gridControl.GetField<GridHeader>("m_gridHeader");
             var gridResult = new Dictionary<string, List<object>>();
@@ -219,13 +275,6 @@ namespace SQLAid.Integration.DTE.Grid
             return gridResult;
         }
 
-        public IEnumerable<ResultGridSelectedCell> GetSelectedCells()
-        {
-            return _gridControl.SelectedCells
-                .Cast<BlockOfCells>()
-                .Select((Func<BlockOfCells, ResultGridSelectedCell>)((item) => item));
-        }
-
         public void SetColumnBackground(int columnIndex, Color backgroundColor)
         {
             var columnsCollection = _gridControl.GetBaseTypeField<GridColumnCollection>("m_columns");
@@ -239,6 +288,13 @@ namespace SQLAid.Integration.DTE.Grid
             {
                 columnsCollection[i].BackgroundBrush.Color = backgroundColor;
             }
+        }
+
+        public IEnumerable<ResultGridSelectedCell> GetSelectedCells()
+        {
+            return _gridControl.SelectedCells
+                .Cast<BlockOfCells>()
+                .Select((Func<BlockOfCells, ResultGridSelectedCell>)((item) => item));
         }
 
         public void Dispose()
