@@ -37,7 +37,7 @@ namespace SQLAid.Commands.ResultGrid
             {
                 var dataTable = gridResultControl.GridFocusAsDatatable();
                 var tableNameForm = new SeedingDataForm(_clipboardService, templates, dataTable);
-                tableNameForm.Show();
+                tableNameForm.ShowDialog();
             }
         }
     }
