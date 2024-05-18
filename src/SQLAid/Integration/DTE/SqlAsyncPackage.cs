@@ -32,14 +32,34 @@ namespace SQLAid.Integration.DTE
             }
         }
 
+        private SQLAidOptions _options;
+
+        public SQLAidOptions Options
+        {
+            get
+            {
+                if (_options != null)
+                    return _options;
+
+                _options = new SQLAidOptions();
+                return _options;
+            }
+        }
+
         public IMenuCommandService MenuCommand { get; private set; }
+
+        private string _extensionInstallationDirectory;
 
         public string ExtensionInstallationDirectory
         {
             get
             {
+                if (!string.IsNullOrEmpty(_extensionInstallationDirectory))
+                    return _extensionInstallationDirectory;
+
                 var uri = new Uri(GetType().Assembly.CodeBase, UriKind.Absolute);
-                return Path.GetDirectoryName(uri.LocalPath);
+                _extensionInstallationDirectory = Path.GetDirectoryName(uri.LocalPath);
+                return _extensionInstallationDirectory;
             }
         }
 
@@ -61,7 +81,7 @@ namespace SQLAid.Integration.DTE
         protected override void Initialize()
         {
             base.Initialize();
-            Logger.Initialize(SQLAidOptions.LocalData);
+            Logger.Initialize(Options.LocalData);
             ThreadHelper.JoinableTaskFactory.Run(InitializeAsync);
         }
 

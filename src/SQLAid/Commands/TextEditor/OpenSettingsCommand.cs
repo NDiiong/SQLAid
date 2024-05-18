@@ -1,20 +1,22 @@
 ﻿using Microsoft.VisualStudio.Shell;
 using SQLAid.Extensions;
 using SQLAid.Integration.DTE;
-using SQLAid.Options;
 using System.ComponentModel.Design;
 using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.TextEditor
 {
-    internal sealed class OpenFileSettingsCommand
+    internal sealed class OpenSettingsCommand
     {
+        private static SqlAsyncPackage _sqlAsyncPackage;
+
         public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            var commandService = sqlAsyncPackage.GetService<IMenuCommandService, OleMenuCommandService>();
-            var cmdId = new CommandID(PackageGuids.guidCommands, PackageIds.SettingsFullPathCommand);
+            _sqlAsyncPackage = sqlAsyncPackage;
+            var commandService = _sqlAsyncPackage.GetService<IMenuCommandService, OleMenuCommandService>();
+            var cmdId = new CommandID(PackageGuids.guidCommands, PackageIds.OpenSettingsCommand);
             var menuItem = new OleMenuCommand((s, e) => Execute(), cmdId);
             menuItem.BeforeQueryStatus += (s, e) => CanExecute(s);
             commandService.AddCommand(menuItem);
@@ -28,7 +30,7 @@ namespace SQLAid.Commands.TextEditor
 
         private static void Execute()
         {
-            System.Diagnostics.Process.Start(SQLAidOptions.SettingsFullPath);
+            System.Diagnostics.Process.Start(_sqlAsyncPackage.Options.SettingsFullPath);
         }
     }
 }

@@ -96,6 +96,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\TextEditor\OpenFolderTemplatesCommand.cs" />
     <Compile Include="Process\RedirectedProcess.cs" />
     <Compile Include="Commands\Events\QueryHistoryCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsSeedDataCommand.cs" />
@@ -104,9 +105,9 @@
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsCsvCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsInsertCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsJsonCommand.cs" />
-    <Compile Include="Commands\TextEditor\OpenFileSettingsCommand.cs" />
-    <Compile Include="Commands\TextEditor\OpenLogDirectoryCommand.cs" />
-    <Compile Include="Commands\TextEditor\OpenQueryHistoryDirectoryCommand.cs" />
+    <Compile Include="Commands\TextEditor\OpenSettingsCommand.cs" />
+    <Compile Include="Commands\TextEditor\OpenFolderLoggingCommand.cs" />
+    <Compile Include="Commands\TextEditor\OpenQueryHistoryCommand.cs" />
     <Compile Include="Commands\Windows\WindowsOpenedAlertEnvironmentEvents.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridFrozenColumnCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlEditorInsertByTemplateCommand.cs" />
@@ -499,6 +500,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="Templates\index.sql" />
+    <Content Include="Templates\nindex.sql" />
+    <Content Include="Templates\sel.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Templates\SQL.INSERT.INTO.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -508,6 +515,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="Templates\updb.sql" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

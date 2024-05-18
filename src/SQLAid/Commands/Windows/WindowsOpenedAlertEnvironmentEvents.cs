@@ -7,7 +7,6 @@ using SQLAid.Extensions;
 using SQLAid.Integration;
 using SQLAid.Integration.DTE;
 using SQLAid.Integration.DTE.Connection;
-using SQLAid.Options;
 using System;
 using System.ComponentModel.Design;
 using System.Drawing;
@@ -26,6 +25,7 @@ namespace SQLAid.Commands.ResultGrid
 
         private static WindowEvents _windowEvents;
         private static StatusStrip _statusStripCached;
+        private static SqlAsyncPackage _sqlAsyncPackage;
         private static readonly ISqlConnection _sqlConnection;
         private static readonly IFrameDocumentView _frameDocumentView;
 
@@ -39,8 +39,10 @@ namespace SQLAid.Commands.ResultGrid
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            var commandService = package.GetService<IMenuCommandService, OleMenuCommandService>();
-            _windowEvents = package.Application.Events.get_WindowEvents();
+            _sqlAsyncPackage = package;
+
+            var commandService = _sqlAsyncPackage.GetService<IMenuCommandService, OleMenuCommandService>();
+            _windowEvents = _sqlAsyncPackage.Application.Events.get_WindowEvents();
             _windowEvents.WindowActivated += WindowEvents_WindowActivated;
             _windowEvents.WindowCreated += WindowEvents_WindowCreated;
         }
@@ -111,7 +113,7 @@ namespace SQLAid.Commands.ResultGrid
 
         private static void StatusStrip_LayoutCompleted(object statusStripSender, Color colorValue, EventArgs e)
         {
-            if (statusStripSender is StatusStrip statusStrip && statusStrip.Items.Count > 1 && statusStrip.Items[statusStrip.Items.Count - 1].Text.StartsWith("0 rows"))
+            if (statusStripSender is StatusStrip statusStrip)
             {
                 if (statusStrip.BackColor != colorValue)
                     statusStrip.BackColor = colorValue;
@@ -121,7 +123,7 @@ namespace SQLAid.Commands.ResultGrid
         private static string GetColorSetting()
         {
             var connection = _sqlConnection.GetCurrentSqlConnection();
-            var options = SQLAidOptions.GetSettings();
+            var options = _sqlAsyncPackage.Options;
             var alertColorOptions = options.AlertColors.FirstOrDefault(opt => opt.ServerName == connection.ServerName && (opt.Database == "." || opt.Database == connection.Database));
             return alertColorOptions != null ? alertColorOptions.ColorHex : YELLOW_COLOR;
         }

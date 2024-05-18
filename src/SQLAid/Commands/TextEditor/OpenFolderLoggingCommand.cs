@@ -1,20 +1,21 @@
 ﻿using Microsoft.VisualStudio.Shell;
 using SQLAid.Extensions;
 using SQLAid.Integration.DTE;
-using SQLAid.Options;
 using System.ComponentModel.Design;
 using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.TextEditor
 {
-    internal sealed class OpenQueryHistoryDirectoryCommand
+    internal sealed class OpenFolderLoggingCommand
     {
+        private static SqlAsyncPackage _sqlAsyncPackage;
+
         public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-            var commandService = sqlAsyncPackage.GetService<IMenuCommandService, OleMenuCommandService>();
-            var cmdId = new CommandID(PackageGuids.guidCommands, PackageIds.HistoryDirectoryCommand);
+            _sqlAsyncPackage = sqlAsyncPackage;
+            var commandService = _sqlAsyncPackage.GetService<IMenuCommandService, OleMenuCommandService>();
+            var cmdId = new CommandID(PackageGuids.guidCommands, PackageIds.OpenFolderLoggingCommand);
             var menuItem = new OleMenuCommand((s, e) => Execute(), cmdId);
             menuItem.BeforeQueryStatus += (s, e) => CanExecute(s);
             commandService.AddCommand(menuItem);
@@ -28,7 +29,7 @@ namespace SQLAid.Commands.TextEditor
 
         private static void Execute()
         {
-            System.Diagnostics.Process.Start("explorer.exe", SQLAidOptions.HistoryDirectory);
+            System.Diagnostics.Process.Start("explorer.exe", _sqlAsyncPackage.Options.LogDirectory);
         }
     }
 }

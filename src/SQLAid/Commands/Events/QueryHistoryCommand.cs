@@ -4,7 +4,6 @@ using Microsoft.VisualStudio.Shell;
 using SQLAid.Extensions;
 using SQLAid.Integration.DTE;
 using SQLAid.Logging;
-using SQLAid.Options;
 using System;
 using System.Collections.Concurrent;
 using System.ComponentModel.Design;
@@ -16,23 +15,18 @@ namespace SQLAid.Commands.Events
     // ADD GUI FOR HISTORY
     internal sealed class QueryHistoryCommand
     {
-        private static readonly string _location;
         private static CommandEvents _executeEvent;
+        private static SqlAsyncPackage _sqlAsyncPackage;
         private static readonly ConcurrentQueue<QueryItem> _itemsQueue = new ConcurrentQueue<QueryItem>();
-
-        static QueryHistoryCommand()
-        {
-            _location = SQLAidOptions.HistoryDirectory;
-        }
 
         public static async Task InitializeAsync(SqlAsyncPackage package)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            var commandService = package.GetService<IMenuCommandService, OleMenuCommandService>();
-
-            var command = package.Application.Commands.Item("Query.Execute");
-            _executeEvent = package.Application.Events.get_CommandEvents(command.Guid, command.ID);
-            _executeEvent.BeforeExecute += (string Guid, int ID, object CustomIn, object CustomOut, ref bool CancelDefault) => SaveQueryEvent(package.Application);
+            _sqlAsyncPackage = package;
+            var commandService = _sqlAsyncPackage.GetService<IMenuCommandService, OleMenuCommandService>();
+            var command = _sqlAsyncPackage.Application.Commands.Item("Query.Execute");
+            _executeEvent = _sqlAsyncPackage.Application.Events.get_CommandEvents(command.Guid, command.ID);
+            _executeEvent.BeforeExecute += (string Guid, int ID, object CustomIn, object CustomOut, ref bool CancelDefault) => SaveQueryEvent(_sqlAsyncPackage.Application);
             _executeEvent.AfterExecute += CommandEvents_AfterExecute;
         }
 
@@ -62,7 +56,7 @@ namespace SQLAid.Commands.Events
             {
                 while (_itemsQueue.TryDequeue(out var item))
                 {
-                    var path = Path.Combine(_location, item.ExecutionDate.ToString("dd.MM.yyyy.hh.mm.ss.fff") + Path.GetRandomFileName());
+                    var path = Path.Combine(_sqlAsyncPackage.Options.HistoryDirectory, item.ExecutionDate.ToString("dd.MM.yyyy.hh.mm.ss.fff") + Path.GetRandomFileName());
                     File.AppendAllText(path + ".txt", $"{item.ExecutionDate}" + Environment.NewLine + item.Query);
                 }
             }

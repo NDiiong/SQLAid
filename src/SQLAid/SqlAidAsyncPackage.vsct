@@ -43,41 +43,55 @@
         </Strings>
       </Button>
 
-      <!--Context.HistoryDirectoryCommand-->
-      <Button guid="guidCommands" id="HistoryDirectoryCommand" priority="0x0100" type="Button">
+      <!--Context.OpenQueryHistoryCommand-->
+      <Button guid="guidCommands" id="OpenQueryHistoryCommand" priority="0x0100" type="Button">
         <Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
-        <Icon guid="ImageCatalogGuid" id="History" />
+        <Icon guid="ImageCatalogGuid" id="ShowFullHistory" />
         <CommandFlag>IconIsMoniker</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultDisabled</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>Open History</ButtonText>
+          <ButtonText>Open Query History</ButtonText>
         </Strings>
       </Button>
 
-      <!--Context.SettingsFullPathCommand-->
-      <Button guid="guidCommands" id="SettingsFullPathCommand" priority="0x0100" type="Button">
+      <!--Context.OpenFolderLoggingCommand-->
+      <Button guid="guidCommands" id="OpenFolderLoggingCommand" priority="0x0100" type="Button">
         <Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
-        <Icon guid="ImageCatalogGuid" id="Settings" />
+        <Icon guid="ImageCatalogGuid" id="PerformanceLog" />
         <CommandFlag>IconIsMoniker</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultDisabled</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>Open Settings</ButtonText>
+          <ButtonText>Open Logging</ButtonText>
         </Strings>
       </Button>
 
-      <!--Context.OpenLogCommand-->
-      <Button guid="guidCommands" id="OpenLogCommand" priority="0x0100" type="Button">
+      <!--Context.OpenFolderTemplateCommand-->
+      <Button guid="guidCommands" id="OpenFolderTemplateCommand" priority="0x0100" type="Button">
         <Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
+        <Icon guid="ImageCatalogGuid" id="TemplateShortcut" />
         <CommandFlag>IconIsMoniker</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultDisabled</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>Open Logs</ButtonText>
+          <ButtonText>Open Folder Templates</ButtonText>
+        </Strings>
+      </Button>
+
+      <!--Context.OpenSettingsCommand-->
+      <Button guid="guidCommands" id="OpenSettingsCommand" priority="0x0100" type="Button">
+        <Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
+        <Icon guid="ImageCatalogGuid" id="SettingsFile" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>SQL-Aid Settings</ButtonText>
         </Strings>
       </Button>
 
@@ -150,9 +164,10 @@
       <IDSymbol name="JoinLinesCommand" value="0x101" />
       <IDSymbol name="NewGuidCommand" value="0x102" />
       <IDSymbol name="PasteAsInsertedWithHeaderCommand" value="0x103" />
-      <IDSymbol name="HistoryDirectoryCommand" value="0x104" />
-      <IDSymbol name="SettingsFullPathCommand" value="0x105" />
-      <IDSymbol name="OpenLogCommand" value="0x106" />
+      <IDSymbol name="OpenQueryHistoryCommand" value="0x104" />
+      <IDSymbol name="OpenFolderLoggingCommand" value="0x105" />
+      <IDSymbol name="OpenFolderTemplateCommand" value="0x106" />
+      <IDSymbol name="OpenSettingsCommand" value="0x107" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>

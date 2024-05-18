@@ -1,33 +1,33 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.IO;
-using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Options
 {
     public class SQLAidOptions
     {
-        [JsonIgnore] public static string LocalData => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), SqlAidAsyncPackage.NAME);
-        [JsonIgnore] public static string LogDirectory => Path.Combine(LocalData, "logs");
-        [JsonIgnore] public static string HistoryDirectory => Path.Combine(LocalData, "histories");
-        [JsonIgnore] public static string SettingsDirectory => Path.Combine(LocalData, "settings");
-        [JsonIgnore] public static string SettingsFullPath => Path.Combine(SettingsDirectory, "settings.json");
+        [JsonIgnore] public string LocalData => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), SqlAidAsyncPackage.NAME);
+        [JsonIgnore] public string LogDirectory => Path.Combine(LocalData, "logs");
+        [JsonIgnore] public string HistoryDirectory => Path.Combine(LocalData, "histories");
+        [JsonIgnore] public string SettingsDirectory => Path.Combine(LocalData, "settings");
+        [JsonIgnore] public string TemplateDirectory => Path.Combine(LocalData, "templates");
+        [JsonIgnore] public string SettingsFullPath => Path.Combine(SettingsDirectory, "settings.json");
 
         public AlertColor[] AlertColors { get; set; }
 
         public SQLAidOptions()
         {
+            Directory.CreateDirectory(LocalData);
+            Directory.CreateDirectory(LogDirectory);
             Directory.CreateDirectory(HistoryDirectory);
             Directory.CreateDirectory(SettingsDirectory);
+            Directory.CreateDirectory(TemplateDirectory);
+
             AlertColors = Array.Empty<AlertColor>();
-        }
 
-        public static Task InitOptionsAsync()
-        {
             if (File.Exists(SettingsFullPath))
-                return Task.CompletedTask;
-
-            var options = new SQLAidOptions
+                JsonConvert.PopulateObject(File.ReadAllText(SettingsFullPath), this);
+            else
             {
                 AlertColors = new AlertColor[] {
                     new AlertColor
@@ -36,20 +36,11 @@ namespace SQLAid.Options
                         Database = ".",
                         ColorHex = "#ff8080"
                     }
-                }
-            };
+                };
 
-            var optionsAsJson = JsonConvert.SerializeObject(options, Formatting.Indented);
-            File.WriteAllText(SettingsFullPath, optionsAsJson);
-
-            return Task.CompletedTask;
-        }
-
-        public static SQLAidOptions GetSettings()
-        {
-            return File.Exists(SettingsFullPath)
-                ? JsonConvert.DeserializeObject<SQLAidOptions>(File.ReadAllText(SettingsFullPath))
-                : throw new FileNotFoundException("File " + SettingsFullPath + "not found!");
+                var optionsAsJson = JsonConvert.SerializeObject(this, Formatting.Indented);
+                File.WriteAllText(SettingsFullPath, optionsAsJson);
+            }
         }
     }
 

@@ -3,7 +3,6 @@ using SQLAid.Commands.Events;
 using SQLAid.Commands.ResultGrid;
 using SQLAid.Commands.TextEditor;
 using SQLAid.Integration.DTE;
-using SQLAid.Options;
 using System;
 using System.Runtime.InteropServices;
 using Task = System.Threading.Tasks.Task;
@@ -22,7 +21,6 @@ namespace SQLAid
 
         protected override async Task InitializeAsync()
         {
-            await SQLAidOptions.InitOptionsAsync().ConfigureAwait(false);
             await WindowEventLogging.InitializeAsync(this).ConfigureAwait(false);
             await QueryHistoryCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsInsertCommand.InitializeAsync(this).ConfigureAwait(false);
@@ -39,9 +37,9 @@ namespace SQLAid
             await SqlEditorAutoAddBracketCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlPasteAsInsertedHeaderQueryCommand.InitializeAsync(this).ConfigureAwait(false);
             await WindowsOpenedAlertEnvironmentEvents.InitializeAsync(this).ConfigureAwait(false);
-            await OpenQueryHistoryDirectoryCommand.InitializeAsync(this).ConfigureAwait(false);
-            await OpenFileSettingsCommand.InitializeAsync(this).ConfigureAwait(false);
-            await OpenLogDirectoryCommand.InitializeAsync(this).ConfigureAwait(false);
+            await OpenQueryHistoryCommand.InitializeAsync(this).ConfigureAwait(false);
+            await OpenSettingsCommand.InitializeAsync(this).ConfigureAwait(false);
+            await OpenFolderTemplatesCommand.InitializeAsync(this).ConfigureAwait(false);
         }
     }
 }
