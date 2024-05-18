@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\TextEditor\OpenFolderTemplatesCommand.cs" />
+    <Compile Include="Commands\TextEditor\OpenStatisticsParserCommand.cs" />
     <Compile Include="Process\RedirectedProcess.cs" />
     <Compile Include="Commands\Events\QueryHistoryCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsSeedDataCommand.cs" />
@@ -110,7 +111,6 @@
     <Compile Include="Commands\TextEditor\OpenQueryHistoryCommand.cs" />
     <Compile Include="Commands\Windows\WindowsOpenedAlertEnvironmentEvents.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridFrozenColumnCommand.cs" />
-    <Compile Include="Commands\TextEditor\SqlEditorInsertByTemplateCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlEditorSnippetCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlEditorAutoAddBracketCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlFormatQueryCommand.cs" />
