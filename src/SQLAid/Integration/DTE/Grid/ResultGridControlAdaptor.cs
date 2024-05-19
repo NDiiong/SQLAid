@@ -206,6 +206,7 @@ namespace SQLAid.Integration.DTE.Grid
                 for (var row = cell.Y; row <= cell.Bottom; row++)
                 {
                     var rows = new List<object>();
+                    var coli = 0;
                     for (var col = cell.X; col <= cell.Right; col++)
                     {
                         var cellText = _gridControl.GridStorage.GetCellDataAsString(row, col);
@@ -216,8 +217,7 @@ namespace SQLAid.Integration.DTE.Grid
                             continue;
                         }
 
-                        var column = datatable.Columns[col - col + 1];
-
+                        var column = datatable.Columns[coli];
                         if (column.DataType == typeof(bool))
                             cellText = cellText == "0" ? "False" : "True";
 
@@ -232,6 +232,8 @@ namespace SQLAid.Integration.DTE.Grid
                             var typedValue = Convert.ChangeType(cellText, column.DataType, CultureInfo.InvariantCulture);
                             rows.Add(typedValue);
                         }
+
+                        coli++;
                     }
                     datatable.Rows.Add(rows.ToArray());
                 }
