@@ -1,1 +1,0 @@
-﻿SELECT TOP 100 * FROM <table_name>

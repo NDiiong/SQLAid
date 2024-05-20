@@ -1,9 +1,9 @@
 ﻿using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using SQLAid.Extensions;
-using SQLAid.Helpers;
 using SQLAid.Integration;
 using SQLAid.Integration.DTE;
+using SQLAid.UndoTransaction;
 using System;
 using System.ComponentModel.Design;
 using System.Text.RegularExpressions;
@@ -13,86 +13,106 @@ namespace SQLAid.Commands.TextEditor
 {
     internal sealed class SqlJoinLinesCommand
     {
-        private const string _pattern = @"[ \t]*\r?\n[ \t]*";
-        private static readonly IFrameDocumentView _textDocumentService;
+        private readonly IFrameDocumentView _documentView;
+        private readonly ILineJoiner _lineJoiner;
+        private readonly IUndoTransactionFactory _undoFactory;
+        private readonly IEditorService _editorService;
 
-        static SqlJoinLinesCommand()
+        public SqlJoinLinesCommand(
+            IFrameDocumentView documentView,
+            ILineJoiner lineJoiner,
+            IUndoTransactionFactory undoFactory,
+            IEditorService editorService)
         {
-            _textDocumentService = new FrameDocumentView();
+            _documentView = documentView ?? throw new ArgumentNullException(nameof(documentView));
+            _lineJoiner = lineJoiner ?? throw new ArgumentNullException(nameof(lineJoiner));
+            _undoFactory = undoFactory ?? throw new ArgumentNullException(nameof(undoFactory));
+            _editorService = editorService ?? throw new ArgumentNullException(nameof(editorService));
         }
 
         public static async Task InitializeAsync(SqlAsyncPackage package)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
+            var command = CreateCommand(package);
             var commandService = package.GetService<IMenuCommandService, OleMenuCommandService>();
-            var menuCommandID = new CommandID(PackageGuids.guidCommands, PackageIds.JoinLinesCommand);
-            var menuItem = new OleMenuCommand((s, e) => Execute(package), menuCommandID);
-            menuItem.BeforeQueryStatus += CanExcute;
-            commandService.AddCommand(menuItem);
+            commandService.AddCommand(command);
         }
 
-        private static void CanExcute(object sender, System.EventArgs e)
+        private static OleMenuCommand CreateCommand(SqlAsyncPackage package)
+        {
+            var command = new SqlJoinLinesCommand(
+                new FrameDocumentView(),
+                new LineJoiner(),
+                new UndoTransactionFactory(package.Application),
+                new EditorService());
+
+            var menuCommandID = new CommandID(PackageGuids.guidCommands, PackageIds.JoinLinesCommand);
+            var menuItem = new OleMenuCommand((s, e) => command.Execute(), menuCommandID);
+            menuItem.BeforeQueryStatus += (s, e) => command.UpdateCommandStatus(s);
+
+            return menuItem;
+        }
+
+        private void UpdateCommandStatus(object sender)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            try
-            {
-                var commandMenu = (OleMenuCommand)sender;
-                commandMenu.Visible = false;
 
-                var textDocument = _textDocumentService.GetTextDocument();
-                if (textDocument != null)
-                {
-                    var textSelection = textDocument.Selection;
-                    if (textSelection != null && !string.IsNullOrEmpty(textSelection.Text))
-                    {
-                        commandMenu.Visible = true;
-                    }
-                }
-            }
-            catch (Exception)
+            if (sender is OleMenuCommand commandMenu)
             {
+                try
+                {
+                    commandMenu.Visible = HasSelectedText();
+                }
+                catch (Exception)
+                {
+                    commandMenu.Visible = false;
+                }
             }
         }
 
-        private static void Execute(SqlAsyncPackage package)
+        private bool HasSelectedText()
         {
-            try
-            {
-                var textDocument = _textDocumentService.GetTextDocument();
+            var textDocument = _documentView.GetTextDocument();
+            return textDocument?.Selection != null && !string.IsNullOrEmpty(textDocument.Selection.Text);
+        }
 
-                if (textDocument != null)
-                {
-                    var undoTransaction = new UndoTransaction(package.Application, nameof(SqlJoinLinesCommand));
-                    undoTransaction.Run(() => JoinLine(textDocument.Selection));
-                }
-            }
-            catch (Exception)
+        private void Execute()
+        {
+            var textDocument = _documentView.GetTextDocument();
+            if (textDocument == null)
+                return;
+
+            using (var undoTransaction = _undoFactory.Create(nameof(SqlJoinLinesCommand)))
             {
+                JoinSelectedLines(textDocument.Selection);
             }
         }
 
-        private static void JoinLine(TextSelection textSelection)
+        private void JoinSelectedLines(TextSelection selection)
         {
-            var content = textSelection.Text;
-            if (!string.IsNullOrEmpty(content))
-            {
-                var currentline = textSelection.TopPoint.Line;
-                var currentColumn = textSelection.TopPoint.DisplayColumn;
+            if (string.IsNullOrEmpty(selection.Text)) return;
 
-                var singleLine = Regex.Replace(content, _pattern, " ", RegexOptions.Multiline);
-                textSelection.Delete(1);
-                textSelection.Collapse();
-                textSelection.MoveToLineAndOffset(currentline, currentColumn);
+            var cursorPosition = _editorService.GetCursorPosition(selection);
+            var joinedText = _lineJoiner.Join(selection.Text);
 
-                var ed = textSelection.TopPoint.CreateEditPoint();
-                ed.Insert(singleLine);
+            _editorService.ReplaceSelection(selection, joinedText);
+            _editorService.FormatLine(selection, cursorPosition);
+        }
+    }
 
-                textSelection.StartOfLine(vsStartOfLineOptions.vsStartOfLineOptionsFirstText);
-                textSelection.EndOfLine(true);
-                textSelection.MoveToLineAndOffset(currentline, currentColumn);
-                textSelection.StartOfLine(vsStartOfLineOptions.vsStartOfLineOptionsFirstText);
-            }
+    public interface ILineJoiner
+    {
+        string Join(string content);
+    }
+
+    public class LineJoiner : ILineJoiner
+    {
+        private const string Pattern = @"[ \t]*\r?\n[ \t]*";
+
+        public string Join(string content)
+        {
+            return Regex.Replace(content, Pattern, " ", RegexOptions.Multiline);
         }
     }
 }

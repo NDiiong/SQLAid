@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.Shell;
 using SQLAid.Commands.Events;
 using SQLAid.Commands.ResultGrid;
+using SQLAid.Commands.ResultMessages;
 using SQLAid.Commands.TextEditor;
 using SQLAid.Integration.DTE;
 using System;
@@ -25,24 +26,30 @@ namespace SQLAid
             await QueryHistoryCommand.InitializeAsync(this).ConfigureAwait(false);
             await WindowsOpenedAlertEnvironmentEvents.InitializeAsync(this).ConfigureAwait(false);
 
-            await TeamsChatCopyKeepFormattingCommand.InitializeAsync(this).ConfigureAwait(false);
-            await SqlResultGridCopyAsInsertCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsCsharpModelCommand.InitializeAsync(this).ConfigureAwait(false);
+            //await SqlResultGridCopyAsInsertCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsSeedDataCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsJsonCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsCsvCommand.InitializeAsync(this).ConfigureAwait(false);
+            await SqlResultGridCopyColumnNameCommand.InitializeAsync(this).ConfigureAwait(false);
+            await SqlResultGridCopyMsTeamsFormattingCommand.InitializeAsync(this).ConfigureAwait(false);
+            await SqlResultGridCopyTextTableFormatterCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridAsSaveCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridFrozenColumnCommand.InitializeAsync(this).ConfigureAwait(false);
+            await SqlResultMessagesStatisticsParserCommand.InitializeAsync(this).ConfigureAwait(false);
 
             await SqlJoinLinesCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlPasteAsCsvCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlEditorNewGuidCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlEditorSnippetCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlEditorAutoAddBracketCommand.InitializeAsync(this).ConfigureAwait(false);
-            await SqlPasteAsInsertedHeaderQueryCommand.InitializeAsync(this).ConfigureAwait(false);
+            await SqlPasteAsInsertCommand.InitializeAsync(this).ConfigureAwait(false);
+
             await OpenQueryHistoryCommand.InitializeAsync(this).ConfigureAwait(false);
             await OpenSettingsCommand.InitializeAsync(this).ConfigureAwait(false);
             await OpenFolderTemplatesCommand.InitializeAsync(this).ConfigureAwait(false);
+            await PasteAsParenthesesCommand.InitializeAsync(this).ConfigureAwait(false);
+            //await KeepAliveConnectionCommand.InitializeAsync(this).ConfigureAwait(false);
         }
     }
 }

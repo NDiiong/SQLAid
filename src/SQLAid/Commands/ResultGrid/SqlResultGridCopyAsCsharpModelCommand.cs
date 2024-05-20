@@ -27,7 +27,7 @@ namespace SQLAid.Commands.ResultGrid
         public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            GridCommandBar.AddButton("Copy As C# Model", $"{sqlAsyncPackage.ExtensionInstallationDirectory}/Resources/Assets/csharp-icon.ico", OnClick);
+            GridCommandBar.AddButton("Copy As C# Model", $"{sqlAsyncPackage.ExtensionInstallationDirectory}/Resources/Assets/csharp-icon.ico", createNewGroup: true, OnClick);
         }
 
         private static void OnClick()
@@ -36,32 +36,44 @@ namespace SQLAid.Commands.ResultGrid
             using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
             {
                 var schema = gridResultControl.SchemaResultGrid();
-                var sb = new StringBuilder();
-                sb.AppendLine("using System;");
-                sb.AppendLine();
-                sb.AppendLine($"public class Root");
-                sb.AppendLine("{");
-
-                foreach (DataColumn column in schema.Columns)
-                {
-                    //Primitive Type
-
-                    if (column.DataType == typeof(DateTime))
-                        sb.AppendLine($"    public DateTime {column.ColumnName} {{ get; set; }}");
-                    else if (column.DataType == typeof(DateTimeOffset))
-                        sb.AppendLine($"    public DateTimeOffset {column.ColumnName} {{ get; set; }}");
-                    else if (column.DataType == typeof(Guid))
-                        sb.AppendLine($"    public Guid {column.ColumnName} {{ get; set; }}");
-                    else
-                    {
-                        var compiler = new CSharpCodeProvider();
-                        sb.AppendLine($"    public {compiler.GetTypeOutput(new CodeTypeReference(column.DataType))} {column.ColumnName} {{ get; set; }}");
-                    }
-                }
-
-                sb.AppendLine("}");
-                _clipboardService.Set(sb.ToString());
+                var modelCode = GenerateCSharpModelCode(schema);
+                _clipboardService.Set(modelCode);
             }
+        }
+
+        private static string GenerateCSharpModelCode(DataTable schema)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("using System;");
+            sb.AppendLine();
+            sb.AppendLine("public class Root");
+            sb.AppendLine("{");
+
+            foreach (DataColumn column in schema.Columns)
+            {
+                sb.AppendLine(GeneratePropertyCode(column));
+            }
+
+            sb.AppendLine("}");
+            return sb.ToString();
+        }
+
+        private static string GeneratePropertyCode(DataColumn column)
+        {
+            if (column.DataType == typeof(DateTime))
+                return $"    public DateTime {column.ColumnName} {{ get; set; }}";
+            if (column.DataType == typeof(DateTimeOffset))
+                return $"    public DateTimeOffset {column.ColumnName} {{ get; set; }}";
+            if (column.DataType == typeof(Guid))
+                return $"    public Guid {column.ColumnName} {{ get; set; }}";
+
+            return GeneratePrimitivePropertyCode(column);
+        }
+
+        private static string GeneratePrimitivePropertyCode(DataColumn column)
+        {
+            var compiler = new CSharpCodeProvider();
+            return $"    public {compiler.GetTypeOutput(new CodeTypeReference(column.DataType))} {column.ColumnName} {{ get; set; }}";
         }
     }
 }

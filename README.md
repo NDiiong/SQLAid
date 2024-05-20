@@ -1,14 +1,18 @@
-# SQLAid | SQL Server Management Studio (SSMS) 18, 19, and 20 Productivity Addin
+# SQLAid | Enhance Your SQL Server Management Studio Experience
 
-Welcome to **SQLAid**, the productivity addin for **SQL Server Management Studio (SSMS) 18, 19, and 20**!
+# Introduction
 
-**SQLAid** is a personal project born out of my own experiences with SSMS. It's designed to tackle common issues and enhance your workflow. But I'm not in this alone - community feedback and ideas are crucial for making SQLAid even better.
-
-This tool is and always will be free and open to everyone. Your feedback shapes its evolution, so don't hesitate to share your thoughts.
-
-If **SQLAid** improves your SSMS experience, consider giving it a star ⭐️ on the repository. Your support means a lot!
-
+Welcome to **SQLAid**, your go-to productivity add-in for SQL Server Management Studio (SSMS) 18, 19, and 20! Designed to streamline your database management tasks, **SQLAid** aims to make your workflow more efficient and enjoyable.
 Happy querying!!
+
+# Why SQLAid?
+Inspired by my journey as a SQL developer, **SQLAid** addresses common pain points that many users face while working with SSMS. This tool not only enhances your productivity but also empowers you to work smarter, not harder. Your insights and suggestions are vital to us, helping **SQLAid** evolve and improve.
+
+# Free and Open Source
+This tool is and always will be free and open to everyone.
+
+# Support
+If you find **SQLAid** helpful, please give it a star ⭐️ on the repository. Your support inspires continuous improvement and innovation!
 
 ## Features
 

@@ -17,6 +17,20 @@
 
     <!--Buttons-->
     <Buttons>
+
+      <!--Context.NewGuidThenCopyCommand-->
+      <Button guid="guidCommands" id="NewGuidCommand" priority="0x0100" type="Button">
+        <Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
+        <Icon guid="ImageCatalogGuid" id="XWorldFile" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>New Guid</ButtonText>
+        </Strings>
+      </Button>
+
       <!--Context.PasteAsCsvCommand-->
       <Button guid="guidCommands" id="PasteAsCsvCommand" priority="0x0100" type="Button">
         <Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
@@ -30,16 +44,15 @@
         </Strings>
       </Button>
 
-      <!--Context.NewGuidThenCopyCommand-->
-      <Button guid="guidCommands" id="NewGuidCommand" priority="0x0100" type="Button">
+      <!--Context.PasteAsParenthesesCommand-->
+      <Button guid="guidCommands" id="PasteAsParenthesesCommand" priority="0x0100" type="Button">
         <Parent guid="guidCommands" id="PasteSpecialContextMenuGroup" />
-        <Icon guid="ImageCatalogGuid" id="XWorldFile" />
         <CommandFlag>IconIsMoniker</CommandFlag>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultDisabled</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>New Guid</ButtonText>
+          <ButtonText>Paste As Parentheses (N'...')</ButtonText>
         </Strings>
       </Button>
 
@@ -160,14 +173,15 @@
       <IDSymbol name="PasteSpecialContextMenuGroup" value="0x1020" />
 
       <!--Command-->
-      <IDSymbol name="PasteAsCsvCommand" value="0x100" />
+      <IDSymbol name="NewGuidCommand" value="0x100" />
       <IDSymbol name="JoinLinesCommand" value="0x101" />
-      <IDSymbol name="NewGuidCommand" value="0x102" />
-      <IDSymbol name="PasteAsInsertedWithHeaderCommand" value="0x103" />
-      <IDSymbol name="OpenQueryHistoryCommand" value="0x104" />
-      <IDSymbol name="OpenFolderLoggingCommand" value="0x105" />
-      <IDSymbol name="OpenFolderTemplateCommand" value="0x106" />
-      <IDSymbol name="OpenSettingsCommand" value="0x107" />
+      <IDSymbol name="PasteAsCsvCommand" value="0x102" />
+      <IDSymbol name="PasteAsParenthesesCommand" value="0x103" />
+      <IDSymbol name="PasteAsInsertedWithHeaderCommand" value="0x104" />
+      <IDSymbol name="OpenQueryHistoryCommand" value="0x105" />
+      <IDSymbol name="OpenFolderLoggingCommand" value="0x106" />
+      <IDSymbol name="OpenFolderTemplateCommand" value="0x107" />
+      <IDSymbol name="OpenSettingsCommand" value="0x108" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>

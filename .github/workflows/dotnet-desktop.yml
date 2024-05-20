@@ -1,0 +1,58 @@
+name: build
+
+on:
+  release:
+    types: [created]
+    branches:
+      - "main"
+
+jobs:
+  build:
+    name: Build
+    runs-on: windows-2019
+    env:
+      Configuration: Release
+      Project: src/SQLAid.sln
+      
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    - name: Setup .NET build dependencies
+      uses: timheuer/bootstrap-dotnet@v1
+      with:
+        nuget: 'false'
+        sdk: 'false'
+        msbuild: 'true'
+            
+    - name: Write release version
+      id: write-version
+      shell: pwsh
+      run: |
+        $VERSION = "${{ github.ref_name }}"
+        $VERSION = $VERSION.Substring(1)
+        if ($VERSION -notmatch '^\d+\.\d+\.\d+\.\d+$') {
+          $VERSION += ".0"
+        }
+        echo "VERSION=$VERSION"
+        echo "::set-output name=VERSION::$VERSION"
+
+    - name: Set version in AssemblyInfo.cs
+      id: set-assembly-version
+      uses: secondbounce/assemblyinfo-update@v2
+      with:
+        version: ${{ steps.write-version.outputs.VERSION }}
+    
+    - name: Restore NuGet packages
+      run: nuget restore src/SQLAid.sln -DisableParallelProcessing -Verbosity detaile
+   
+    - name: Build
+      run: msbuild $env:Project /p:Configuration=$env:Configuration /t:Clean,Build
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ github.event.repository.name }}.vsix
+        path: /_built/**/*.vsix
+
