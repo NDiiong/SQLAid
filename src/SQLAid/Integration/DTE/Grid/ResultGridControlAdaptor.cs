@@ -39,26 +39,25 @@ namespace SQLAid.Integration.DTE.Grid
                     var cellText = _gridControl.GridStorage.GetCellDataAsString(nRowIndex, nColIndex);
 
                     if (cellText == "NULL")
-                    {
                         rows.Add(null);
-                        continue;
-                    }
-
-                    var column = datatable.Columns[nColIndex - 1];
-
-                    if (column.DataType == typeof(bool))
-                        cellText = cellText == "0" ? "False" : "True";
-
-                    if (column.DataType == typeof(Guid))
-                        rows.Add(new Guid(cellText));
-                    else if (column.DataType == typeof(DateTime) || column.DataType == typeof(DateTimeOffset))
-                        rows.Add(DateTime.Parse(cellText));
-                    else if (column.DataType == typeof(byte[]))
-                        rows.Add(Encoding.UTF8.GetBytes(cellText));
                     else
                     {
-                        var typedValue = Convert.ChangeType(cellText, column.DataType, CultureInfo.InvariantCulture);
-                        rows.Add(typedValue);
+                        var column = datatable.Columns[nColIndex - 1];
+
+                        if (column.DataType == typeof(bool))
+                            cellText = cellText == "0" ? "False" : "True";
+
+                        if (column.DataType == typeof(Guid))
+                            rows.Add(new Guid(cellText));
+                        else if (column.DataType == typeof(DateTime) || column.DataType == typeof(DateTimeOffset))
+                            rows.Add(DateTime.Parse(cellText));
+                        else if (column.DataType == typeof(byte[]))
+                            rows.Add(Encoding.UTF8.GetBytes(cellText));
+                        else
+                        {
+                            var typedValue = Convert.ChangeType(cellText, column.DataType, CultureInfo.InvariantCulture);
+                            rows.Add(typedValue);
+                        }
                     }
                 }
 
@@ -189,8 +188,8 @@ namespace SQLAid.Integration.DTE.Grid
         {
             var datatable = new DataTable();
 
+            // COLUMNS
             var schemaTable = _gridControl.GridStorage.GetField<DataTable>("m_schemaTable");
-
             foreach (BlockOfCells cell in _gridControl.SelectedCells)
             {
                 for (var col = cell.X; col <= cell.Right; col++)
@@ -201,39 +200,39 @@ namespace SQLAid.Integration.DTE.Grid
                 }
             }
 
+            // ROWS
             foreach (BlockOfCells cell in _gridControl.SelectedCells)
             {
                 for (var row = cell.Y; row <= cell.Bottom; row++)
                 {
                     var rows = new List<object>();
-                    var coli = 0;
+                    var nColIndex = 0;
                     for (var col = cell.X; col <= cell.Right; col++)
                     {
                         var cellText = _gridControl.GridStorage.GetCellDataAsString(row, col);
 
                         if (cellText == "NULL")
-                        {
                             rows.Add(null);
-                            continue;
-                        }
-
-                        var column = datatable.Columns[coli];
-                        if (column.DataType == typeof(bool))
-                            cellText = cellText == "0" ? "False" : "True";
-
-                        if (column.DataType == typeof(Guid))
-                            rows.Add(new Guid(cellText));
-                        else if (column.DataType == typeof(DateTime) || column.DataType == typeof(DateTimeOffset))
-                            rows.Add(DateTime.Parse(cellText));
-                        else if (column.DataType == typeof(byte[]))
-                            rows.Add(Encoding.UTF8.GetBytes(cellText));
                         else
                         {
-                            var typedValue = Convert.ChangeType(cellText, column.DataType, CultureInfo.InvariantCulture);
-                            rows.Add(typedValue);
+                            var column = datatable.Columns[nColIndex];
+                            if (column.DataType == typeof(bool))
+                                cellText = cellText == "0" ? "False" : "True";
+
+                            if (column.DataType == typeof(Guid))
+                                rows.Add(new Guid(cellText));
+                            else if (column.DataType == typeof(DateTime) || column.DataType == typeof(DateTimeOffset))
+                                rows.Add(DateTime.Parse(cellText));
+                            else if (column.DataType == typeof(byte[]))
+                                rows.Add(Encoding.UTF8.GetBytes(cellText));
+                            else
+                            {
+                                var typedValue = Convert.ChangeType(cellText, column.DataType, CultureInfo.InvariantCulture);
+                                rows.Add(typedValue);
+                            }
                         }
 
-                        coli++;
+                        nColIndex++;
                     }
                     datatable.Rows.Add(rows.ToArray());
                 }
