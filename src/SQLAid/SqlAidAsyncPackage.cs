@@ -43,6 +43,7 @@ namespace SQLAid
             await OpenQueryHistoryCommand.InitializeAsync(this).ConfigureAwait(false);
             await OpenSettingsCommand.InitializeAsync(this).ConfigureAwait(false);
             await OpenFolderTemplatesCommand.InitializeAsync(this).ConfigureAwait(false);
+            await PasteAsParenthesesCommand.InitializeAsync(this).ConfigureAwait(false);
         }
     }
 }

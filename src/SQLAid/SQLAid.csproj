@@ -99,6 +99,7 @@
     <Compile Include="Commands\ResultGrid\TeamsChatCopyKeepFormattingCommand.cs" />
     <Compile Include="Commands\TextEditor\OpenFolderTemplatesCommand.cs" />
     <Compile Include="Commands\TextEditor\OpenStatisticsParserCommand.cs" />
+    <Compile Include="Commands\TextEditor\PasteAsParenthesesCommand.cs" />
     <Compile Include="Process\RedirectedProcess.cs" />
     <Compile Include="Commands\Events\QueryHistoryCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyAsSeedDataCommand.cs" />
