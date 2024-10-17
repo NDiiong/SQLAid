@@ -208,8 +208,11 @@
     <Reference Include="SqlPackageBase">
       <HintPath>Assemblies\ssms20\SqlPackageBase.dll</HintPath>
     </Reference>
+	    <Reference Include="SQLEditors">
+      <HintPath>Assemblies\ssms20\SQLEditors.dll</HintPath>
+    </Reference>
     <Reference Include="SqlWorkbench.Interfaces">
-      <HintPath>SqlWorkbench.Interfaces.dll</HintPath>
+      <HintPath>Assemblies\ssms20\SqlWorkbench.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SqlServer.ConnectionInfo">
       <HintPath>Assemblies\ssms20\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
