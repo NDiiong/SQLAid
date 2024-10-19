@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.Shell;
 using SQLAid.Commands.Events;
 using SQLAid.Commands.ResultGrid;
+using SQLAid.Commands.ResultMessages;
 using SQLAid.Commands.TextEditor;
 using SQLAid.Integration.DTE;
 using System;
@@ -24,7 +25,6 @@ namespace SQLAid
             await WindowEventLogging.InitializeAsync(this).ConfigureAwait(false);
             await QueryHistoryCommand.InitializeAsync(this).ConfigureAwait(false);
             await WindowsOpenedAlertEnvironmentEvents.InitializeAsync(this).ConfigureAwait(false);
-
             await TeamsChatCopyKeepFormattingCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsInsertCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridCopyAsCsharpModelCommand.InitializeAsync(this).ConfigureAwait(false);
@@ -33,7 +33,7 @@ namespace SQLAid
             await SqlResultGridCopyAsCsvCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridAsSaveCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridFrozenColumnCommand.InitializeAsync(this).ConfigureAwait(false);
-
+            await ResultMessagesStatisticsParserCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlJoinLinesCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlPasteAsCsvCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlEditorNewGuidCommand.InitializeAsync(this).ConfigureAwait(false);

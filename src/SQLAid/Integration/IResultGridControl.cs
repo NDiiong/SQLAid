@@ -15,4 +15,9 @@ namespace SQLAid.Integration
 
         IGridControl GetFocusGridControl();
     }
+
+    public interface IResultMessagesControl
+    {
+        string GetMessages();
+    }
 }
