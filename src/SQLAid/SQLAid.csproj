@@ -172,6 +172,7 @@
     <Compile Include="Logging\Func.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Options\SQLAidOptions.cs" />
+    <Compile Include="Security\AES.cs" />
     <Compile Include="Security\Encrypter.cs" />
     <Compile Include="source.extension.cs">
       <AutoGen>True</AutoGen>
