@@ -190,6 +190,7 @@
     <Compile Include="Threading\IThreadTask.cs" />
     <Compile Include="Threading\Singleton`1.cs" />
     <Compile Include="Threading\TaskGeneric.cs" />
+    <Compile Include="Threading\ThreadWorker.cs" />
     <Compile Include="Windows\SeedingDataForm.cs">
       <SubType>Form</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
