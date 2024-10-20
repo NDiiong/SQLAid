@@ -96,6 +96,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\ResultGrid\SqlResultGridCopyColumnNameCommand.cs" />
     <Compile Include="Commands\ResultMessages\SqlResultMessagesCommandBase.cs" />
     <Compile Include="Commands\ResultGrid\TeamsChatCopyKeepFormattingCommand.cs" />
     <Compile Include="Commands\ResultMessages\ResultMessagesStatisticsParserCommand.cs" />
@@ -191,7 +192,9 @@
     <Compile Include="Threading\IThreadTask.cs" />
     <Compile Include="Threading\Singleton`1.cs" />
     <Compile Include="Threading\TaskGeneric.cs" />
-    <Compile Include="Threading\ThreadWorker.cs" />
+    <Compile Include="Threading\ThreadWorker.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Windows\SeedingDataForm.cs">
       <SubType>Form</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
