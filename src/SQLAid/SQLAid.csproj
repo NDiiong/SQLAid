@@ -100,9 +100,11 @@
     <Compile Include="Commands\ResultMessages\SqlResultMessagesCommandBase.cs" />
     <Compile Include="Commands\ResultGrid\TeamsChatCopyKeepFormattingCommand.cs" />
     <Compile Include="Commands\ResultMessages\ResultMessagesStatisticsParserCommand.cs" />
+    <Compile Include="Commands\Windows\KeepAliveConnectionCommand.cs" />
     <Compile Include="Commands\TextEditor\OpenFolderTemplatesCommand.cs" />
     <Compile Include="Commands\TextEditor\OpenStatisticsParserCommand.cs" />
     <Compile Include="Commands\TextEditor\PasteAsParenthesesCommand.cs" />
+    <Compile Include="Extensions\TasksExtensions.cs" />
     <Compile Include="Integration\DTE\Grid\ResultMessagesControl.cs" />
     <Compile Include="Process\RedirectedProcess.cs" />
     <Compile Include="Commands\Events\QueryHistoryCommand.cs" />

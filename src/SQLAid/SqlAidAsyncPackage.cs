@@ -3,6 +3,7 @@ using SQLAid.Commands.Events;
 using SQLAid.Commands.ResultGrid;
 using SQLAid.Commands.ResultMessages;
 using SQLAid.Commands.TextEditor;
+using SQLAid.Commands.Windows;
 using SQLAid.Integration.DTE;
 using System;
 using System.Runtime.InteropServices;
@@ -45,6 +46,7 @@ namespace SQLAid
             await OpenSettingsCommand.InitializeAsync(this).ConfigureAwait(false);
             await OpenFolderTemplatesCommand.InitializeAsync(this).ConfigureAwait(false);
             await PasteAsParenthesesCommand.InitializeAsync(this).ConfigureAwait(false);
+            await KeepAliveConnectionCommand.InitializeAsync(this).ConfigureAwait(false);
         }
     }
 }
