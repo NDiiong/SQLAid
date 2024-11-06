@@ -46,7 +46,8 @@ namespace SQLAid
             await OpenSettingsCommand.InitializeAsync(this).ConfigureAwait(false);
             await OpenFolderTemplatesCommand.InitializeAsync(this).ConfigureAwait(false);
             await PasteAsParenthesesCommand.InitializeAsync(this).ConfigureAwait(false);
-            await KeepAliveConnectionCommand.InitializeAsync(this).ConfigureAwait(false);
+            await TextTableFormatterCommand.InitializeAsync(this).ConfigureAwait(false);
+            //await KeepAliveConnectionCommand.InitializeAsync(this).ConfigureAwait(false);
         }
     }
 }
