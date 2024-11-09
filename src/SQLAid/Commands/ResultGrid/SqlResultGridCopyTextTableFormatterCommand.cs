@@ -12,11 +12,11 @@ using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.ResultGrid
 {
-    internal sealed class TextTableFormatterCommand : SqlResultGridCommandBase
+    internal sealed class SqlResultGridCopyTextTableFormatterCommand : SqlResultGridCommandBase
     {
         private static readonly IClipboardService _clipboardService;
 
-        static TextTableFormatterCommand()
+        static SqlResultGridCopyTextTableFormatterCommand()
         {
             _clipboardService = new ClipboardService();
         }
@@ -24,7 +24,7 @@ namespace SQLAid.Commands.ResultGrid
         public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            GridCommandBar.AddButton("Text Table Formatter", OnClick);
+            GridCommandBar.AddButton("Copy As 'Text Table' Formatting", OnClick);
         }
 
         private static void OnClick()

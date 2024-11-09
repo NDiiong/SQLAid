@@ -52,52 +52,46 @@ namespace SQLAid.Commands.TextEditor
         private static void Execute()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            try
+            var content = _clipboardService.GetFromClipboard();
+            if (!string.IsNullOrWhiteSpace(content))
             {
-                var content = _clipboardService.GetFromClipboard();
-                if (!string.IsNullOrWhiteSpace(content))
+                var lines = content.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                if (lines.Length > 0)
                 {
-                    var lines = content.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                    if (lines.Length > 0)
+                    var columns = lines.ElementAtOrDefault(0)?.Split('\t');
+                    if (columns != null)
                     {
-                        var columns = lines.ElementAtOrDefault(0)?.Split('\t');
-                        if (columns != null)
+                        var result = new List<string>();
+                        foreach (var item in lines.Skip(1))
                         {
-                            var result = new List<string>();
-                            foreach (var item in lines.Skip(1))
+                            var cells = item.Split('\t');
+                            var @string = "";
+                            for (int i = 0; i < cells.Length; i++)
                             {
-                                var cells = item.Split('\t');
-                                var @string = "";
-                                for (int i = 0; i < cells.Length; i++)
-                                {
-                                    if (i > 0)
-                                        @string += ", ";
+                                if (i > 0)
+                                    @string += ", ";
 
-                                    if (cells[i] != "NULL")
-                                        @string += string.Format("N'{0}'", cells[i].Replace("'", "''"));
-                                    else
-                                        @string += cells[i];
-                                }
-
-                                result.Add(@string);
+                                if (cells[i] != "NULL")
+                                    @string += string.Format("N'{0}'", cells[i].Replace("'", "''"));
+                                else
+                                    @string += cells[i];
                             }
 
-                            var rows = string.Join($",{Environment.NewLine}\t", result.Select(r => $"({string.Join(", ", r)})"));
-                            var columnsJoined = string.Join(", ", columns.Select(x => x.StartsWith("[") ? x : $"[{x}]"));
-                            var sqlQuery = templates.Replace("{rows}", rows).Replace("{columnHeaders}", columnsJoined);
-
-                            var textSelection = _frameDocumentView.GetTextSelection();
-                            var currentline = textSelection.TopPoint.Line;
-                            var currentColumn = textSelection.TopPoint.DisplayColumn;
-                            var editPoint = textSelection.TopPoint.CreateEditPoint();
-                            editPoint.Insert(sqlQuery);
-                            textSelection.MoveToLineAndOffset(currentline, currentColumn);
+                            result.Add(@string);
                         }
+
+                        var rows = string.Join($",{Environment.NewLine}\t", result.Select(r => $"({string.Join(", ", r)})"));
+                        var columnsJoined = string.Join(", ", columns.Select(x => x.StartsWith("[") ? x : $"[{x}]"));
+                        var sqlQuery = templates.Replace("{rows}", rows).Replace("{columnHeaders}", columnsJoined);
+
+                        var textSelection = _frameDocumentView.GetTextSelection();
+                        var currentline = textSelection.TopPoint.Line;
+                        var currentColumn = textSelection.TopPoint.DisplayColumn;
+                        var editPoint = textSelection.TopPoint.CreateEditPoint();
+                        editPoint.Insert(sqlQuery);
+                        textSelection.MoveToLineAndOffset(currentline, currentColumn);
                     }
                 }
-            }
-            catch (Exception)
-            {
             }
         }
     }

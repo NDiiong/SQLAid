@@ -27,7 +27,7 @@ namespace SQLAid.Commands.ResultGrid
         public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            GridCommandBar.AddButton("Copy As C# Model", $"{sqlAsyncPackage.ExtensionInstallationDirectory}/Resources/Assets/csharp-icon.ico", OnClick);
+            GridCommandBar.AddButton("Copy As C# Model", $"{sqlAsyncPackage.ExtensionInstallationDirectory}/Resources/Assets/csharp-icon.ico", createNewGroup: true, OnClick);
         }
 
         private static void OnClick()

@@ -12,12 +12,12 @@ using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.ResultGrid
 {
-    internal sealed class TeamsChatCopyKeepFormattingCommand : SqlResultGridCommandBase
+    internal sealed class SqlResultGridCopyMsTeamsFormattingCommand : SqlResultGridCommandBase
     {
         private static readonly IClipboardService _clipboardService;
         private static SqlAsyncPackage _sqlAsyncPackage;
 
-        static TeamsChatCopyKeepFormattingCommand()
+        static SqlResultGridCopyMsTeamsFormattingCommand()
         {
             _clipboardService = new ClipboardService();
         }
@@ -27,7 +27,7 @@ namespace SQLAid.Commands.ResultGrid
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             _sqlAsyncPackage = sqlAsyncPackage;
 
-            GridCommandBar.AddButton("Microsoft Teams: Copy Keep Formatting", $"{sqlAsyncPackage.ExtensionInstallationDirectory}/Resources/Assets/copy-special.ico", createNewGroup: true, OnClick);
+            GridCommandBar.AddButton("Copy As 'MS Teams' Formatting", $"{sqlAsyncPackage.ExtensionInstallationDirectory}/Resources/Assets/copy-special.ico", OnClick);
         }
 
         private static void OnClick()
