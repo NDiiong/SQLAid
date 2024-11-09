@@ -109,6 +109,7 @@
     <Compile Include="Commands\TextEditor\OpenStatisticsParserCommand.cs" />
     <Compile Include="Commands\TextEditor\PasteAsParenthesesCommand.cs" />
     <Compile Include="Extensions\TasksExtensions.cs" />
+    <Compile Include="Integration\Clipboard\ClipboardDataParser.cs" />
     <Compile Include="Integration\DTE\Grid\ResultMessagesControl.cs" />
     <Compile Include="Process\RedirectedProcess.cs" />
     <Compile Include="Commands\Events\QueryHistoryCommand.cs" />
@@ -128,7 +129,7 @@
     <Compile Include="Commands\TextEditor\SqlFormatQueryCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlJoinLinesCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlPasteAsCsvCommand.cs" />
-    <Compile Include="Commands\TextEditor\SqlPasteAsInsertedHeaderQueryCommand.cs" />
+    <Compile Include="Commands\TextEditor\SqlPasteAsInsertCommand.cs" />
     <Compile Include="Commands\TextEditor\SqlEditorNewGuidCommand.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridAsSaveCommand.cs" />
     <Compile Include="Commands\Events\WindowEventLogging.cs" />
@@ -194,6 +195,7 @@
     <Compile Include="SqlAidAsyncPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\UndoTransaction.cs" />
+    <Compile Include="Templates\ITemplateProvider.cs" />
     <Compile Include="Threading\BackgroundTask.cs" />
     <Compile Include="Threading\IThreadTask.cs" />
     <Compile Include="Threading\Singleton`1.cs" />
