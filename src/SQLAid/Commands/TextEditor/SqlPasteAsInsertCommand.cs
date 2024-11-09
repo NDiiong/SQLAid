@@ -15,6 +15,7 @@ namespace SQLAid.Commands.TextEditor
     internal sealed class SqlPasteAsInsertCommand
     {
         private readonly IClipboardService _clipboardService;
+        private readonly IEditorService _editorService;
         private readonly IFrameDocumentView _documentView;
         private readonly ITemplateProvider _templateProvider;
         private readonly SqlInsertQueryBuilder _queryBuilder;
@@ -22,12 +23,14 @@ namespace SQLAid.Commands.TextEditor
 
         public SqlPasteAsInsertCommand(
              IClipboardService clipboardService,
+             IEditorService editorService,
              IFrameDocumentView documentView,
              ITemplateProvider templateProvider,
              SqlInsertQueryBuilder queryBuilder,
              ClipboardDataParser dataParser)
         {
             _clipboardService = clipboardService ?? throw new ArgumentNullException(nameof(clipboardService));
+            _editorService = editorService ?? throw new ArgumentNullException(nameof(clipboardService));
             _documentView = documentView ?? throw new ArgumentNullException(nameof(documentView));
             _templateProvider = templateProvider ?? throw new ArgumentNullException(nameof(templateProvider));
             _queryBuilder = queryBuilder ?? throw new ArgumentNullException(nameof(queryBuilder));
@@ -53,17 +56,13 @@ namespace SQLAid.Commands.TextEditor
         private static SqlPasteAsInsertCommand CreateCommandInstance(SqlAsyncPackage package)
         {
             var clipboardService = new ClipboardService();
+            var editorService = new EditorService();
             var documentView = new FrameDocumentView();
             var templateProvider = new FileTemplateProvider(package.ExtensionInstallationDirectory);
             var queryBuilder = new SqlInsertQueryBuilder();
             var dataParser = new ClipboardDataParser();
 
-            return new SqlPasteAsInsertCommand(
-                clipboardService,
-                documentView,
-                templateProvider,
-                queryBuilder,
-                dataParser);
+            return new SqlPasteAsInsertCommand(clipboardService, editorService, documentView, templateProvider, queryBuilder, dataParser);
         }
 
         public void UpdateCommandStatus(OleMenuCommand menuCommand)
@@ -84,28 +83,19 @@ namespace SQLAid.Commands.TextEditor
 
         public async Task ExecuteAsync()
         {
-            try
-            {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-                var clipboardContent = _clipboardService.GetFromClipboard();
-                if (string.IsNullOrWhiteSpace(clipboardContent))
-                    return;
+            var clipboardContent = _clipboardService.GetFromClipboard();
+            if (string.IsNullOrWhiteSpace(clipboardContent))
+                return;
 
-                var (headers, rows) = _dataParser.Parse(clipboardContent);
-                var template = await _templateProvider.GetTemplateAsync("SQL.INSERT.INTO.sql");
-                var sqlQuery = _queryBuilder.BuildQuery(template, headers, rows);
+            var (headers, rows) = _dataParser.Parse(clipboardContent);
+            var template = await _templateProvider.GetTemplateAsync("SQL.INSERT.INTO.sql");
+            var sqlQuery = _queryBuilder.BuildQuery(template, headers, rows);
 
-                var textSelection = _documentView.GetTextSelection();
-                var editPoint = textSelection.TopPoint.CreateEditPoint();
-                editPoint.Insert(sqlQuery);
-                textSelection.MoveToLineAndOffset(textSelection.TopPoint.Line, textSelection.TopPoint.DisplayColumn);
-            }
-            catch (Exception ex)
-            {
-                // Consider logging the exception or showing a user-friendly error message
-                System.Diagnostics.Debug.WriteLine($"Error executing SQL paste command: {ex}");
-            }
+            var textSelection = _documentView.GetTextSelection();
+            _editorService.InsertText(textSelection, sqlQuery);
+            _editorService.RestoreCursorPosition(textSelection, new EditorPosition(textSelection.TopPoint.Line, textSelection.TopPoint.DisplayColumn));
         }
 
         internal class SqlInsertQueryBuilder

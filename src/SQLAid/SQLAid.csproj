@@ -149,14 +149,12 @@
     <Compile Include="Integration\DTE\Grid\ResultGridControl.cs" />
     <Compile Include="Integration\ISqlConnection.cs" />
     <Compile Include="Integration\Exceptions\ConnectionInfoException.cs" />
-    <Compile Include="Integration\DTE\HostContext.cs" />
     <Compile Include="Integration\DTE\HostServerConnection.cs" />
     <Compile Include="Integration\Files\IHtmlService.cs" />
     <Compile Include="Integration\Files\IJsonService.cs" />
-    <Compile Include="Integration\IHostContext.cs" />
     <Compile Include="Integration\EditedLine.cs" />
-    <Compile Include="Integration\DTE\Editor.cs" />
-    <Compile Include="Integration\IEditor.cs" />
+    <Compile Include="Integration\DTE\EditorService.cs" />
+    <Compile Include="Integration\IEditorService.cs" />
     <Compile Include="Integration\IResultGridControl.cs" />
     <Compile Include="Integration\IServerConnection.cs" />
     <Compile Include="Integration\IWindowsUser.cs" />
