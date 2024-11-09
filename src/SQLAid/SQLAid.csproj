@@ -103,7 +103,7 @@
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyTextTableFormatterCommand.cs" />
     <Compile Include="Commands\ResultMessages\SqlResultMessagesCommandBase.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyMsTeamsFormattingCommand.cs" />
-    <Compile Include="Commands\ResultMessages\ResultMessagesStatisticsParserCommand.cs" />
+    <Compile Include="Commands\ResultMessages\SqlResultMessagesStatisticsParserCommand.cs" />
     <Compile Include="Commands\Windows\KeepAliveConnectionCommand.cs" />
     <Compile Include="Commands\TextEditor\OpenFolderTemplatesCommand.cs" />
     <Compile Include="Commands\TextEditor\OpenStatisticsParserCommand.cs" />

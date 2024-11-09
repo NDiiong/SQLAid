@@ -36,7 +36,7 @@ namespace SQLAid
             await SqlResultGridCopyTextTableFormatterCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridAsSaveCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlResultGridFrozenColumnCommand.InitializeAsync(this).ConfigureAwait(false);
-            await ResultMessagesStatisticsParserCommand.InitializeAsync(this).ConfigureAwait(false);
+            await SqlResultMessagesStatisticsParserCommand.InitializeAsync(this).ConfigureAwait(false);
 
             await SqlJoinLinesCommand.InitializeAsync(this).ConfigureAwait(false);
             await SqlPasteAsCsvCommand.InitializeAsync(this).ConfigureAwait(false);

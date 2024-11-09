@@ -10,12 +10,12 @@ using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.ResultMessages
 {
-    internal class ResultMessagesStatisticsParserCommand : SqlResultMessagesCommandBase
+    internal class SqlResultMessagesStatisticsParserCommand : SqlResultMessagesCommandBase
     {
         private static readonly IClipboardService _clipboardService;
         private static readonly IResultMessagesControl _resultMessageControl;
 
-        static ResultMessagesStatisticsParserCommand()
+        static SqlResultMessagesStatisticsParserCommand()
         {
             _clipboardService = new ClipboardService();
             _resultMessageControl = new ResultMessagesControl();
