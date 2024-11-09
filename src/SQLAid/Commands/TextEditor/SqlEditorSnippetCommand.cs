@@ -66,7 +66,7 @@ namespace SQLAid.Commands.TextEditor
                 return false;
 
             var template = _templateProvider.FindTemplate(lineInfo.Text);
-            if (template == null)
+            if (string.IsNullOrWhiteSpace(template))
                 return false;
 
             _editorService.ReplaceLineWithTemplate(selection, lineInfo, template);
