@@ -14,5 +14,9 @@ namespace SQLAid.Integration
         void ReplaceSelection(TextSelection selection, string newText);
 
         void FormatLine(TextSelection selection, EditorPosition position);
+
+        LineInfo GetCurrentLineInfo(TextSelection selection);
+
+        void ReplaceLineWithTemplate(TextSelection selection, LineInfo lineInfo, string content);
     }
 }

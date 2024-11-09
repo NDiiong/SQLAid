@@ -58,7 +58,7 @@ namespace SQLAid.Commands.TextEditor
             var clipboardService = new ClipboardService();
             var editorService = new EditorService();
             var documentView = new FrameDocumentView();
-            var templateProvider = new FileTemplateProvider(package.ExtensionInstallationDirectory);
+            var templateProvider = new TemplateProvider(package.ExtensionInstallationDirectory);
             var queryBuilder = new SqlInsertQueryBuilder();
             var dataParser = new ClipboardDataParser();
 

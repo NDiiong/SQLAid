@@ -1,80 +1,85 @@
 ﻿using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
+using SQLAid.Integration;
 using SQLAid.Integration.DTE;
-using System.IO;
-using System.Linq;
+using SQLAid.Templates;
+using System;
 using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.TextEditor
 {
-    internal sealed class SqlEditorSnippetCommand
+    /// <summary>
+    /// Handles SQL snippet insertion in the editor based on text triggers
+    /// </summary>
+    internal sealed class SqlEditorSnippetCommand : IDisposable
     {
-        private static TextDocumentKeyPressEvents _textDocumentKeyPressEvents;
+        private readonly ITemplateProvider _templateProvider;
+        private readonly IEditorService _editorService;
+        private readonly TextDocumentKeyPressEvents _keyPressEvents;
+        private bool _isDisposed;
 
-        private static SqlAsyncPackage _sqlAsyncPackage;
+        public SqlEditorSnippetCommand(
+            ITemplateProvider templateProvider,
+            IEditorService editorService,
+            Events2 events)
+        {
+            _templateProvider = templateProvider ?? throw new ArgumentNullException(nameof(templateProvider));
+            _editorService = editorService ?? throw new ArgumentNullException(nameof(editorService));
+            _keyPressEvents = events?.TextDocumentKeyPressEvents ?? throw new ArgumentNullException(nameof(events));
+
+            _keyPressEvents.BeforeKeyPress += HandleBeforeKeyPress;
+        }
 
         public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            _sqlAsyncPackage = sqlAsyncPackage;
             var events = sqlAsyncPackage.Application.Events as Events2;
-            _textDocumentKeyPressEvents = events.TextDocumentKeyPressEvents;
-            _textDocumentKeyPressEvents.BeforeKeyPress += TextDocumentKeyPressEvents_BeforeKeyPress;
-        }
-
-        private static void TextDocumentKeyPressEvents_BeforeKeyPress(string Keypress, TextSelection Selection, bool InStatementCompletion, ref bool CancelKeypress)
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-
-            if (Keypress != "\t")
+            if (events == null)
                 return;
 
-            var startPoint = Selection.ActivePoint.CreateEditPoint();
-            startPoint.StartOfLine();
-
-            while (!startPoint.AtEndOfLine && (startPoint.GetText(1) == "\t" || startPoint.GetText(1) == " "))
-                startPoint.CharRight();
-
-            CancelKeypress = CreateSnippet(Selection, startPoint);
+            var command = new SqlEditorSnippetCommand(
+                new TemplateProvider(
+                    sqlAsyncPackage.ExtensionInstallationDirectory,
+                    sqlAsyncPackage.Options.TemplateDirectory),
+                new EditorService(), events);
         }
 
-        private static bool CreateSnippet(TextSelection Selection, EditPoint startPoint)
+        private void HandleBeforeKeyPress(string keypress, TextSelection selection, bool inStatementCompletion, ref bool cancelKeypress)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var endPoint = startPoint.CreateEditPoint();
-            endPoint.EndOfLine();
+            if (keypress != "\t")
+                return;
 
-            var lineText = startPoint.GetText(endPoint.AbsoluteCharOffset - startPoint.AbsoluteCharOffset).TrimEnd();
-            if (string.IsNullOrWhiteSpace(lineText))
+            var lineInfo = _editorService.GetCurrentLineInfo(selection);
+            if (lineInfo == null)
+                return;
+
+            cancelKeypress = TryInsertSnippet(selection, lineInfo);
+        }
+
+        private bool TryInsertSnippet(TextSelection selection, LineInfo lineInfo)
+        {
+            if (string.IsNullOrWhiteSpace(lineInfo.Text))
                 return false;
 
-            var defaultTemplates = Directory.GetFiles($"{_sqlAsyncPackage.ExtensionInstallationDirectory}/Templates");
-            var customTemplates = Directory.GetFiles(_sqlAsyncPackage.Options.TemplateDirectory).ToList();
-            customTemplates.AddRange(defaultTemplates);
+            var template = _templateProvider.FindTemplate(lineInfo.Text);
+            if (template == null)
+                return false;
 
-            foreach (var template in customTemplates)
-            {
-                var filename = Path.GetFileNameWithoutExtension(template);
+            _editorService.ReplaceLineWithTemplate(selection, lineInfo, template);
+            return true;
+        }
 
-                // Compare the entire line text with the filename
-                if (lineText.Equals(filename, System.StringComparison.CurrentCultureIgnoreCase))
-                {
-                    var content = File.ReadAllText(template);
+        public void Dispose()
+        {
+            if (_isDisposed)
+                return;
 
-                    // Delete the entire line content
-                    startPoint.Delete(lineText.Length);
-
-                    // Insert the template content
-                    startPoint.Insert(content);
-                    Selection.MoveToPoint(startPoint);
-                    return true;
-                }
-            }
-
-            return false;
+            _keyPressEvents.BeforeKeyPress -= HandleBeforeKeyPress;
+            _isDisposed = true;
         }
     }
 }
