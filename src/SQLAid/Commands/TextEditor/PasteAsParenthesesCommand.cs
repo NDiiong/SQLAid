@@ -1,63 +1,76 @@
 using Microsoft.VisualStudio.Shell;
 using SQLAid.Extensions;
 using SQLAid.Integration;
-using SQLAid.Integration.Clipboard;
 using SQLAid.Integration.DTE;
 using System;
 using System.ComponentModel.Design;
+using System.Linq;
 using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.TextEditor
 {
     internal sealed class PasteAsParenthesesCommand
     {
-        private static SqlAsyncPackage _sqlAsyncPackage;
-        private static readonly IClipboardService _clipboardService;
-        private static readonly IFrameDocumentView _frameDocumentView;
+        private readonly IClipboardService _clipboardService;
+        private readonly IFrameDocumentView _frameDocumentView;
+        private readonly SqlAsyncPackage _sqlAsyncPackage;
+        private OleMenuCommand _menuCommand;
 
-        static PasteAsParenthesesCommand()
+        public PasteAsParenthesesCommand(
+            SqlAsyncPackage sqlAsyncPackage,
+            IClipboardService clipboardService,
+            IFrameDocumentView frameDocumentView)
         {
-            _clipboardService = new ClipboardService();
-            _frameDocumentView = new FrameDocumentView();
+            _sqlAsyncPackage = sqlAsyncPackage ?? throw new ArgumentNullException(nameof(sqlAsyncPackage));
+            _clipboardService = clipboardService ?? throw new ArgumentNullException(nameof(clipboardService));
+            _frameDocumentView = frameDocumentView ?? throw new ArgumentNullException(nameof(frameDocumentView));
         }
 
-        public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
+        public async Task InitializeAsync()
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            _sqlAsyncPackage = sqlAsyncPackage;
             var commandService = _sqlAsyncPackage.GetService<IMenuCommandService, OleMenuCommandService>();
             var cmdId = new CommandID(PackageGuids.guidCommands, PackageIds.PasteAsParenthesesCommand);
-            var menuItem = new OleMenuCommand((s, e) => Execute(), cmdId);
-            menuItem.BeforeQueryStatus += (s, e) => CanExecute(s);
-            commandService.AddCommand(menuItem);
+
+            _menuCommand = new OleMenuCommand(ExecuteHandler, cmdId);
+            _menuCommand.BeforeQueryStatus += HandleBeforeQueryStatus;
+
+            commandService.AddCommand(_menuCommand);
         }
 
-        private static void CanExecute(object s)
-        {
-            var oleMenuCommand = s as OleMenuCommand;
-            if (!string.IsNullOrWhiteSpace(_clipboardService.GetFromClipboard()))
-                oleMenuCommand.Visible = true;
-        }
-
-        private static void Execute()
+        private void ExecuteHandler(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var values = _clipboardService.GetFromClipboard();
-            var valuesSplited = values.Split(',');
-            if (valuesSplited.Length > 0)
-            {
-                var formattedNumbers = new string[valuesSplited.Length];
-                for (int i = 0; i < valuesSplited.Length; i++)
-                {
-                    formattedNumbers[i] = $"(N'{valuesSplited[i].Trim()}')";
-                }
+            var clipboardContent = _clipboardService.GetFromClipboard();
+            if (string.IsNullOrWhiteSpace(clipboardContent)) return;
 
-                var result = string.Join("," + Environment.NewLine, formattedNumbers);
-                var selection = _frameDocumentView.GetTextSelection();
-                selection.Insert(result);
+            var formattedValues = FormatClipboardContent(clipboardContent);
+            InsertFormattedValues(formattedValues);
+        }
+
+        private void HandleBeforeQueryStatus(object sender, EventArgs e)
+        {
+            if (sender is OleMenuCommand menuCommand)
+            {
+                menuCommand.Visible = !string.IsNullOrWhiteSpace(_clipboardService.GetFromClipboard());
             }
+        }
+
+        private string FormatClipboardContent(string content)
+        {
+            var values = content.Split(',')
+                .Where(v => !string.IsNullOrWhiteSpace(v))
+                .Select(v => $"(N'{v.Trim()}')").ToArray();
+
+            return string.Join("," + Environment.NewLine, values);
+        }
+
+        private void InsertFormattedValues(string formattedContent)
+        {
+            var selection = _frameDocumentView.GetTextSelection();
+            selection.Insert(formattedContent);
         }
     }
 }
