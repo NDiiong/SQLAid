@@ -7,7 +7,6 @@ using SQLAid.Integration.DTE;
 using SQLAid.Integration.DTE.Grid;
 using SQLAid.Integration.Files;
 using System;
-using System.IO;
 using System.Windows.Forms;
 using Task = System.Threading.Tasks.Task;
 
@@ -19,52 +18,39 @@ namespace SQLAid.Commands.ResultGrid
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            GridCommandBar.AddButton("Save Result As Json", $"{package.ExtensionInstallationDirectory}/Resources/Assets/json-download.ico", createNewGroup: true, SaveJsonGridResultEventHandler);
-            GridCommandBar.AddButton("Save Result As Excel", $"{package.ExtensionInstallationDirectory}/Resources/Assets/xls-icon.ico", SaveExcelGridResultEventHandler);
+            GridCommandBar.AddButton(
+                "Save Result As Json",
+                $"{package.ExtensionInstallationDirectory}/Resources/Assets/json-download.ico",
+                createNewGroup: true,
+                () => SaveGridResult(".json", "Save Results As Json", "Json (*.json)|*.json", Environment.GetFolderPath(Environment.SpecialFolder.Desktop)));
+
+            GridCommandBar.AddButton(
+                "Save Result As Excel",
+                $"{package.ExtensionInstallationDirectory}/Resources/Assets/xls-icon.ico",
+                () => SaveGridResult(".xlsx", "Save Results As Excel", "Excel (*.xlsx)|*.xlsx", Environment.GetFolderPath(Environment.SpecialFolder.Desktop)));
         }
 
-        private static void SaveExcelGridResultEventHandler()
-        {
-            var saveFileDialog = new SaveFileDialog
-            {
-                FileName = "",
-                Title = "Save Results As Excel",
-                Filter = "Excel (*.xlsx)|*.xlsx",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-            };
-
-            FileHandler(saveFileDialog);
-        }
-
-        private static void SaveJsonGridResultEventHandler()
-        {
-            var saveFileDialog = new SaveFileDialog
-            {
-                FileName = "",
-                Title = "Save Results As Json",
-                Filter = "Json (*.json)|*.json",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-            };
-
-            FileHandler(saveFileDialog);
-        }
-
-        private static void FileHandler(SaveFileDialog saveDialog)
+        private static void SaveGridResult(string extension, string title, string filter, string initialDirectory)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var diaglogResult = saveDialog.ShowDialog();
-            if (diaglogResult != DialogResult.Cancel)
+            var saveDialog = new SaveFileDialog
             {
-                var extension = Path.GetExtension(saveDialog.FileName).ToLower();
-                var fileservice = FileServiceFactory.GetService(extension);
+                FileName = "",
+                Title = title,
+                Filter = filter,
+                InitialDirectory = initialDirectory,
+            };
 
-                if (fileservice != null)
+            if (saveDialog.ShowDialog() == DialogResult.OK)
+            {
+                var fileService = FileServiceFactory.GetService(extension);
+                if (fileService != null)
                 {
                     var activeGridControl = GridControl.GetFocusGridControl();
                     using (var gridResultControl = new ResultGridControlAdaptor(activeGridControl))
                     {
-                        fileservice.WriteFile(saveDialog.FileName, gridResultControl.GridFocusAsDatatable());
-                        ServiceCache.ExtensibilityModel.StatusBar.Text = "Successed";
+                        fileService.WriteFile(saveDialog.FileName, gridResultControl.GridFocusAsDatatable());
+                        ServiceCache.ExtensibilityModel.StatusBar.Text = "Succeeded";
                     }
                 }
             }
