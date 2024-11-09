@@ -2,7 +2,6 @@
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using SQLAid.Integration.DTE;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Task = System.Threading.Tasks.Task;
@@ -35,30 +34,35 @@ namespace SQLAid.Commands.TextEditor
             var startPoint = Selection.ActivePoint.CreateEditPoint();
             startPoint.StartOfLine();
 
-            while (!startPoint.AtEndOfLine && startPoint.GetText(1) == "\t")
+            while (!startPoint.AtEndOfLine && (startPoint.GetText(1) == "\t" || startPoint.GetText(1) == " "))
                 startPoint.CharRight();
+
+            CancelKeypress = CreateSnippet(Selection, startPoint);
+        }
+
+        private static bool CreateSnippet(TextSelection Selection, EditPoint startPoint)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            var endPoint = startPoint.CreateEditPoint();
+            endPoint.EndOfLine();
+
+            var lineText = startPoint.GetText(endPoint.AbsoluteCharOffset - startPoint.AbsoluteCharOffset).TrimEnd();
+            if (string.IsNullOrWhiteSpace(lineText))
+                return false;
 
             var defaultTemplates = Directory.GetFiles($"{_sqlAsyncPackage.ExtensionInstallationDirectory}/Templates");
             var customTemplates = Directory.GetFiles(_sqlAsyncPackage.Options.TemplateDirectory).ToList();
             customTemplates.AddRange(defaultTemplates);
-            CancelKeypress = CreateSnippet(Selection, startPoint, customTemplates);
-        }
 
-        private static bool CreateSnippet(TextSelection Selection, EditPoint startPoint, List<string> paths)
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            var endPoint = startPoint.CreateEditPoint();
-            endPoint.EndOfLine();
-
-            string lineText = startPoint.GetText(endPoint.AbsoluteCharOffset - startPoint.AbsoluteCharOffset).TrimEnd();
-            foreach (var path in paths)
+            foreach (var template in customTemplates)
             {
-                var filename = Path.GetFileNameWithoutExtension(path);
+                var filename = Path.GetFileNameWithoutExtension(template);
 
                 // Compare the entire line text with the filename
                 if (lineText.Equals(filename, System.StringComparison.CurrentCultureIgnoreCase))
                 {
-                    var content = File.ReadAllText(path);
+                    var content = File.ReadAllText(template);
 
                     // Delete the entire line content
                     startPoint.Delete(lineText.Length);
@@ -69,6 +73,7 @@ namespace SQLAid.Commands.TextEditor
                     return true;
                 }
             }
+
             return false;
         }
     }

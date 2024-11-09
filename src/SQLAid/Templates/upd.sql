@@ -1,1 +1,1 @@
-﻿UPDATE <table_name> SET	 WHERE
+﻿UPDATE  SET	 WHERE

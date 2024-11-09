@@ -1,1 +1,1 @@
-﻿SELECT TOP 100 * FROM <table_name>
+﻿SELECT TOP 100 * FROM 
