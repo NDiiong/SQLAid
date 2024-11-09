@@ -47,21 +47,28 @@ namespace SQLAid.Commands.TextEditor
         private static bool CreateSnippet(TextSelection Selection, EditPoint startPoint, List<string> paths)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+            var endPoint = startPoint.CreateEditPoint();
+            endPoint.EndOfLine();
 
+            string lineText = startPoint.GetText(endPoint.AbsoluteCharOffset - startPoint.AbsoluteCharOffset).TrimEnd();
             foreach (var path in paths)
             {
                 var filename = Path.GetFileNameWithoutExtension(path);
-                var keyword = startPoint.GetText(filename.Length + 1).ToLower();
-                if (keyword.Equals(filename, System.StringComparison.CurrentCultureIgnoreCase))
+
+                // Compare the entire line text with the filename
+                if (lineText.Equals(filename, System.StringComparison.CurrentCultureIgnoreCase))
                 {
                     var content = File.ReadAllText(path);
-                    startPoint.Delete(filename.Length);
+
+                    // Delete the entire line content
+                    startPoint.Delete(lineText.Length);
+
+                    // Insert the template content
                     startPoint.Insert(content);
                     Selection.MoveToPoint(startPoint);
                     return true;
                 }
             }
-
             return false;
         }
     }

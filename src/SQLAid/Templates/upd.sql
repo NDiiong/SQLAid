@@ -1,0 +1,1 @@
+﻿UPDATE <table_name> SET	 WHERE

@@ -26,7 +26,7 @@ namespace SQLAid.Commands.TextEditor
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (Keypress == "(" || Keypress == "[")
+            if (Keypress == "(" || Keypress == "[" || Keypress == ")" || Keypress == "]")
             {
                 var selectedText = Selection.Text.Trim();
                 if (!string.IsNullOrWhiteSpace(selectedText) && !selectedText.StartsWith(Keypress))
