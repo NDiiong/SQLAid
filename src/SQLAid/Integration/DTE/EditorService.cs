@@ -4,6 +4,15 @@ namespace SQLAid.Integration.DTE
 {
     public class EditorService : IEditorService
     {
+        public void FormatLine(TextSelection selection, EditorPosition position)
+        {
+            selection.MoveToLineAndOffset(position.Line, position.Column);
+            selection.StartOfLine(vsStartOfLineOptions.vsStartOfLineOptionsFirstText);
+            selection.EndOfLine(true);
+            selection.MoveToLineAndOffset(position.Line, position.Column);
+            selection.StartOfLine(vsStartOfLineOptions.vsStartOfLineOptionsFirstText);
+        }
+
         public EditorPosition GetCursorPosition(TextSelection textSelection)
         {
             return new EditorPosition(
@@ -15,6 +24,14 @@ namespace SQLAid.Integration.DTE
         {
             var editPoint = textSelection.TopPoint.CreateEditPoint();
             editPoint.Insert(text);
+        }
+
+        public void ReplaceSelection(TextSelection selection, string newText)
+        {
+            selection.Delete(1);
+            selection.Collapse();
+            var editPoint = selection.TopPoint.CreateEditPoint();
+            editPoint.Insert(newText);
         }
 
         public void RestoreCursorPosition(TextSelection textSelection, EditorPosition position)

@@ -104,6 +104,10 @@
     <Compile Include="Commands\ResultMessages\SqlResultMessagesCommandBase.cs" />
     <Compile Include="Commands\ResultGrid\SqlResultGridCopyMsTeamsFormattingCommand.cs" />
     <Compile Include="Commands\ResultMessages\SqlResultMessagesStatisticsParserCommand.cs" />
+    <Compile Include="UndoTransaction\IUndoTransaction.cs" />
+    <Compile Include="UndoTransaction\IUndoTransactionFactory.cs" />
+    <Compile Include="UndoTransaction\UndoTransactionFactory.cs" />
+    <Compile Include="UndoTransaction\UndoTransactionWrapper.cs" />
     <Compile Include="Commands\Windows\KeepAliveConnectionCommand.cs" />
     <Compile Include="Commands\TextEditor\OpenFolderTemplatesCommand.cs" />
     <Compile Include="Commands\TextEditor\OpenStatisticsParserCommand.cs" />
@@ -152,7 +156,6 @@
     <Compile Include="Integration\DTE\HostServerConnection.cs" />
     <Compile Include="Integration\Files\IHtmlService.cs" />
     <Compile Include="Integration\Files\IJsonService.cs" />
-    <Compile Include="Integration\EditedLine.cs" />
     <Compile Include="Integration\DTE\EditorService.cs" />
     <Compile Include="Integration\IEditorService.cs" />
     <Compile Include="Integration\IResultGridControl.cs" />
@@ -192,7 +195,6 @@
     </Compile>
     <Compile Include="SqlAidAsyncPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Helpers\UndoTransaction.cs" />
     <Compile Include="Templates\ITemplateProvider.cs" />
     <Compile Include="Threading\BackgroundTask.cs" />
     <Compile Include="Threading\IThreadTask.cs" />

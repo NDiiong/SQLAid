@@ -10,5 +10,9 @@ namespace SQLAid.Integration
         void InsertText(TextSelection textSelection, string text);
 
         void RestoreCursorPosition(TextSelection textSelection, EditorPosition position);
+
+        void ReplaceSelection(TextSelection selection, string newText);
+
+        void FormatLine(TextSelection selection, EditorPosition position);
     }
 }
