@@ -30,16 +30,16 @@ namespace SQLAid.Commands.ResultGrid
         private static void OnClick()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var activeGridControl = GridControl.GetGridControl();
-            using (var gridResultControl = new ResultGridControlAdaptor(activeGridControl))
-            {
-                var json = FileServiceFactory.JsonService.AsJson(gridResultControl.GridFocusAsDatatable());
-                if (!string.IsNullOrEmpty(json))
-                {
-                    _clipboardService.Set(json);
-                    ServiceCache.ExtensibilityModel.StatusBar.Text = "Copied";
-                }
-            }
+            //var activeGridControl = GridControl.GetGridControl();
+            //using (var gridResultControl = new ResultGridControlAdaptor(activeGridControl))
+            //{
+            //    var json = FileServiceFactory.JsonService.AsJson(gridResultControl.GridFocusAsDatatable());
+            //    if (!string.IsNullOrEmpty(json))
+            //    {
+            //        _clipboardService.Set(json);
+            //        ServiceCache.ExtensibilityModel.StatusBar.Text = "Copied";
+            //    }
+            //}
         }
     }
 }

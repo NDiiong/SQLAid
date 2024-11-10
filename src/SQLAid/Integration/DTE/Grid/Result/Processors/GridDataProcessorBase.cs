@@ -10,8 +10,6 @@ namespace SQLAid.Integration.DTE.Grid.Processors
         DataTable GetSchema();
 
         DataTable GridAsDatatable();
-
-        IEnumerable<string> ConvertToSqlValues();
     }
 
     public abstract class GridDataProcessorBase : IGridDataProcessor
@@ -33,7 +31,5 @@ namespace SQLAid.Integration.DTE.Grid.Processors
         public abstract DataTable GetSchema();
 
         public abstract DataTable GridAsDatatable();
-
-        public abstract IEnumerable<string> ConvertToSqlValues();
     }
 }

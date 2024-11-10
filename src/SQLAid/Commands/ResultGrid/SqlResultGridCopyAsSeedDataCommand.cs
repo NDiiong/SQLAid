@@ -32,13 +32,13 @@ namespace SQLAid.Commands.ResultGrid
         private static void OnClick()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var focusGridControl = GridControl.GetGridControl();
-            using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
-            {
-                var dataTable = gridResultControl.GridFocusAsDatatable();
-                var tableNameForm = new SeedingDataForm(_clipboardService, templates, dataTable);
-                tableNameForm.ShowDialog();
-            }
+            //var focusGridControl = GridControl.GetGridControl();
+            //using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
+            //{
+            //    var dataTable = gridResultControl.GridFocusAsDatatable();
+            //    var tableNameForm = new SeedingDataForm(_clipboardService, templates, dataTable);
+            //    tableNameForm.ShowDialog();
+            //}
         }
     }
 }

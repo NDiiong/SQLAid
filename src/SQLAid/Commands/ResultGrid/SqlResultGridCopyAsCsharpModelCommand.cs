@@ -32,13 +32,13 @@ namespace SQLAid.Commands.ResultGrid
 
         private static void OnClick()
         {
-            var focusGridControl = GridControl.GetGridControl();
-            using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
-            {
-                var schema = gridResultControl.SchemaResultGrid();
-                var modelCode = GenerateCSharpModelCode(schema);
-                _clipboardService.Set(modelCode);
-            }
+            //var focusGridControl = GridControl.GetGridControl();
+            //using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
+            //{
+            //    var schema = gridResultControl.SchemaResultGrid();
+            //    var modelCode = GenerateCSharpModelCode(schema);
+            //    _clipboardService.Set(modelCode);
+            //}
         }
 
         private static string GenerateCSharpModelCode(DataTable schema)

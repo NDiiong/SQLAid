@@ -29,15 +29,15 @@ namespace SQLAid.Commands.ResultGrid
         private static void OnClick()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var activeGridControl = GridControl.GetGridControl();
-            using (var gridResultControl = new ResultGridControlAdaptor(activeGridControl))
-            {
-                var datatable = gridResultControl.GridFocusAsDatatable();
-                var content = datatable.ToCsv();
+            //var activeGridControl = GridControl.GetGridControl();
+            //using (var gridResultControl = new ResultGridControlAdaptor(activeGridControl))
+            //{
+            //    var datatable = gridResultControl.GridFocusAsDatatable();
+            //    var content = datatable.ToCsv();
 
-                _clipboardService.Set(content);
-                ServiceCache.ExtensibilityModel.StatusBar.Text = "Copied";
-            }
+            //    _clipboardService.Set(content);
+            //    ServiceCache.ExtensibilityModel.StatusBar.Text = "Copied";
+            //}
         }
     }
 }

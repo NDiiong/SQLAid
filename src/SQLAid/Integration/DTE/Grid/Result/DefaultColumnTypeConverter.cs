@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLAid.Integration.Exceptions;
+using System;
 using System.Globalization;
 using System.Text;
 

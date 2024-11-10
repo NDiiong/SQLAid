@@ -58,22 +58,22 @@ namespace SQLAid.Commands.ResultGrid
             var queryText = _templateProvider.GetTemplate("SQL.INSERT.INTO.sql");
             queryText = queryText.Replace("{columnHeaders}", string.Join(", ", columnsbrackets));
 
-            queryText.
+            //queryText.
 
-            using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
-            {
-                var gridResultSelected = gridResultControl.GridSelectedAsQuerySql();
-                var columnHeaders = gridResultSelected.ElementAt(0);
-                var contentRows = gridResultSelected.Skip(1);
+            //using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
+            //{
+            //    var gridResultSelected = gridResultControl.GridSelectedAsQuerySql();
+            //    var columnHeaders = gridResultSelected.ElementAt(0);
+            //    var contentRows = gridResultSelected.Skip(1);
 
-                var rows = string.Join($",{Environment.NewLine}\t", contentRows.Select(r => $"({string.Join(", ", r)})"));
-                var sqlQuery = templates.Replace("{columnHeaders}", columnHeaders).Replace("{rows}", rows);
+            //    var rows = string.Join($",{Environment.NewLine}\t", contentRows.Select(r => $"({string.Join(", ", r)})"));
+            //    var sqlQuery = templates.Replace("{columnHeaders}", columnHeaders).Replace("{rows}", rows);
 
-                _clipboardService.Set(sqlQuery);
-                ServiceCache.ExtensibilityModel.StatusBar.Text = "Copied";
-            }
+            //    _clipboardService.Set(sqlQuery);
+            //    ServiceCache.ExtensibilityModel.StatusBar.Text = "Copied";
+            //}
 
-            _gridComponentAdaptor.Dispose();
+            //_gridComponentAdaptor.Dispose();
         }
     }
 }

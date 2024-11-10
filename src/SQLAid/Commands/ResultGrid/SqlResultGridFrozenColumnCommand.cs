@@ -38,39 +38,39 @@ namespace SQLAid.Commands.ResultGrid
 
         private static void OnClick()
         {
-            var currentGridControl = GridControl.GetGridControl();
-            if (currentGridControl != null)
-            {
-                var gridControl = currentGridControl.As<GridControl>();
-                using (var gridControlAdaptor = new ResultGridControlAdaptor(gridControl))
-                {
-                    if (gridControl.FirstScrollableColumn == 1)
-                    {
-                        gridControl.GetCurrentCell(out _, out var col);
-                        if (1 <= col && (col + 1) < gridControl.GridColumnsInfo.Count)
-                        {
-                            _columnIndexLastest = col + 1;
-                            _commandBarButton.Caption("Unfrozen");
-                            gridControl.FirstScrollableColumn = _columnIndexLastest;
-                            gridControlAdaptor.SetRangeColumnBackground(1, _columnIndexLastest, Color.PowderBlue);
-                        }
-                        else
-                        {
-                            gridControl.FirstScrollableColumn = 1;
-                        }
-                    }
-                    else
-                    {
-                        gridControl.FirstScrollableColumn = 1;
-                        gridControlAdaptor.SetRangeColumnBackground(1, _columnIndexLastest, Color.White);
-                        _commandBarButton.Caption("Frozen");
-                    }
+            //var currentGridControl = GridControl.GetGridControl();
+            //if (currentGridControl != null)
+            //{
+            //    var gridControl = currentGridControl.As<GridControl>();
+            //    using (var gridControlAdaptor = new ResultGridControlAdaptor(gridControl))
+            //    {
+            //        if (gridControl.FirstScrollableColumn == 1)
+            //        {
+            //            gridControl.GetCurrentCell(out _, out var col);
+            //            if (1 <= col && (col + 1) < gridControl.GridColumnsInfo.Count)
+            //            {
+            //                _columnIndexLastest = col + 1;
+            //                _commandBarButton.Caption("Unfrozen");
+            //                gridControl.FirstScrollableColumn = _columnIndexLastest;
+            //                gridControlAdaptor.SetRangeColumnBackground(1, _columnIndexLastest, Color.PowderBlue);
+            //            }
+            //            else
+            //            {
+            //                gridControl.FirstScrollableColumn = 1;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            gridControl.FirstScrollableColumn = 1;
+            //            gridControlAdaptor.SetRangeColumnBackground(1, _columnIndexLastest, Color.White);
+            //            _commandBarButton.Caption("Frozen");
+            //        }
 
-                    gridControl.GridColumnsInfo[gridControl.FirstScrollableColumn].IsWithRightGridLine = true;
-                    gridControl.UpdateGrid();
-                    gridControl.Refresh();
-                }
-            }
+            //        gridControl.GridColumnsInfo[gridControl.FirstScrollableColumn].IsWithRightGridLine = true;
+            //        gridControl.UpdateGrid();
+            //        gridControl.Refresh();
+            //    }
+            //}
         }
     }
 }

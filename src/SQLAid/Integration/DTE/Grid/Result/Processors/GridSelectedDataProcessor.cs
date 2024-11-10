@@ -1,6 +1,5 @@
 ﻿using Microsoft.SqlServer.Management.UI.Grid;
 using SQLAid.Integration.DTE.Grid.Result;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -77,17 +76,6 @@ namespace SQLAid.Integration.DTE.Grid.Processors
                 }
             }
             return rowData;
-        }
-
-        public override IEnumerable<IEnumerable<string>> ConvertToSqlValues()
-        {
-            var selectedCells = GridControl.SelectedCells.Cast<BlockOfCells>();
-            var result = new List<IEnumerable<string>>();
-            foreach (var cell in selectedCells)
-            {
-                var cellValues = ProcessSelectedCell(cell);
-                result.add
-            }
         }
     }
 }

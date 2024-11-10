@@ -34,14 +34,14 @@ namespace SQLAid.Commands.ResultGrid
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             var htmlTemplates = File.ReadAllText($"{_sqlAsyncPackage.ExtensionInstallationDirectory}/Templates/Internal/MSTeamMessageChatsFormat.html");
-            var focusGridControl = GridControl.GetGridControl();
-            using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
-            {
-                var datatable = gridResultControl.GridSelectedAsDataTable();
-                var tableHtml = datatable.ToTeamsFormat();
-                var content = htmlTemplates.Replace("{table}", tableHtml);
-                _clipboardService.Set(content, TextDataFormat.Html);
-            }
+            //var focusGridControl = GridControl.GetGridControl();
+            //using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
+            //{
+            //    var datatable = gridResultControl.GridSelectedAsDataTable();
+            //    var tableHtml = datatable.ToTeamsFormat();
+            //    var content = htmlTemplates.Replace("{table}", tableHtml);
+            //    _clipboardService.Set(content, TextDataFormat.Html);
+            //}
         }
     }
 }
