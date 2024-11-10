@@ -82,9 +82,11 @@ namespace SQLAid.Integration.DTE.Grid.Processors
         public override IEnumerable<IEnumerable<string>> ConvertToSqlValues()
         {
             var selectedCells = GridControl.SelectedCells.Cast<BlockOfCells>();
+            var result = new List<IEnumerable<string>>();
             foreach (var cell in selectedCells)
             {
-                ProcessSelectedCell(cell, schema);
+                var cellValues = ProcessSelectedCell(cell);
+                result.add
             }
         }
     }
