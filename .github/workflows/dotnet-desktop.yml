@@ -1,4 +1,4 @@
-name: .NET Desktop
+name: build
 
 on:
   release:
@@ -7,24 +7,24 @@ on:
       - "main"
 
 jobs:
-
   build:
-
-    strategy:
-      matrix:
-        configuration: [Debug]
-    runs-on: windows-2019
+    name: Build
+    runs-on: windows-latest
     env:
-      Solution_Name: "src/SQLAid.sln"
-      Wap_Project_Directory: SQLAid
-      Wap_Project_Path: src/SQLAid/SQLAid.csproj
+      Configuration: Release
+      Project: src/SQLAid/SQLAid.csproj
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
+      
+    - name: Setup .NET build dependencies
+      uses: timheuer/bootstrap-dotnet@v1
       with:
-        fetch-depth: 0
-
+        nuget: 'false'
+        sdk: 'false'
+        msbuild: 'true'
+            
     - name: Write release version
       id: write-version
       shell: pwsh
@@ -43,30 +43,12 @@ jobs:
       with:
         version: ${{ steps.write-version.outputs.VERSION }}
 
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v2
+    - name: Build
+      run: msbuild $env:Project /p:Configuration=$env:Configuration /t:Clean,Build
 
-    - name: Restore the application
-      run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
-      env:
-        Configuration: ${{ matrix.configuration }}
-
-    - name: Build the application
-      run: msbuild $env:Wap_Project_Path /p:Configuration=$env:Configuration /t:Clean,Build
-      env:
-        Configuration: ${{ matrix.configuration }}
-
-    - name: Zip the package
-      env:
-        Configuration: ${{ matrix.configuration }}
-      if: ${{ env.Configuration == 'Debug' }}
-      run: 7z a -tzip "$env:Wap_Project_Directory/SQLAid.zip" "./$env:Wap_Project_Directory/bin/Debug/*"
-
-    - name: Upload build artifacts
-      uses: softprops/action-gh-release@v2
-      env:
-        Configuration: ${{ matrix.configuration }}
-      if: ${{ env.Configuration == 'Debug' }}
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
       with:
-        files: ${{ env.Wap_Project_Directory }}/SQLAid.zip
-        tag_name: ${{ github.ref_name }}
+        name: ${{ github.event.repository.name }}.vsix
+        path: /_built/**/*.vsix
+
