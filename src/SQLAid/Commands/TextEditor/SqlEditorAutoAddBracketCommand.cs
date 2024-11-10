@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.Shell;
 using SQLAid.Integration.DTE;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
 
 namespace SQLAid.Commands.TextEditor
 {
@@ -35,7 +35,7 @@ namespace SQLAid.Commands.TextEditor
         /// </summary>
         /// <param name="sqlAsyncPackage">The SQL Async Package instance</param>
         /// <returns>A task representing the initialization operation</returns>
-        public static async Task<SqlEditorAutoAddBracketCommand> InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
+        public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             if (sqlAsyncPackage == null)
                 throw new ArgumentNullException(nameof(sqlAsyncPackage));
@@ -43,7 +43,7 @@ namespace SQLAid.Commands.TextEditor
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             var events = sqlAsyncPackage.Application.Events as Events2;
-            return new SqlEditorAutoAddBracketCommand(events);
+            var _ = new SqlEditorAutoAddBracketCommand(events);
         }
 
         /// <summary>

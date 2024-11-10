@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.Shell;
 using SQLAid.Extensions;
 using SQLAid.Integration;
+using SQLAid.Integration.Clipboard;
 using SQLAid.Integration.DTE;
 using System;
 using System.ComponentModel.Design;
@@ -13,44 +14,47 @@ namespace SQLAid.Commands.TextEditor
     {
         private readonly IClipboardService _clipboardService;
         private readonly IFrameDocumentView _frameDocumentView;
-        private readonly SqlAsyncPackage _sqlAsyncPackage;
-        private OleMenuCommand _menuCommand;
 
         public PasteAsParenthesesCommand(
-            SqlAsyncPackage sqlAsyncPackage,
             IClipboardService clipboardService,
             IFrameDocumentView frameDocumentView)
         {
-            _sqlAsyncPackage = sqlAsyncPackage ?? throw new ArgumentNullException(nameof(sqlAsyncPackage));
             _clipboardService = clipboardService ?? throw new ArgumentNullException(nameof(clipboardService));
             _frameDocumentView = frameDocumentView ?? throw new ArgumentNullException(nameof(frameDocumentView));
         }
 
-        public async Task InitializeAsync()
+        public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-            var commandService = _sqlAsyncPackage.GetService<IMenuCommandService, OleMenuCommandService>();
-            var cmdId = new CommandID(PackageGuids.guidCommands, PackageIds.PasteAsParenthesesCommand);
-
-            _menuCommand = new OleMenuCommand(ExecuteHandler, cmdId);
-            _menuCommand.BeforeQueryStatus += HandleBeforeQueryStatus;
-
-            commandService.AddCommand(_menuCommand);
+            var command = CreateCommand();
+            var commandService = sqlAsyncPackage.GetService<IMenuCommandService, OleMenuCommandService>();
+            commandService.AddCommand(command);
         }
 
-        private void ExecuteHandler(object sender, EventArgs e)
+        private static OleMenuCommand CreateCommand()
+        {
+            var command = new PasteAsParenthesesCommand(new ClipboardService(), new FrameDocumentView());
+
+            var cmdId = new CommandID(PackageGuids.guidCommands, PackageIds.PasteAsParenthesesCommand);
+            var menuItem = new OleMenuCommand((s, e) => command.Execute(), cmdId);
+            menuItem.BeforeQueryStatus += (s, e) => command.UpdateCommandStatus(s);
+
+            return menuItem;
+        }
+
+        private void Execute()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
             var clipboardContent = _clipboardService.GetFromClipboard();
-            if (string.IsNullOrWhiteSpace(clipboardContent)) return;
+            if (string.IsNullOrWhiteSpace(clipboardContent))
+                return;
 
             var formattedValues = FormatClipboardContent(clipboardContent);
             InsertFormattedValues(formattedValues);
         }
 
-        private void HandleBeforeQueryStatus(object sender, EventArgs e)
+        private void UpdateCommandStatus(object sender)
         {
             if (sender is OleMenuCommand menuCommand)
             {
