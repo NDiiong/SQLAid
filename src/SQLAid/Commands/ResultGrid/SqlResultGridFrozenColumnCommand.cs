@@ -38,7 +38,7 @@ namespace SQLAid.Commands.ResultGrid
 
         private static void OnClick()
         {
-            var currentGridControl = GridControl.GetFocusGridControl();
+            var currentGridControl = GridControl.GetGridControl();
             if (currentGridControl != null)
             {
                 var gridControl = currentGridControl.As<GridControl>();

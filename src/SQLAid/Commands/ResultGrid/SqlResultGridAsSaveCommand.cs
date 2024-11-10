@@ -46,7 +46,7 @@ namespace SQLAid.Commands.ResultGrid
                 var fileService = FileServiceFactory.GetService(extension);
                 if (fileService != null)
                 {
-                    var activeGridControl = GridControl.GetFocusGridControl();
+                    var activeGridControl = GridControl.GetGridControl();
                     using (var gridResultControl = new ResultGridControlAdaptor(activeGridControl))
                     {
                         fileService.WriteFile(saveDialog.FileName, gridResultControl.GridFocusAsDatatable());

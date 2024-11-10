@@ -65,7 +65,7 @@ namespace SQLAid.Commands.TextEditor
             if (string.IsNullOrWhiteSpace(lineInfo.Text))
                 return false;
 
-            var template = _templateProvider.FindTemplate(lineInfo.Text);
+            var template = _templateProvider.GetTemplate(lineInfo.Text);
             if (string.IsNullOrWhiteSpace(template))
                 return false;
 

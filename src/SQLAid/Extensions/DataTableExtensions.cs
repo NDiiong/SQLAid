@@ -10,7 +10,17 @@ namespace SQLAid.Extensions
 {
     public static class DataTableExtensions
     {
-        public static string FormatDataTable(DataTable table)
+        public static string[] GetColumnHeaders(this DataTable dataTable)
+        {
+            var columnHeaders = new string[dataTable.Columns.Count];
+            for (int i = 0; i < dataTable.Columns.Count; i++)
+            {
+                columnHeaders[i] = dataTable.Columns[i].ColumnName;
+            }
+            return columnHeaders;
+        }
+
+        public static string ToTextTable(this DataTable table)
         {
             var builder = new StringBuilder();
 

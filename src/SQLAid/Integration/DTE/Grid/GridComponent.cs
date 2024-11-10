@@ -11,11 +11,11 @@ using System.Windows.Forms;
 
 namespace SQLAid.Integration.DTE.Grid
 {
-    public class ResultGridControl : IResultGridControl
+    public class GridComponent : IGridComponent
     {
         public void ChangeWindowTitle(string text)
         {
-            var gridControl = GetFocusGridControl();
+            var gridControl = GridControl();
 
             var m_rawSP = gridControl.GetField("m_rawSP");
             var frame = m_rawSP.GetField("frame");
@@ -36,6 +36,12 @@ namespace SQLAid.Integration.DTE.Grid
             statusStrip_FontProperty.SetValue(statusStrip, boldFont);
         }
 
+        public string GetQueryText()
+        {
+            var textSpan = ServiceCache.ScriptFactory.InvokeMethod<ITextSpan>("GetSelectedTextSpan");
+            return textSpan.Text;
+        }
+
         public object GetGridControl()
         {
             var scriptFactory = ServiceCache.ScriptFactory.GetType();
@@ -44,15 +50,9 @@ namespace SQLAid.Integration.DTE.Grid
 
             var @object = result.GetType();
             var field = @object.GetField("m_sqlResultsControl", BindingFlags.NonPublic | BindingFlags.Instance);
-            var resultsControl = field.GetValue(result);
+            var resultsControl21 = field.GetValue(result);
 
-            return resultsControl;
-        }
-
-        public string GetQueryText()
-        {
-            var textSpan = ServiceCache.ScriptFactory.InvokeMethod<ITextSpan>("GetSelectedTextSpan");
-            return textSpan.Text;
+            return resultsControl21;
         }
 
         public CollectionBase GetGridContainers()
@@ -63,7 +63,7 @@ namespace SQLAid.Integration.DTE.Grid
             return gridContainers;
         }
 
-        public IGridControl GetFocusGridControl()
+        public IGridControl GridControl()
         {
             object outVsWindowFrame = null;
             ServiceCache.VSMonitorSelection.GetCurrentElementValue((int)VSConstants.VSSELELEMID.SEID_WindowFrame, ref outVsWindowFrame);

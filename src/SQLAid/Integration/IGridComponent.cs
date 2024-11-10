@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace SQLAid.Integration
 {
-    public interface IResultGridControl
+    public interface IGridComponent
     {
         string GetQueryText();
 
@@ -13,7 +13,7 @@ namespace SQLAid.Integration
 
         void ChangeWindowTitle(string text);
 
-        IGridControl GetFocusGridControl();
+        IGridControl GridControl();
     }
 
     public interface IResultMessagesControl

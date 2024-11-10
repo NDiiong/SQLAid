@@ -8,7 +8,7 @@ namespace SQLAid.Templates
 {
     public interface ITemplateProvider
     {
-        string FindTemplate(string triggerText);
+        string GetTemplate(string templateName);
 
         Task<string> GetTemplateAsync(string templateName);
     }
@@ -28,10 +28,10 @@ namespace SQLAid.Templates
             _customTemplatesPath = customTemplatesPath ?? throw new ArgumentNullException(nameof(customTemplatesPath));
         }
 
-        public string FindTemplate(string triggerText)
+        public string GetTemplate(string templateName)
         {
             IEnumerable<(string Name, string Content)> templates = GetAllTemplates();
-            var template = templates.FirstOrDefault(t => t.Name.Equals(triggerText, StringComparison.CurrentCultureIgnoreCase));
+            var template = templates.FirstOrDefault(t => t.Name.Equals(templateName, StringComparison.CurrentCultureIgnoreCase));
             return template.Content ?? string.Empty;
         }
 

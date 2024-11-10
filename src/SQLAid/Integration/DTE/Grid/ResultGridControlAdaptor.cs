@@ -1,5 +1,6 @@
 ﻿using Microsoft.SqlServer.Management.UI.Grid;
 using SQLAid.Extensions;
+using SQLAid.Integration.DTE.Grid.Result;
 using System;
 using System.Collections.Generic;
 using System.Data;

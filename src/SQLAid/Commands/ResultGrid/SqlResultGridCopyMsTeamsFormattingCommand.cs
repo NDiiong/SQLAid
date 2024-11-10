@@ -34,7 +34,7 @@ namespace SQLAid.Commands.ResultGrid
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             var htmlTemplates = File.ReadAllText($"{_sqlAsyncPackage.ExtensionInstallationDirectory}/Templates/Internal/MSTeamMessageChatsFormat.html");
-            var focusGridControl = GridControl.GetFocusGridControl();
+            var focusGridControl = GridControl.GetGridControl();
             using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
             {
                 var datatable = gridResultControl.GridSelectedAsDataTable();

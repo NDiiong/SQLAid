@@ -30,7 +30,7 @@ namespace SQLAid.Commands.ResultGrid
         private static void OnClick()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var activeGridControl = GridControl.GetFocusGridControl();
+            var activeGridControl = GridControl.GetGridControl();
             using (var gridResultControl = new ResultGridControlAdaptor(activeGridControl))
             {
                 var json = FileServiceFactory.JsonService.AsJson(gridResultControl.GridFocusAsDatatable());

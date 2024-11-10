@@ -32,7 +32,7 @@ namespace SQLAid.Commands.ResultGrid
 
         private static void OnClick()
         {
-            var focusGridControl = GridControl.GetFocusGridControl();
+            var focusGridControl = GridControl.GetGridControl();
             using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
             {
                 var schema = gridResultControl.SchemaResultGrid();

@@ -1,6 +1,6 @@
 ﻿using Microsoft.SqlServer.Management.UI.Grid;
 
-namespace SQLAid.Integration.DTE.Grid
+namespace SQLAid.Integration.DTE.Grid.Result
 {
     public class ResultGridSelectedCell
     {
