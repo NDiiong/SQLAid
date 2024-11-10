@@ -42,7 +42,10 @@ jobs:
       uses: secondbounce/assemblyinfo-update@v2
       with:
         version: ${{ steps.write-version.outputs.VERSION }}
-
+    
+    - name: Restore NuGet packages
+      run: nuget restore src/SQLAid.sln -DisableParallelProcessing -Verbosity detaile
+   
     - name: Build
       run: msbuild $env:Project /p:Configuration=$env:Configuration /t:Clean,Build
 
