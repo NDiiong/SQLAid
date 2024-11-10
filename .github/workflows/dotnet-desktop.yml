@@ -1,0 +1,72 @@
+name: .NET Desktop
+
+on:
+  release:
+    types: [created]
+    branches:
+      - "main"
+
+jobs:
+
+  build:
+
+    strategy:
+      matrix:
+        configuration: [Debug]
+    runs-on: windows-2019
+    env:
+      Solution_Name: "src/SQLAid.sln"
+      Wap_Project_Directory: SQLAid
+      Wap_Project_Path: src/SQLAid/SQLAid.csproj
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Write release version
+      id: write-version
+      shell: pwsh
+      run: |
+        $VERSION = "${{ github.ref_name }}"
+        $VERSION = $VERSION.Substring(1)
+        if ($VERSION -notmatch '^\d+\.\d+\.\d+\.\d+$') {
+          $VERSION += ".0"
+        }
+        echo "VERSION=$VERSION"
+        echo "::set-output name=VERSION::$VERSION"
+
+    - name: Set version in AssemblyInfo.cs
+      id: set-assembly-version
+      uses: secondbounce/assemblyinfo-update@v2
+      with:
+        version: ${{ steps.write-version.outputs.VERSION }}
+
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Restore the application
+      run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+      env:
+        Configuration: ${{ matrix.configuration }}
+
+    - name: Build the application
+      run: msbuild $env:Wap_Project_Path /p:Configuration=$env:Configuration /t:Clean,Build
+      env:
+        Configuration: ${{ matrix.configuration }}
+
+    - name: Zip the package
+      env:
+        Configuration: ${{ matrix.configuration }}
+      if: ${{ env.Configuration == 'Debug' }}
+      run: 7z a -tzip "$env:Wap_Project_Directory/SQLAid.zip" "./$env:Wap_Project_Directory/bin/Debug/*"
+
+    - name: Upload build artifacts
+      uses: softprops/action-gh-release@v2
+      env:
+        Configuration: ${{ matrix.configuration }}
+      if: ${{ env.Configuration == 'Debug' }}
+      with:
+        files: ${{ env.Wap_Project_Directory }}/SQLAid.zip
+        tag_name: ${{ github.ref_name }}
