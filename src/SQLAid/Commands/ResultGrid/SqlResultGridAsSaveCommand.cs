@@ -33,24 +33,19 @@ namespace SQLAid.Commands.ResultGrid
         private static void SaveGridResult(string extension, string title, string filter, string initialDirectory)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var saveDialog = new SaveFileDialog
+            using (var saveDialog = new SaveFileDialog { FileName = "", Title = title, Filter = filter, InitialDirectory = initialDirectory, })
             {
-                FileName = "",
-                Title = title,
-                Filter = filter,
-                InitialDirectory = initialDirectory,
-            };
-
-            if (saveDialog.ShowDialog() == DialogResult.OK)
-            {
-                var fileService = FileServiceFactory.GetService(extension);
-                if (fileService != null)
+                if (saveDialog.ShowDialog() == DialogResult.OK)
                 {
-                    var activeGridControl = GridControl.GetFocusGridControl();
-                    using (var gridResultControl = new ResultGridControlAdaptor(activeGridControl))
+                    var fileService = FileServiceFactory.GetService(extension);
+                    if (fileService != null)
                     {
-                        fileService.WriteFile(saveDialog.FileName, gridResultControl.GridFocusAsDatatable());
-                        ServiceCache.ExtensibilityModel.StatusBar.Text = "Succeeded";
+                        var activeGridControl = GridControl.GetFocusGridControl();
+                        using (var gridResultControl = new ResultGridControlAdaptor(activeGridControl))
+                        {
+                            fileService.WriteFile(saveDialog.FileName, gridResultControl.GridFocusAsDatatable());
+                            ServiceCache.ExtensibilityModel.StatusBar.Text = "Succeeded";
+                        }
                     }
                 }
             }
