@@ -31,7 +31,7 @@ namespace SQLAid.Commands.ResultGrid
             var focusGridControl = GridControl.GetFocusGridControl();
             using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
             {
-                var dataTable = gridResultControl.SchemaResultGrid();
+                var dataTable = gridResultControl.GridSelectedAsDataTable();
                 if (dataTable != null && dataTable.Columns != null && dataTable.Columns.Count == 1)
                     _clipboardService.Set(dataTable.Columns[0].ColumnName);
             }
