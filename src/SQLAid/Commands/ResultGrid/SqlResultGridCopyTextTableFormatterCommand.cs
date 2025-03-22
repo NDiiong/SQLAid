@@ -33,7 +33,7 @@ namespace SQLAid.Commands.ResultGrid
             var focusGridControl = GridControl.GetFocusGridControl();
             using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
             {
-                var datatable = gridResultControl.GridSelectedAsDataTable();
+                var datatable = gridResultControl.GetSelectedCellsAsDataTable();
                 var content = datatable.GetStringRepresentation();
                 _clipboardService.Set(content, TextDataFormat.Text);
             }

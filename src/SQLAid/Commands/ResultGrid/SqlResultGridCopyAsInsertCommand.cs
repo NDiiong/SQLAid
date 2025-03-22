@@ -37,7 +37,7 @@ namespace SQLAid.Commands.ResultGrid
             var focusGridControl = GridControl.GetFocusGridControl();
             using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
             {
-                var gridResultSelected = gridResultControl.GridSelectedAsQuerySql();
+                var gridResultSelected = gridResultControl.GetSelectedCellsAsSqlQuery();
                 var columnHeaders = gridResultSelected.ElementAt(0);
                 var contentRows = gridResultSelected.Skip(1);
 

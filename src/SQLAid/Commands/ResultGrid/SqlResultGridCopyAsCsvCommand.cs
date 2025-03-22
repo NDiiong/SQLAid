@@ -32,7 +32,7 @@ namespace SQLAid.Commands.ResultGrid
             var activeGridControl = GridControl.GetFocusGridControl();
             using (var gridResultControl = new ResultGridControlAdaptor(activeGridControl))
             {
-                var datatable = gridResultControl.GridFocusAsDatatable();
+                var datatable = gridResultControl.GetDataTable();
                 var content = datatable.ToCsv();
 
                 _clipboardService.Set(content);

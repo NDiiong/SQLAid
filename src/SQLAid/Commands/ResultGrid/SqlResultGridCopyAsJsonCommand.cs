@@ -33,7 +33,7 @@ namespace SQLAid.Commands.ResultGrid
             var activeGridControl = GridControl.GetFocusGridControl();
             using (var gridResultControl = new ResultGridControlAdaptor(activeGridControl))
             {
-                var json = FileServiceFactory.JsonService.AsJson(gridResultControl.GridFocusAsDatatable());
+                var json = FileServiceFactory.JsonService.AsJson(gridResultControl.GetDataTable());
                 if (!string.IsNullOrEmpty(json))
                 {
                     _clipboardService.Set(json);

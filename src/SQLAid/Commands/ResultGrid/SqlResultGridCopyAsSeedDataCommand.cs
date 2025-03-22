@@ -35,7 +35,7 @@ namespace SQLAid.Commands.ResultGrid
             var focusGridControl = GridControl.GetFocusGridControl();
             using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
             {
-                var dataTable = gridResultControl.GridFocusAsDatatable();
+                var dataTable = gridResultControl.GetDataTable();
                 var tableNameForm = new SeedingDataForm(_clipboardService, templates, dataTable);
                 tableNameForm.ShowDialog();
             }

@@ -10,305 +10,306 @@ using System.Text;
 
 namespace SQLAid.Integration.DTE.Grid
 {
-    public class ResultGridControlAdaptor : IDisposable
+    /// <summary>
+    /// Defines methods for converting grid cell values to typed and SQL formats
+    /// </summary>
+    public interface IGridCellValueConverter
     {
-        public bool IsDisposed { get; private set; }
-        public long RowCount { get; private set; }
-        public long ColumnCount { get; private set; }
+        object ConvertToTypedValue(string cellText, Type targetType);
 
-        private readonly IGridControl _gridControl;
+        object ConvertToSqlValue(string cellText, Type columnType);
+    }
 
-        public ResultGridControlAdaptor(IGridControl gridControl)
+    /// <summary>
+    /// Default implementation for converting grid cell values
+    /// </summary>
+    public class DefaultGridCellValueConverter : IGridCellValueConverter
+    {
+        private static Dictionary<Type, Func<string, object>> TypeConverters = new Dictionary<Type, Func<string, object>>
         {
-            _gridControl = gridControl ?? throw new ArgumentNullException(nameof(gridControl));
-            ColumnCount = gridControl.ColumnsNumber;
-            RowCount = gridControl?.GridStorage?.NumRows() ?? 0;
+            [typeof(bool)] = text => text != "0",
+            [typeof(Guid)] = text => new Guid(text),
+            [typeof(DateTime)] = text => DateTime.Parse(text),
+            [typeof(DateTimeOffset)] = text => DateTime.Parse(text),
+            [typeof(byte[])] = text => Encoding.UTF8.GetBytes(text)
+        };
+
+        private static readonly HashSet<Type> NumericTypes = new HashSet<Type>
+        {
+            typeof(int),
+            typeof(decimal),
+            typeof(long),
+            typeof(double),
+            typeof(float),
+            typeof(byte)
+        };
+
+        private static readonly HashSet<Type> QuotedTypes = new HashSet<Type>
+        {
+            typeof(Guid),
+            typeof(DateTime),
+            typeof(DateTimeOffset),
+            typeof(byte[])
+        };
+
+        public object ConvertToTypedValue(string cellText, Type targetType)
+        {
+            if (string.IsNullOrEmpty(cellText) || cellText.Equals("NULL", StringComparison.OrdinalIgnoreCase))
+                return null;
+
+            return TypeConverters.TryGetValue(targetType, out var converter)
+                ? converter(cellText)
+                : Convert.ChangeType(cellText, targetType, CultureInfo.InvariantCulture);
         }
 
-        public DataTable GridFocusAsDatatable()
+        public object ConvertToSqlValue(string cellText, Type columnType)
         {
-            // DEFINE COLUMN
-            var datatable = SchemaResultGrid();
-
-            // DEFINE ROWS
-            for (var nRowIndex = 0L; nRowIndex < RowCount; ++nRowIndex)
-            {
-                var rows = new List<object>();
-                for (var nColIndex = 1; nColIndex < ColumnCount; nColIndex++)
-                {
-                    var cellText = _gridControl.GridStorage.GetCellDataAsString(nRowIndex, nColIndex);
-
-                    if (cellText == "NULL")
-                        rows.Add(null);
-                    else
-                    {
-                        var column = datatable.Columns[nColIndex - 1];
-
-                        if (column.DataType == typeof(bool))
-                            cellText = cellText == "0" ? "False" : "True";
-
-                        if (column.DataType == typeof(Guid))
-                            rows.Add(new Guid(cellText));
-                        else if (column.DataType == typeof(DateTime) || column.DataType == typeof(DateTimeOffset))
-                            rows.Add(DateTime.Parse(cellText));
-                        else if (column.DataType == typeof(byte[]))
-                            rows.Add(Encoding.UTF8.GetBytes(cellText));
-                        else
-                        {
-                            var typedValue = Convert.ChangeType(cellText, column.DataType, CultureInfo.InvariantCulture);
-                            rows.Add(typedValue);
-                        }
-                    }
-                }
-
-                datatable.Rows.Add(rows.ToArray());
-            }
-
-            datatable.AcceptChanges();
-            return datatable;
-        }
-
-        public DataTable SchemaResultGrid()
-        {
-            var datatable = new DataTable();
-            var schemaTable = _gridControl.GridStorage.GetField<DataTable>("m_schemaTable");
-            for (var column = 1; column < ColumnCount; column++)
-            {
-                var columnType = schemaTable.Rows[column - 1][12].As<Type>();
-                var columnText = GetColumnName(column);
-                datatable.Columns.Add(columnText, columnType);
-            }
-            return datatable;
-        }
-
-        public object GetCellValueAsString(long nRowIndex, int nColIndex)
-        {
-            var cellText = _gridControl.GridStorage.GetCellDataAsString(nRowIndex, nColIndex) ?? "";
-
-            if (cellText.Equals("NULL", StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrEmpty(cellText) || cellText.Equals("NULL", StringComparison.OrdinalIgnoreCase))
                 return cellText;
-
-            var schema = _gridControl.GridStorage.GetField<DataTable>("m_schemaTable");
-            var columnType = schema.Rows[nColIndex - 1][12].As<Type>();
 
             if (columnType == typeof(bool))
                 return cellText == "1" ? 1 : 0;
 
-            if (columnType == typeof(Guid))
-                return string.Format("'{0}'", cellText);
-
-            if (columnType == typeof(int) || columnType == typeof(decimal) || columnType == typeof(long) || columnType == typeof(double) || columnType == typeof(float) || columnType == typeof(byte))
+            if (NumericTypes.Contains(columnType))
                 return Convert.ChangeType(cellText, columnType, CultureInfo.InvariantCulture);
 
-            if (columnType == typeof(Guid) || columnType == typeof(DateTime) || columnType == typeof(DateTimeOffset) || columnType == typeof(byte[]))
-            {
-                columnType = typeof(string);
-                var @values = Convert.ChangeType(cellText, columnType, CultureInfo.InvariantCulture);
-                return string.Format("N'{0}'", @values);
-            }
-
-            return string.Format("N'{0}'", cellText.Replace("'", "''"));
+            var stringValue = Convert.ChangeType(cellText, typeof(string), CultureInfo.InvariantCulture);
+            return QuotedTypes.Contains(columnType)
+                ? $"N'{stringValue}'"
+                : $"N'{EscapeSqlString(stringValue.ToString())}'";
         }
 
-        public IEnumerable<(Type, string)> GetColumnTypes()
+        private static string EscapeSqlString(string input) => input.Replace("'", "''");
+    }
+
+    /// <summary>
+    /// Represents column metadata
+    /// </summary>
+    public class GridColumnInfo
+    {
+        public string Name { get; }
+        public Type DataType { get; }
+
+        public GridColumnInfo(string name, Type dataType)
         {
-            var result = new List<(Type, string)>();
+            Name = name;
+            DataType = dataType;
+        }
+    }
+
+    /// <summary>
+    /// Provides data access and conversion for grid control
+    /// </summary>
+    public class GridDataProvider
+    {
+        private readonly IGridControl _gridControl;
+        private readonly IGridCellValueConverter _valueConverter;
+        private readonly DataTable _schemaTable;
+
+        public GridDataProvider(IGridControl gridControl, IGridCellValueConverter valueConverter)
+        {
+            _gridControl = gridControl ?? throw new ArgumentNullException(nameof(gridControl));
+            _valueConverter = valueConverter ?? throw new ArgumentNullException(nameof(valueConverter));
+            _schemaTable = _gridControl.GridStorage.GetField<DataTable>("m_schemaTable");
+        }
+
+        public string GetCellText(long rowIndex, int columnIndex) =>
+            _gridControl.GridStorage.GetCellDataAsString(rowIndex, columnIndex) ?? string.Empty;
+
+        public object GetTypedCellValue(long rowIndex, int columnIndex) =>
+            _valueConverter.ConvertToTypedValue(GetCellText(rowIndex, columnIndex), GetColumnType(columnIndex));
+
+        public object GetSqlCellValue(long rowIndex, int columnIndex) =>
+            _valueConverter.ConvertToSqlValue(GetCellText(rowIndex, columnIndex), GetColumnType(columnIndex));
+
+        public GridColumnInfo GetColumnInfo(int columnIndex)
+        {
+            if (columnIndex <= 0 || columnIndex >= _schemaTable.Rows.Count + 1)
+                return new GridColumnInfo(string.Empty, typeof(string));
+
+            var columnType = _schemaTable.Rows[columnIndex - 1][12].As<Type>();
+            _gridControl.GetHeaderInfo(columnIndex, out var columnName, out Bitmap _);
+            return new GridColumnInfo(columnName, columnType);
+        }
+
+        public Type GetColumnType(int columnIndex) =>
+            (columnIndex <= 0 || columnIndex >= _schemaTable.Rows.Count + 1)
+                ? typeof(string)
+                : _schemaTable.Rows[columnIndex - 1][12].As<Type>();
+
+        public string CleanColumnName(string rawName) =>
+            !rawName.StartsWith("<") ? rawName : ExtractColumnName(rawName);
+
+        private static string ExtractColumnName(string rawName)
+        {
+            try
+            {
+                var parts = rawName.Split('(');
+                return parts.Length > 1 ? parts[1].TrimEnd(")>".ToCharArray()) : rawName;
+            }
+            catch
+            {
+                return rawName;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Adapts grid control for data operations
+    /// </summary>
+    public class ResultGridControlAdaptor : IDisposable
+    {
+        private readonly IGridControl _gridControl;
+        private readonly GridDataProvider _dataProvider;
+        private bool _isDisposed;
+
+        public long RowCount => _gridControl?.GridStorage?.NumRows() ?? 0;
+        public long ColumnCount => _gridControl.ColumnsNumber;
+
+        public ResultGridControlAdaptor(IGridControl gridControl)
+        {
+            _gridControl = gridControl ?? throw new ArgumentNullException(nameof(gridControl));
+            _dataProvider = new GridDataProvider(_gridControl, new DefaultGridCellValueConverter());
+        }
+
+        public DataTable GetSchemaTable() =>
+            CreateDataTableFromColumns(1, ColumnCount, col => _dataProvider.GetColumnInfo(col));
+
+        public DataTable GetDataTable()
+        {
+            var dataTable = GetSchemaTable();
+            PopulateDataTable(dataTable);
+            return dataTable;
+        }
+
+        public string GetColumnName(int columnIndex) => _dataProvider.GetColumnInfo(columnIndex).Name;
+
+        public Dictionary<string, List<object>> GetSelectedCellsAsDictionary()
+        {
+            var result = new Dictionary<string, List<object>>();
+            var gridHeader = _gridControl.GetField<GridHeader>("m_gridHeader");
+
+            foreach (BlockOfCells cell in _gridControl.SelectedCells)
+            {
+                ProcessSelectedBlock(cell, result, gridHeader);
+            }
 
             return result;
         }
 
-        public string GetColumnName(int nColIndex)
+        public IEnumerable<string> GetSelectedCellsAsSqlQuery()
         {
-            if (nColIndex > 0 && nColIndex < ColumnCount)
+            var selectedData = GetSelectedCellsAsDictionary();
+            var columnNames = selectedData.Keys.Select(k => k.StartsWith("[") ? k : $"[{k}]");
+            var columnJoins = string.Join(", ", columnNames);
+            var rowData = selectedData.Values.ZipIt(values => string.Join(", ", values));
+
+            return new[] { columnJoins }.Concat(rowData);
+        }
+
+        public DataTable GetSelectedCellsAsDataTable()
+        {
+            var dataTable = new DataTable();
+            var selectedCells = _gridControl.SelectedCells.Cast<BlockOfCells>().ToList();
+
+            if (selectedCells.Count == 0)
+                return dataTable;
+
+            AddColumnsFromSelection(dataTable, selectedCells);
+            AddRowsFromSelection(dataTable, selectedCells);
+            return dataTable;
+        }
+
+        public void SetColumnBackgroundRange(int startColumn, int endColumn, Color backgroundColor)
+        {
+            var columns = _gridControl.GetBaseTypeField<GridColumnCollection>("m_columns");
+            for (int i = startColumn; i < endColumn && i < columns.Count; i++)
             {
-                _gridControl.GetHeaderInfo(nColIndex, out var columnName, out Bitmap _);
-                return columnName;
+                if (i >= 0)
+                    columns[i].BackgroundBrush.Color = backgroundColor;
             }
-
-            return string.Empty;
-        }
-
-        public (Type, string) GetColumnType(int nColIndex)
-        {
-            if (nColIndex > 0 && nColIndex < ColumnCount)
-            {
-                var schema = _gridControl.GridStorage.GetField<DataTable>("m_schemaTable");
-                var columnType = schema.Rows[nColIndex - 1][12].As<Type>();
-                var columnText = GetColumnName(nColIndex);
-                return (columnType, columnText);
-            }
-
-            return (default, string.Empty);
-        }
-
-        public string[] GetBracketColumns()
-        {
-            var columnHeaders = new string[ColumnCount - 1];
-            for (var colIndex = 1; colIndex < ColumnCount; colIndex++)
-            {
-                var columnName = GetColumnName(colIndex);
-                if (columnHeaders.Contains("[" + columnName + "]"))
-                    columnName = columnName + "_" + colIndex.ToString();
-
-                columnHeaders[colIndex - 1] = !columnName.StartsWith("[") ? "[" + columnName + "]" : columnName;
-            }
-
-            return columnHeaders;
-        }
-
-        public IEnumerable<IEnumerable<object>> GridAsQuerySql()
-        {
-            var rows = new List<List<object>>();
-            for (var nRowIndex = 0L; nRowIndex < RowCount; ++nRowIndex)
-            {
-                var columns = new List<object>();
-                for (var nColIndex = 1; nColIndex < ColumnCount; nColIndex++)
-                {
-                    var cellText = GetCellValueAsString(nRowIndex, nColIndex);
-                    columns.Add(cellText);
-                }
-
-                rows.Add(columns);
-            }
-
-            return rows;
-        }
-
-        public IEnumerable<string> GridSelectedAsQuerySql()
-        {
-            var resultGridSelected = GridSelectedAsDictionary();
-            var columnJoins = string.Join(", ", resultGridSelected.Select(q => q.Key.StartsWith("[") ? q.Key : "[" + q.Key + "]"));
-            var rowJoins = resultGridSelected.Select(q => q.Value).ZipIt(xs => string.Join(", ", xs));
-            var linkedList = new LinkedList<string>(rowJoins);
-            linkedList.AddFirst(columnJoins);
-            return linkedList;
-        }
-
-        public DataTable GridSelectedAsDataTable()
-        {
-            var datatable = new DataTable();
-
-            // COLUMNS
-            var schemaTable = _gridControl.GridStorage.GetField<DataTable>("m_schemaTable");
-            foreach (BlockOfCells cell in _gridControl.SelectedCells)
-            {
-                for (var col = cell.X; col <= cell.Right; col++)
-                {
-                    var columnType = schemaTable.Rows[col - 1][12].As<Type>();
-                    var columnText = GetColumnName(col);
-                    datatable.Columns.Add(columnText, columnType);
-                }
-            }
-
-            // ROWS
-            foreach (BlockOfCells cell in _gridControl.SelectedCells)
-            {
-                for (var row = cell.Y; row <= cell.Bottom; row++)
-                {
-                    var rows = new List<object>();
-                    var nColIndex = 0;
-                    for (var col = cell.X; col <= cell.Right; col++)
-                    {
-                        var cellText = _gridControl.GridStorage.GetCellDataAsString(row, col);
-
-                        if (cellText == "NULL")
-                            rows.Add(null);
-                        else
-                        {
-                            var column = datatable.Columns[nColIndex];
-                            if (column.DataType == typeof(bool))
-                                cellText = cellText == "0" ? "False" : "True";
-
-                            if (column.DataType == typeof(Guid))
-                                rows.Add(new Guid(cellText));
-                            else if (column.DataType == typeof(DateTime) || column.DataType == typeof(DateTimeOffset))
-                                rows.Add(DateTime.Parse(cellText));
-                            else if (column.DataType == typeof(byte[]))
-                                rows.Add(Encoding.UTF8.GetBytes(cellText));
-                            else
-                            {
-                                var typedValue = Convert.ChangeType(cellText, column.DataType, CultureInfo.InvariantCulture);
-                                rows.Add(typedValue);
-                            }
-                        }
-
-                        nColIndex++;
-                    }
-                    datatable.Rows.Add(rows.ToArray());
-                }
-            }
-
-            datatable.AcceptChanges();
-            return datatable;
-        }
-
-        public Dictionary<string, List<object>> GridSelectedAsDictionary()
-        {
-            var gridHeader = _gridControl.GetField<GridHeader>("m_gridHeader");
-            var gridResult = new Dictionary<string, List<object>>();
-            foreach (BlockOfCells cell in _gridControl.SelectedCells)
-            {
-                for (var row = cell.Y; row <= cell.Bottom; row++)
-                {
-                    for (var col = cell.X; col <= cell.Right; col++)
-                    {
-                        var column = gridHeader[col].Text.Trim();
-                        if (column.StartsWith("<"))
-                        {
-                            try
-                            {
-                                var cols = column.Split('(');
-                                if (cols.Length > 1)
-                                    column = cols[1].TrimEnd(")>".ToArray());
-                            }
-                            catch { }
-                        }
-
-                        if (!gridResult.ContainsKey(column))
-                            gridResult.Add(column, new List<object>());
-
-                        var cellText = GetCellValueAsString(row, col);
-                        gridResult[column].Add(cellText);
-                    }
-                }
-            }
-
-            return gridResult;
-        }
-
-        public void SetColumnBackground(int columnIndex, Color backgroundColor)
-        {
-            var columnsCollection = _gridControl.GetBaseTypeField<GridColumnCollection>("m_columns");
-            columnsCollection[columnIndex].BackgroundBrush.Color = backgroundColor;
-        }
-
-        public void SetRangeColumnBackground(int beginColumn, int endColumn, Color backgroundColor)
-        {
-            var columnsCollection = _gridControl.GetBaseTypeField<GridColumnCollection>("m_columns");
-            for (var i = beginColumn; i < endColumn; i++)
-            {
-                columnsCollection[i].BackgroundBrush.Color = backgroundColor;
-            }
-        }
-
-        public IEnumerable<ResultGridSelectedCell> GetSelectedCells()
-        {
-            return _gridControl.SelectedCells
-                .Cast<BlockOfCells>()
-                .Select((Func<BlockOfCells, ResultGridSelectedCell>)((item) => item));
         }
 
         public void Dispose()
         {
-            if (IsDisposed)
-                return;
+            if (_isDisposed) return;
+            _isDisposed = true;
+            GC.SuppressFinalize(this);
+        }
 
-            GC.ReRegisterForFinalize(ColumnCount);
-            GC.ReRegisterForFinalize(RowCount);
-            GC.ReRegisterForFinalize(_gridControl);
-            GC.ReRegisterForFinalize(this);
+        private DataTable CreateDataTableFromColumns(int start, long end, Func<int, GridColumnInfo> columnInfoProvider)
+        {
+            var dataTable = new DataTable();
+            for (int column = start; column < end; column++)
+            {
+                var info = columnInfoProvider(column);
+                dataTable.Columns.Add(info.Name, info.DataType);
+            }
+            return dataTable;
+        }
 
-            IsDisposed = true;
+        private void PopulateDataTable(DataTable dataTable)
+        {
+            for (long row = 0; row < RowCount; row++)
+            {
+                var values = new object[dataTable.Columns.Count];
+                for (int col = 0; col < dataTable.Columns.Count; col++)
+                {
+                    values[col] = _dataProvider.GetTypedCellValue(row, col + 1);
+                }
+                dataTable.Rows.Add(values);
+            }
+            dataTable.AcceptChanges();
+        }
+
+        private void ProcessSelectedBlock(BlockOfCells cell, Dictionary<string, List<object>> result, GridHeader gridHeader)
+        {
+            for (var row = cell.Y; row <= cell.Bottom; row++)
+            {
+                for (var col = cell.X; col <= cell.Right; col++)
+                {
+                    var columnName = _dataProvider.CleanColumnName(gridHeader[col].Text.Trim());
+                    result.Add(columnName, new List<object>());
+                    result[columnName].Add(_dataProvider.GetSqlCellValue(row, col));
+                }
+            }
+        }
+
+        private void AddColumnsFromSelection(DataTable dataTable, List<BlockOfCells> selectedCells)
+        {
+            foreach (var cell in selectedCells)
+            {
+                for (var col = cell.X; col <= cell.Right; col++)
+                {
+                    var info = _dataProvider.GetColumnInfo(col);
+                    dataTable.Columns.Add(info.Name, info.DataType);
+                }
+            }
+        }
+
+        private void AddRowsFromSelection(DataTable dataTable, List<BlockOfCells> selectedCells)
+        {
+            foreach (var cell in selectedCells)
+            {
+                for (var row = cell.Y; row <= cell.Bottom; row++)
+                {
+                    var values = new List<object>();
+                    for (var col = cell.X; col <= cell.Right; col++)
+                    {
+                        values.Add(GetTypedValueForColumn(dataTable, values.Count, row, col));
+                    }
+                    dataTable.Rows.Add(values.ToArray());
+                }
+            }
+            dataTable.AcceptChanges();
+        }
+
+        private object GetTypedValueForColumn(DataTable dataTable, int columnIndex, long row, int column)
+        {
+            var value = _dataProvider.GetTypedCellValue(row, column);
+            return dataTable.Columns[columnIndex].DataType == typeof(bool) && value != null
+                ? (bool)value
+                : value;
         }
     }
 }

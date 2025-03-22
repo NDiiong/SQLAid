@@ -35,7 +35,7 @@ namespace SQLAid.Commands.ResultGrid
             var focusGridControl = GridControl.GetFocusGridControl();
             using (var gridResultControl = new ResultGridControlAdaptor(focusGridControl))
             {
-                var schema = gridResultControl.SchemaResultGrid();
+                var schema = gridResultControl.GetSchemaTable();
                 var modelCode = GenerateCSharpModelCode(schema);
                 _clipboardService.Set(modelCode);
             }

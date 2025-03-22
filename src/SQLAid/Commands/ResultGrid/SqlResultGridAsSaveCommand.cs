@@ -43,7 +43,7 @@ namespace SQLAid.Commands.ResultGrid
                         var activeGridControl = GridControl.GetFocusGridControl();
                         using (var gridResultControl = new ResultGridControlAdaptor(activeGridControl))
                         {
-                            fileService.WriteFile(saveDialog.FileName, gridResultControl.GridFocusAsDatatable());
+                            fileService.WriteFile(saveDialog.FileName, gridResultControl.GetDataTable());
                             ServiceCache.ExtensibilityModel.StatusBar.Text = "Succeeded";
                         }
                     }
