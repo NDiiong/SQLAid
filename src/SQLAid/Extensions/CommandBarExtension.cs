@@ -62,5 +62,14 @@ namespace SQLAid.Extensions
             commandBarButton.Click += (CommandBarButton _, ref bool __) => Func.Run(onclick, message: $"Command{caption}");
         }
 
+        public static void AddButton(this CommandBar CommandBar, string caption, bool createNewGroup, Action onclick)
+        {
+            var commandBarButton = CommandBar.Controls.Add(MsoControlType.msoControlButton, Type.Missing, Type.Missing, Type.Missing, true)
+                   .Visible(true).Caption(caption)
+                   .As<CommandBarButton>();
+
+            commandBarButton.BeginGroup = createNewGroup;
+            commandBarButton.Click += (CommandBarButton _, ref bool __) => Func.Run(onclick, message: $"Command{caption}");
+        }
     }
 }

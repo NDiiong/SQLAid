@@ -22,7 +22,7 @@ namespace SQLAid.Commands.ResultGrid
         public static async Task InitializeAsync(SqlAsyncPackage sqlAsyncPackage)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            GridCommandBar.AddButton("Copy Column Name", OnClick);
+            GridCommandBar.AddButton("Copy Column Name", createNewGroup: true, OnClick);
         }
 
         private static void OnClick()
