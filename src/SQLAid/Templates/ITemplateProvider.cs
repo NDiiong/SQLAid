@@ -47,7 +47,7 @@ namespace SQLAid.Templates
             if (!Directory.Exists(directory))
                 return Enumerable.Empty<(string, string)>();
 
-            return Directory.GetFiles(directory).Select(file => (Path.GetFileNameWithoutExtension(file), File.ReadAllText(file)));
+            return Directory.GetFiles(directory, "*.sql", SearchOption.AllDirectories).Select(file => (Path.GetFileNameWithoutExtension(file), File.ReadAllText(file)));
         }
 
         public Task<string> GetTemplateAsync(string templateName)
