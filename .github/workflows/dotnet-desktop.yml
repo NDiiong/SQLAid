@@ -15,40 +15,40 @@ jobs:
     runs-on: windows-2019
     env:
       Project: src/SQLAid.sln
-      
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      
-    - name: Install Visual Studio Build Tools
-      uses: microsoft/setup-msbuild@v1
-      
-    - name: Setup .NET build dependencies
-      uses: timheuer/bootstrap-dotnet@v1
-      with:
-        nuget: 'false'
-        sdk: 'false'
-        msbuild: 'true'
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Restore NuGet packages
-      run: nuget restore src/SQLAid.sln
-   
-    - name: Build
-      run: msbuild src/SQLAid.sln /p:Configuration=${{ matrix.configuration }}
+      - name: Install Visual Studio Build Tools
+        uses: microsoft/setup-msbuild@v1
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ github.event.repository.name }}-${{ matrix.configuration }}.vsix
-        path: src/SQLAid/bin/**/*.vsix
+      - name: Setup .NET build dependencies
+        uses: timheuer/bootstrap-dotnet@v1
+        with:
+          nuget: "false"
+          sdk: "false"
+          msbuild: "true"
 
-    - name: Upload to GitHub Release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: src/SQLAid/bin/**/*.vsix
-        tag_name: ${{ github.ref }}
-        name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Restore NuGet packages
+        run: nuget restore src/SQLAid.sln
+
+      - name: Build
+        run: msbuild src/SQLAid.sln /p:Configuration=${{ matrix.configuration }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.repository.name }}-${{ matrix.configuration }}.vsix
+          path: src/SQLAid/bin/**/*.vsix
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: src/SQLAid/bin/**/*.vsix
+          tag_name: ${{ github.ref }}
+          name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
