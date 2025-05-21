@@ -11,7 +11,7 @@ jobs:
     name: Build
     runs-on: windows-2019
     env:
-      Configuration: Release
+      Configuration: SSMS19
       Project: src/SQLAid.sln
       
 
@@ -51,7 +51,7 @@ jobs:
       run: msbuild $env:Project /p:Configuration=$env:Configuration /t:Clean,Build
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ github.event.repository.name }}.vsix
         path: /_built/**/*.vsix
