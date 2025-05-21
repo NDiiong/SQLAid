@@ -28,24 +28,6 @@ jobs:
         nuget: 'false'
         sdk: 'false'
         msbuild: 'true'
-            
-    - name: Write release version
-      id: write-version
-      shell: pwsh
-      run: |
-        $VERSION = "${{ github.ref_name }}"
-        $VERSION = $VERSION.Substring(1)
-        if ($VERSION -notmatch '^\d+\.\d+\.\d+\.\d+$') {
-          $VERSION += ".0"
-        }
-        echo "VERSION=$VERSION"
-        echo "::set-output name=VERSION::$VERSION"
-
-    - name: Set version in AssemblyInfo.cs
-      id: set-assembly-version
-      uses: secondbounce/assemblyinfo-update@v2
-      with:
-        version: ${{ steps.write-version.outputs.VERSION }}
     
     - name: Restore NuGet packages
       run: nuget restore src/SQLAid.sln
