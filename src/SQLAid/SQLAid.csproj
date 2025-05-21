@@ -28,14 +28,14 @@
     <OutputPath>bin\SSMS19\</OutputPath>
     <DefineConstants>TRACE;DEBUG;SSMS19DLL</DefineConstants>
     <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CopyVsixExtensionFiles>True</CopyVsixExtensionFiles>
+    <CopyVsixExtensionFiles>False</CopyVsixExtensionFiles>
     <CopyVsixExtensionLocation>C:\Program Files (x86)\Microsoft SQL Server Management Studio 19\Common7\IDE\Extensions\SQLAid</CopyVsixExtensionLocation>
     <Optimize>false</Optimize>
-    <DeployExtension>True</DeployExtension>
-    <CreateVsixContainer>True</CreateVsixContainer>
+    <DeployExtension>False</DeployExtension>
+    <CreateVsixContainer>False</CreateVsixContainer>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SSMS20|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
