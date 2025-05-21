@@ -8,10 +8,12 @@ on:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        configuration: [SSMS18, SSMS19, SSMS20]
     name: Build
     runs-on: windows-2019
     env:
-      Configuration: SSMS19
       Project: src/SQLAid.sln
       
     steps:
@@ -27,21 +29,26 @@ jobs:
         nuget: 'false'
         sdk: 'false'
         msbuild: 'true'
-    
+
     - name: Restore NuGet packages
       run: nuget restore src/SQLAid.sln
    
     - name: Build
-      run: msbuild src/SQLAid.sln /p:Configuration=$env:Configuration
+      run: msbuild src/SQLAid.sln /p:Configuration=${{ matrix.configuration }}
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ github.event.repository.name }}.vsix
+        name: ${{ github.event.repository.name }}-${{ matrix.configuration }}.vsix
         path: src/SQLAid/bin/**/*.vsix
 
     - name: Upload to GitHub Release
       uses: softprops/action-gh-release@v1
       with:
         files: src/SQLAid/bin/**/*.vsix
-
+        tag_name: ${{ github.ref }}
+        name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
