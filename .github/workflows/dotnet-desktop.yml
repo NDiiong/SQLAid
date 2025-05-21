@@ -48,10 +48,10 @@ jobs:
         version: ${{ steps.write-version.outputs.VERSION }}
     
     - name: Restore NuGet packages
-      run: nuget restore src/SQLAid.sln -DisableParallelProcessing -Verbosity detaile
+      run: nuget restore src/SQLAid.sln
    
     - name: Build
-      run: msbuild $env:Project /p:Configuration=$env:Configuration /t:Clean,Build
+      run: msbuild src/SQLAid.sln /p:Configuration=$env:Configuration
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
