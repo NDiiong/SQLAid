@@ -43,7 +43,7 @@ jobs:
     - name: Upload to GitHub Release
       uses: softprops/action-gh-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
       with:
         files: src/SQLAid/bin/**/*.vsix
         tag_name: ${{ github.ref_name }}
