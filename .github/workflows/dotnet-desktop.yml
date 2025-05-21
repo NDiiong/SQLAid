@@ -14,7 +14,6 @@ jobs:
       Configuration: SSMS19
       Project: src/SQLAid.sln
       
-
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -40,4 +39,9 @@ jobs:
       with:
         name: ${{ github.event.repository.name }}.vsix
         path: src/SQLAid/bin/**/*.vsix
+
+    - name: Upload to GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: src/SQLAid/bin/**/*.vsix
 
